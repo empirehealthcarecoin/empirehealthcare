@@ -1,0 +1,148 @@
+/* RESET AND BASE SETUP */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f7f9fc;
+  color: #222;
+}
+
+/* ===== HEADER / TOP NAVIGATION ===== */
+header {
+  background-color: #083d77;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+/* LOGO TEXT */
+.logo {
+  font-size: 24px;
+  color: #ffffff;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* NAVIGATION LINKS */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 4px; /* Reduced gap between navigation links */
+}
+
+.nav-links li {
+  display: inline-block;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 10px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #ffc107;
+  left: 0;
+  bottom: 0;
+  transition: width 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #ffc107;
+}
+
+.nav-links li a:hover::after {
+  width: 100%;
+}
+
+/* Career Hero Section */
+.career-hero {
+  padding: 100px 20px 40px;
+  text-align: center;
+  background: linear-gradient(to right, #e6f2ff, #ffffff);
+}
+
+.career-hero h1 {
+  font-size: 2.8em;
+  margin-bottom: 10px;
+  color: #004080;
+}
+
+.career-hero p {
+  font-size: 1.2em;
+  color: #555;
+}
+
+/* Expandable Accordion Section */
+.expandable-section {
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.accordion {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.accordion-btn {
+  background-color: #004080;
+  color: white;
+  padding: 15px 20px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.accordion-btn:hover {
+  background-color: #0059b3;
+}
+
+.accordion-content {
+  display: none;
+  padding: 15px 20px;
+  background-color: #f9f9f9;
+}
+
+.accordion-content ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.accordion-content li {
+  margin: 8px 0;
+  color: #333;
+}
+
+/* JS-free accordion behavior */
+.accordion-btn:focus + .accordion-content,
+.accordion-btn:active + .accordion-content {
+  display: block;
+}
+
