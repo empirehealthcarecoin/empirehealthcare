@@ -67,6 +67,7 @@ h1 {
   gap: 10px;
   opacity: 0;
   animation: fadeInLineGroup 1.5s ease forwards;
+  position: relative; /* added for dot absolute positioning */
 }
 
 .line-group.left {
@@ -164,10 +165,52 @@ h1 {
 
 /* Responsive fix for mobile screens */
 @media (max-width: 768px) {
+
+  /* fullscreen link stays fullscreen */
   .fullscreen-link {
     width: 100%;
     height: 100%;
     z-index: 9999;
     pointer-events: auto;
+  }
+
+  /* Shrink the title font */
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* Stack slogan vertically & reduce gap */
+  .slogan-wrapper {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Make slogan text smaller */
+  .slogan-wrapper p {
+    font-size: 1.2rem;
+    white-space: normal; /* allow wrapping on small screens */
+  }
+
+  /* Adjust line-group dot positions for smaller screen */
+  .line-group.left .dot {
+    left: auto !important;
+    position: relative;
+    margin: 0 auto;
+    animation-delay: 0.5s; /* earlier fade-in on mobile */
+  }
+
+  .line-group.right .dot {
+    right: auto !important;
+    position: relative;
+    margin: 0 auto;
+    animation-delay: 0.5s;
+  }
+
+  /* Adjust the lines so they scale */
+  .line-group.left .line,
+  .line-group.right .line {
+    width: 80px !important; /* smaller lines on mobile */
   }
 }
