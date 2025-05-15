@@ -1,174 +1,151 @@
-/\* Reset \*/
-
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  }
+}
 
 body {
-background-color: #ffffff;
-color: #000;
-height: 100vh;
-display: flex;
-justify-content: center;
-align-items: center;
-font-family: 'Montserrat', sans-serif;
+  background-color: #ffffff;
+  color: #000;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
 }
 
-/\* Fullscreen Invisible Link for Touch \*/
-.fullscreen-link {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-z-index: 9999;
-text-decoration: none;
-background: transparent;
-}
-
-/\* Container \*/
+/* Container */
 .intro-container {
-text-align: center;
+  text-align: center;
 }
 
-/\* Title \*/
+/* Title */
 h1 {
-font-size: 4rem;
-color: #083d77;
-margin-bottom: 40px;
-letter-spacing: 2px;
-animation: fadeIn 1s ease forwards;
-opacity: 0;
+  font-size: 4rem;
+  color: #083d77;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+  animation: fadeIn 1s ease forwards;
+  opacity: 0;
 }
 
-/\* Slogan section \*/
+/* Slogan section */
 .slogan-wrapper {
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 25px;
-opacity: 0;
-animation: fadeIn 1.5s ease forwards;
-animation-delay: 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  opacity: 0;
+  animation: fadeIn 1.5s ease forwards;
+  animation-delay: 0.5s;
 }
 
-/\* Adjusted text color for better visibility */
+/* Adjusted text color for better visibility */
 .slogan-wrapper p {
-font-size: 1.5rem;
-color: #b5b5b5; /* Updated color to the requested dark silver \*/
-white-space: nowrap;
+  font-size: 1.5rem;
+  color: #b5b5b5; /* Updated color to the requested dark silver */
+  white-space: nowrap;
 }
 
-/\* Line + dot container \*/
+/* Line + dot container */
 .line-group {
-display: flex;
-align-items: center;
-gap: 10px;
-opacity: 0;
-animation: fadeInLineGroup 1.5s ease forwards;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: fadeInLineGroup 1.5s ease forwards;
 }
 
 .line-group.left {
-justify-content: flex-end;  /\* Align the left side group to the right \*/
+  justify-content: flex-end;  /* Align the left side group to the right */
 }
 
 .line-group.right {
-justify-content: flex-start;  /\* Align the right side group to the left \*/
+  justify-content: flex-start;  /* Align the right side group to the left */
 }
 
-/\* Left line grow \*/
+/* Left line grow */
 .line-group.left .line {
-width: 0;
-height: 2px;
-background-color: #aaa;
-animation: growLineLeft 1.5s ease forwards;
+  width: 0;
+  height: 2px;
+  background-color: #aaa;
+  animation: growLineLeft 1.5s ease forwards;
 }
 
-/\* Left dot */
+/* Left dot */
 .line-group.left .dot {
-width: 18px;
-height: 18px;
-background-color: black;
-border-radius: 50%;
-opacity: 0;
-position: absolute;
-animation: fadeInDotLeft 0.5s ease forwards;
-animation-delay: 2s;
-left: 450px; /* Now the dot is closer to the end of the line (15-20px gap) \*/
+  width: 18px;
+  height: 18px;
+  background-color: black;
+  border-radius: 50%;
+  opacity: 0;
+  position: absolute;
+  animation: fadeInDotLeft 0.5s ease forwards;
+  animation-delay: 2s;
+  left: 450px; /* Now the dot is closer to the end of the line (15-20px gap) */
 }
 
-/\* Right line grow \*/
+/* Right line grow */
 .line-group.right .line {
-width: 0;
-height: 2px;
-background-color: #aaa;
-animation: growLineRight 1.5s ease forwards;
+  width: 0;
+  height: 2px;
+  background-color: #aaa;
+  animation: growLineRight 1.5s ease forwards;
 }
 
-/\* Right dot */
+/* Right dot */
 .line-group.right .dot {
-width: 18px;
-height: 18px;
-background-color: black;
-border-radius: 50%;
-opacity: 0;
-position: absolute;
-animation: fadeInDotRight 0.5s ease forwards;
-animation-delay: 2s;
-right: 450px; /* Now the dot is closer to the end of the line (15-20px gap) \*/
+  width: 18px;
+  height: 18px;
+  background-color: black;
+  border-radius: 50%;
+  opacity: 0;
+  position: absolute;
+  animation: fadeInDotRight 0.5s ease forwards;
+  animation-delay: 2s;
+  right: 450px; /* Now the dot is closer to the end of the line (15-20px gap) */
 }
 
-/\* Animations \*/
+/* Animations */
 @keyframes fadeIn {
-to {
-opacity: 1;
-}
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInLineGroup {
-to {
-opacity: 1;
-}
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes growLineLeft {
-from {
-width: 0;
-}
-to {
-width: 150px;
-}
+  from {
+    width: 0;
+  }
+  to {
+    width: 150px;
+  }
 }
 
 @keyframes growLineRight {
-from {
-width: 0;
-}
-to {
-width: 150px;
-}
+  from {
+    width: 0;
+  }
+  to {
+    width: 150px;
+  }
 }
 
 @keyframes fadeInDotLeft {
-to {
-opacity: 1;
-}
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInDotRight {
-to {
-opacity: 1;
-}
-}
-
-/\* Responsive fix for mobile screens \*/
-@media (max-width: 768px) {
-.fullscreen-link {
-width: 100%;
-height: 100%;
-z-index: 9999;
-pointer-events: auto;
-}
+  to {
+    opacity: 1;
+  }
 }
