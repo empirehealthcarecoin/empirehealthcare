@@ -56,7 +56,7 @@ h1 {
 /* Adjusted text color for better visibility */
 .slogan-wrapper p {
   font-size: 1.5rem;
-  color: #b5b5b5; /* Updated color to the requested dark silver */
+  color: #b5b5b5; /* dark silver */
   white-space: nowrap;
 }
 
@@ -67,15 +67,15 @@ h1 {
   gap: 10px;
   opacity: 0;
   animation: fadeInLineGroup 1.5s ease forwards;
-  position: relative; /* added for dot absolute positioning */
+  position: relative; /* needed for absolute dots */
 }
 
 .line-group.left {
-  justify-content: flex-end;  /* Align the left side group to the right */
+  justify-content: flex-end;  /* Align the left group right */
 }
 
 .line-group.right {
-  justify-content: flex-start;  /* Align the right side group to the left */
+  justify-content: flex-start;  /* Align the right group left */
 }
 
 /* Left line grow */
@@ -96,7 +96,7 @@ h1 {
   position: absolute;
   animation: fadeInDotLeft 0.5s ease forwards;
   animation-delay: 2s;
-  left: 450px; /* Now the dot is closer to the end of the line (15-20px gap) */
+  left: 450px; /* dot near line end on desktop */
 }
 
 /* Right line grow */
@@ -117,7 +117,7 @@ h1 {
   position: absolute;
   animation: fadeInDotRight 0.5s ease forwards;
   animation-delay: 2s;
-  right: 450px; /* Now the dot is closer to the end of the line (15-20px gap) */
+  right: 450px; /* dot near line end on desktop */
 }
 
 /* Animations */
@@ -181,36 +181,48 @@ h1 {
     letter-spacing: 1px;
   }
 
-  /* Stack slogan vertically & reduce gap */
+  /* Stack slogan vertically but keep flex row on lines to keep dots aligned */
   .slogan-wrapper {
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
+    position: relative;
   }
 
-  /* Make slogan text smaller */
+  /* Smaller slogan text and allow wrapping */
   .slogan-wrapper p {
     font-size: 1.2rem;
-    white-space: normal; /* allow wrapping on small screens */
+    white-space: normal; /* allow line wrap */
   }
 
-  /* Adjust line-group dot positions for smaller screen */
+  /* Make line-groups full width and relative for positioning */
+  .line-group {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Left line + dot on mobile */
+  .line-group.left .line {
+    width: 80px !important; /* smaller line */
+  }
+
   .line-group.left .dot {
-    left: auto !important;
-    position: relative;
-    margin: 0 auto;
-    animation-delay: 0.5s; /* earlier fade-in on mobile */
-  }
-
-  .line-group.right .dot {
-    right: auto !important;
-    position: relative;
-    margin: 0 auto;
+    position: absolute;
+    left: 10px; /* keep dot near left edge */
+    top: 50%;
+    transform: translateY(-50%);
     animation-delay: 0.5s;
   }
 
-  /* Adjust the lines so they scale */
-  .line-group.left .line,
+  /* Right line + dot on mobile */
   .line-group.right .line {
-    width: 80px !important; /* smaller lines on mobile */
+    width: 80px !important; /* smaller line */
+  }
+
+  .line-group.right .dot {
+    position: absolute;
+    right: 10px; /* keep dot near right edge */
+    top: 50%;
+    transform: translateY(-50%);
+    animation-delay: 0.5s;
   }
 }
