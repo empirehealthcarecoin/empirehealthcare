@@ -5,19 +5,25 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   background-color: #ffffff;
   color: #000;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Montserrat', sans-serif;
+  overflow: hidden;
 }
 
 /* Container */
 .intro-container {
   text-align: center;
+  padding: 20px;
 }
 
 /* Title */
@@ -30,7 +36,7 @@ h1 {
   opacity: 0;
 }
 
-/* Slogan section */
+/* Slogan wrapper */
 .slogan-wrapper {
   display: flex;
   align-items: center;
@@ -39,72 +45,53 @@ h1 {
   opacity: 0;
   animation: fadeIn 1.5s ease forwards;
   animation-delay: 0.5s;
+  position: relative;
 }
 
-/* Adjusted text color for better visibility */
+/* Text in center */
 .slogan-wrapper p {
   font-size: 1.5rem;
-  color: #b5b5b5; /* Updated color to the requested dark silver */
+  color: #b5b5b5; /* dark silver */
   white-space: nowrap;
+  z-index: 2;
 }
 
-/* Line + dot container */
+/* Line + Dot Container */
 .line-group {
   display: flex;
   align-items: center;
   gap: 10px;
   opacity: 0;
   animation: fadeInLineGroup 1.5s ease forwards;
+  position: relative;
 }
 
-.line-group.left {
-  justify-content: flex-end;  /* Align the left side group to the right */
-}
-
-.line-group.right {
-  justify-content: flex-start;  /* Align the right side group to the left */
-}
-
-/* Left line grow */
-.line-group.left .line {
+/* Shared Line Style */
+.line {
   width: 0;
   height: 2px;
   background-color: #aaa;
+}
+
+/* Shared Dot Style */
+.dot {
+  width: 18px;
+  height: 18px;
+  background-color: black;
+  border-radius: 50%;
+  opacity: 0;
+  animation-delay: 2s;
+  animation: fadeInDot 0.5s ease forwards;
+  z-index: 1;
+}
+
+/* Animating Lines */
+.line-group.left .line {
   animation: growLineLeft 1.5s ease forwards;
 }
 
-/* Left dot */
-.line-group.left .dot {
-  width: 18px;
-  height: 18px;
-  background-color: black;
-  border-radius: 50%;
-  opacity: 0;
-  position: absolute;
-  animation: fadeInDotLeft 0.5s ease forwards;
-  animation-delay: 2s;
-  left: 450px; /* Now the dot is closer to the end of the line (15-20px gap) */
-}
-
-/* Right line grow */
 .line-group.right .line {
-  width: 0;
-  height: 2px;
-  background-color: #aaa;
   animation: growLineRight 1.5s ease forwards;
-}
-
-/* Right dot */
-.line-group.right .dot {
-  width: 18px;
-  height: 18px;
-  background-color: black;
-  border-radius: 50%;
-  opacity: 0;
-  position: absolute;
-  animation: fadeInDotRight 0.5s ease forwards;
-  animation-delay: 2s;
-  right: 450px; /* Now the dot is closer to the end of the line (15-20px gap) */
 }
 
 /* Animations */
@@ -138,14 +125,33 @@ h1 {
   }
 }
 
-@keyframes fadeInDotLeft {
+@keyframes fadeInDot {
   to {
     opacity: 1;
   }
 }
 
-@keyframes fadeInDotRight {
-  to {
-    opacity: 1;
+/* Responsive Tweaks */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .slogan-wrapper {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .line-group {
+    flex-direction: row;
+  }
+
+  .line {
+    width: 100px !important;
+  }
+
+  .dot {
+    width: 14px;
+    height: 14px;
   }
 }
