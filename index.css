@@ -36,96 +36,22 @@ h1 {
   opacity: 0;
 }
 
-/* Slogan wrapper */
+/* Slogan wrapper (just the text now) */
 .slogan-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 25px;
   opacity: 0;
   animation: fadeIn 1.5s ease forwards;
   animation-delay: 0.5s;
-  position: relative;
 }
 
-/* Text in center */
+/* Just the text */
 .slogan-wrapper p {
   font-size: 1.5rem;
   color: #b5b5b5; /* dark silver */
   white-space: nowrap;
-  z-index: 2;
-}
-
-/* Line + Dot Container */
-.line-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  opacity: 0;
-  animation: fadeInLineGroup 1.5s ease forwards;
-  position: relative;
-}
-
-/* Shared Line Style */
-.line {
-  width: 0;
-  height: 2px;
-  background-color: #aaa;
-}
-
-/* Shared Dot Style */
-.dot {
-  width: 18px;
-  height: 18px;
-  background-color: black;
-  border-radius: 50%;
-  opacity: 0;
-  animation-delay: 2s;
-  animation: fadeInDot 0.5s ease forwards;
-  z-index: 1;
-}
-
-/* Animating Lines */
-.line-group.left .line {
-  animation: growLineLeft 1.5s ease forwards;
-}
-
-.line-group.right .line {
-  animation: growLineRight 1.5s ease forwards;
 }
 
 /* Animations */
 @keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeInLineGroup {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes growLineLeft {
-  from {
-    width: 0;
-  }
-  to {
-    width: 150px;
-  }
-}
-
-@keyframes growLineRight {
-  from {
-    width: 0;
-  }
-  to {
-    width: 150px;
-  }
-}
-
-@keyframes fadeInDot {
   to {
     opacity: 1;
   }
@@ -137,21 +63,7 @@ h1 {
     font-size: 2.5rem;
   }
 
-  .slogan-wrapper {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .line-group {
-    flex-direction: row;
-  }
-
-  .line {
-    width: 100px !important;
-  }
-
-  .dot {
-    width: 14px;
-    height: 14px;
+  .slogan-wrapper p {
+    font-size: 1.2rem;
   }
 }
