@@ -5,10 +5,13 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Segoe UI', sans-serif;
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f7f9fc;
   color: #222;
+  overflow-x: hidden; /* Allows vertical scroll, hides horizontal overflow */
 }
 
 /* ===== HEADER / TOP NAVIGATION ===== */
@@ -21,7 +24,7 @@ header {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
-  z-index: 999;
+  z-index: 1000;
 }
 
 /* LOGO TEXT */
@@ -36,7 +39,7 @@ header {
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 4px; /* Reduced gap between navigation links */
+  gap: 4px;
 }
 
 .nav-links li {
@@ -80,7 +83,6 @@ header {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: -20px;
   text-align: center;
 }
 
@@ -111,58 +113,20 @@ header {
   background-color: #083d77;
 }
 
-/* Universal Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Global Body Styles */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f7f9fc;
-  color: #222;
-}
-
-/* Header Styling */
-header {
-  background-color: #083d77;
-  padding: 15px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-/* Logo Styling */
-.logo {
-  font-size: 24px;
-  color: white;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
-html, body {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
+/* Scrollable Content Container */
 .content {
   height: 100vh;
   overflow-y: auto;
   scroll-behavior: smooth;
 }
 
+/* Hero Logo */
 .hero-logo {
   width: 500px;
   height: auto;
   margin-bottom: 50px;
-  display: circle;
   margin-left: auto;
   margin-right: auto;
+  display: block;
+  border-radius: 50%; /* for circle effect */
 }
