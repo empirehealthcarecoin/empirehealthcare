@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us - Empire Healthcare</title>
+  <!-- Kept internal styles for preview purposes. In your real project, move this to contact.css -->
+  <style>
+    /* =========================================
+       YOUR ORIGINAL CSS (UNCHANGED BASE)
+       ========================================= */
+
+    /* RESET AND BASE SETUP */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
+      color: #222;
+      overflow-x: hidden;
+    }
+
+    /* ===== HEADER / TOP NAVIGATION ===== */
+    header {
+      background-color: #083d77;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    /* LOGO TEXT */
+    .logo {
+      font-size: 24px;
+      color: #ffffff;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    /* NAVIGATION LINKS */
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px; /* Increased slightly for better clickability */
+    }
+
+    .nav-links li {
+      display: inline-block;
+    }
+
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 10px;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links li a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background-color: #ffc107;
+      left: 0;
+      bottom: 0;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+      color: #ffc107;
+    }
+
+    .nav-links li a:hover::after,
+    .nav-links li a.active::after {
+      width: 100%;
+    }
+
+    /* Page Specific */
+    .contact-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      display: flex; /* Added flex to allow side-by-side layout on desktop if desired, or column */
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .page-title {
+      font-size: 36px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 10px;
+      color: #083d77; /* Matched theme color */
+    }
+
+    /* Wrapper for Form and Info to sit side-by-side on desktop */
+    .contact-content-wrapper {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .contact-form,
+    .contact-info {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      flex: 1;
+      min-width: 300px; /* Ensures they don't get too squished */
+      border: 1px solid rgba(8, 61, 119, 0.1);
+    }
+
+    .contact-form h2 {
+      margin-bottom: 20px;
+      color: #083d77;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #083d77;
+      box-shadow: 0 0 0 3px rgba(8, 61, 119, 0.1);
+    }
+
+    .submit-btn {
+      background-color: #083d77; /* Matched theme */
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      font-weight: bold;
+    }
+
+    .submit-btn:hover {
+      background-color: #005acc;
+    }
+
+    .contact-info h3 {
+      color: #083d77;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+    }
+
+    .contact-info p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 15px 0;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .contact-info strong {
+      min-width: 80px;
+      color: #083d77;
+    }
+
+    /* =========================================
+       MOBILE RESPONSIVE FIXES
+       ========================================= */
+    
+    @media screen and (max-width: 768px) {
+      /* 1. Header Fixes */
+      header {
+        flex-direction: column;
+        padding: 15px 20px;
+        gap: 15px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+      
+      .nav-links li a {
+        padding: 8px;
+        font-size: 0.95rem;
+      }
+
+      /* 2. Page Layout */
+      .contact-container {
+        padding: 30px 15px;
+        gap: 20px;
+      }
+
+      .page-title {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      /* 3. Stack Content */
+      .contact-content-wrapper {
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .contact-form,
+      .contact-info {
+        width: 100%;
+        min-width: 0; /* Override min-width */
+        padding: 20px;
+      }
+
+      .contact-form h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <header>
+    <div class="logo">Empire HealthCare</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="career.html">Career</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </nav>
+  </header> 
+
+  <div class="contact-container">
+    <h1 class="page-title">Contact Us</h1>
+    
+    <div class="contact-content-wrapper">
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <h2>We'd love to hear from you!</h2>
+        <form action="#" method="POST">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your full name" />
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email address" />
+          </div>
+
+          <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" rows="5" required placeholder="How can we help you?"></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <h3>Empire Healthcare Contact Info</h3>
+        <p><strong>Email:</strong> empirehealthcareservice@gmail.com</p>
+        <p><strong>Phone 1:</strong> 98400 89366</p>
+        <p><strong>Phone 2:</strong> 80124 39366</p>
+        <p><strong>Phone 3:</strong> 99444 30996</p>
+        <p><strong>Address:</strong> 
+          <span>No. 7C, L.G. Nagar, Meena Estate,<br/> 
+          6th Cross, Sowripalayam,<br/> 
+          Coimbatore - 641 028</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

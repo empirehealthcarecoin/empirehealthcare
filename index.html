@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Empire HealthCare</title>
+    <!-- Added Google Font link for Montserrat to make it look right -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* =========================================
+           YOUR ORIGINAL CSS
+           ========================================= */
+        
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            background: linear-gradient(to bottom right, #bcdcff, #d6ebff, #ffffff);
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; /* Prevents scrollbars on the splash screen */
+            cursor: pointer; /* Shows a hand cursor to indicate the whole page is clickable */
+        }
+
+        /* Container */
+        .intro-container {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 900px; /* Limits width on large screens */
+        }
+
+        /* Title */
+        h1 {
+            font-size: 4rem;
+            color: #083d77;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            animation: fadeIn 1s ease forwards;
+            opacity: 0;
+            line-height: 1.2;
+        }
+
+        /* Slogan wrapper */
+        .slogan-wrapper {
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* Just the text */
+        .slogan-wrapper p {
+            font-size: 1.5rem;
+            color: #7d7d7d; /* Changed slightly from #b5b5b5 for better readability on light backgrounds */
+            white-space: nowrap;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* =========================================
+           MOBILE RESPONSIVE FIXES
+           ========================================= */
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px; /* Adds safety padding around the edges */
+            }
+
+            h1 {
+                font-size: 2.2rem; /* Reduced size for mobile */
+                margin-bottom: 20px;
+                letter-spacing: 1px;
+            }
+
+            .slogan-wrapper p {
+                font-size: 1.1rem; /* Smaller text */
+                white-space: normal; /* CRITICAL FIX: Allows text to wrap to the next line */
+                line-height: 1.5; /* Adds space between wrapped lines */
+                padding: 0 10px; /* Prevents text from hitting the screen edge */
+            }
+        }
+
+        /* For very small screens */
+        @media (max-width: 380px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="intro-container">
+        <!-- Inferred content based on your previous file -->
+        <h1>Empire HealthCare</h1>
+        
+        <div class="slogan-wrapper">
+            <p>beyond everything</p>
+        </div>
+    </div>
+
+    <script>
+        // Redirect to home.html when clicking anywhere on the body
+        document.body.addEventListener('click', function() {
+            window.location.href = 'home.html';
+        });
+    </script>
+
+</body>
+</html>

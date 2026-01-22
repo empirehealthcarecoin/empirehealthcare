@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Empire HealthCare</title>
+    <!-- Kept internal styles for preview purposes. In your real project, move this to home.css -->
+    <style>
+        /* =========================================
+           YOUR ORIGINAL CSS (UNCHANGED BASE)
+           ========================================= */
+        
+        /* RESET AND BASE SETUP */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fcf7f7;
+            color: #222;
+            overflow-x: hidden; /* Allows vertical scroll, hides horizontal overflow */
+        }
+
+        /* ===== HEADER / TOP NAVIGATION ===== */
+        header {
+            background-color: #083d77;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* LOGO TEXT */
+        .logo {
+            font-size: 24px;
+            color: #ffffff;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* NAVIGATION LINKS */
+        /* Note: Since your HTML wraps this in a <nav>, this class selector still works perfectly */
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px; 
+        }
+
+        .nav-links li {
+            display: inline-block;
+        }
+
+        .nav-links li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: #ffc107;
+            left: 0;
+            bottom: 0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links li a:hover,
+        .nav-links li a.active { /* Added support for your active class */
+            color: #ffc107;
+        }
+
+        .nav-links li a:hover::after,
+        .nav-links li a.active::after {
+            width: 100%;
+        }
+
+        /* Content Wrapper */
+        .content {
+            /* Ensuring this doesn't trap scroll on mobile unless intended */
+            height: 100vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(to bottom right, #bcdcff, #d6ebff, #ffffff);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px 20px 80px 20px; /* Added bottom padding to account for navbar height if needed */
+        }
+
+        .hero h1 {
+            font-size: 2.3rem;
+            color: #083d77;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: #444;
+            margin-bottom: 30px;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .cta {
+            background-color: #083d77;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta:hover {
+            background-color: #062a52; 
+        }
+
+        /* Hero Logo Image */
+        .hero-logo {
+            width: 500px; 
+            max-width: 100%; /* CRITICAL FIX: Ensures image shrinks on mobile */
+            height: auto;
+            margin-bottom: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        /* =========================================
+           MOBILE RESPONSIVE FIXES
+           ========================================= */
+        
+        @media screen and (max-width: 768px) {
+            /* 1. Stack the Header elements */
+            header {
+                flex-direction: column;
+                padding: 15px 20px; 
+                gap: 15px; 
+            }
+
+            /* 2. Adjust Navigation for touch */
+            .nav-links {
+                gap: 10px;
+                flex-wrap: wrap; 
+                justify-content: center;
+            }
+
+            .nav-links li a {
+                padding: 8px; 
+                font-size: 0.95rem;
+            }
+
+            /* 3. Scale down the Hero Image */
+            .hero-logo {
+                width: 80%; /* Logo takes 80% of screen width */
+                margin-bottom: 30px;
+            }
+
+            /* 4. Adjust Typography sizes */
+            .hero h1 {
+                font-size: 1.8rem; 
+            }
+
+            .hero p {
+                font-size: 1.1rem; 
+                max-width: 90%; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="logo">Empire HealthCare</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="home.html" class="active">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="career.html">Career</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header> 
+
+  <!-- Scrollable Content Wrapper -->
+  <main class="content">
+    <!-- Hero Section -->
+    <section class="hero">
+      <img src="images/logo.png" alt="Empire Healthcare Logo" class="hero-logo">
+      
+      <h1>Revolutionizing Diagnostics Powering Progress in Patient Care.</h1>
+      <p>Empowering healthcare with world-class biomedical equipment and innovation.</p>
+      <a href="products.html" class="cta">Explore Our Products</a>
+    </section>
+  </main>
+
+</body>
+</html>

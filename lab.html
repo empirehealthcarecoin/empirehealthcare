@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laboratory Equipment - Empire Healthcare</title>
+  <!-- Kept internal styles for preview purposes. In your real project, move this to lab.css -->
+  <style>
+    /* =========================================
+       YOUR ORIGINAL CSS (UNCHANGED BASE)
+       ========================================= */
+
+    /* RESET AND BASE SETUP */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
+      color: #222;
+      overflow-x: hidden;
+    }
+
+    /* ===== HEADER / TOP NAVIGATION ===== */
+    header {
+      background-color: #083d77;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    /* LOGO TEXT */
+    .logo {
+      font-size: 24px;
+      color: #ffffff;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    /* NAVIGATION LINKS */
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px; /* Increased slightly for better clickability */
+    }
+
+    .nav-links li {
+      display: inline-block;
+    }
+
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 10px;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links li a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background-color: #ffc107;
+      left: 0;
+      bottom: 0;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+      color: #ffc107;
+    }
+
+    .nav-links li a:hover::after,
+    .nav-links li a.active::after {
+      width: 100%;
+    }
+
+    /* Page Container */
+    .lab-container {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 2.8rem;
+      color: #083d77; /* Matched to theme (was #0077ff) */
+      margin-bottom: 40px;
+    }
+
+    /* Sections */
+    .lab-section {
+      margin-bottom: 60px;
+    }
+
+    .lab-section h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #083d77;
+    }
+
+    /* Grid */
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    /* Product Card */
+    .product-card {
+      background-color: #ffffff;
+      border: 2px solid #083d77; /* Matched to theme */
+      border-radius: 12px;
+      width: 260px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover; /* Ensures images fill the box nicely */
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .product-card h3 {
+      font-size: 1.1rem;
+      color: #083d77;
+      margin-top: auto; /* Pushes title to center/bottom */
+    }
+
+    /* =========================================
+       MOBILE RESPONSIVE FIXES
+       ========================================= */
+    
+    @media screen and (max-width: 768px) {
+      /* 1. Header Fixes */
+      header {
+        flex-direction: column;
+        padding: 15px 20px;
+        gap: 15px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+      
+      .nav-links li a {
+        padding: 8px;
+        font-size: 0.95rem;
+      }
+
+      /* 2. Page Layout */
+      .lab-container {
+        padding: 40px 15px;
+      }
+
+      .title {
+        font-size: 2.2rem;
+        margin-bottom: 30px;
+      }
+
+      .lab-section h2 {
+        font-size: 1.8rem;
+      }
+
+      /* 3. Card Adjustments for Mobile */
+      .product-grid {
+        gap: 20px;
+      }
+
+      .product-card {
+        width: 100%;       /* Fill container width on small screens... */
+        max-width: 320px;  /* ...but don't get huge */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="logo">Empire HealthCare</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="career.html">Career</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="lab-container">
+    <h1 class="title">Laboratory Equipment</h1>
+
+    <!-- Hematology Section -->
+    <section class="lab-section">
+      <h2>Hematology</h2>
+      <div class="product-grid">
+        <div class="product-card">
+          <img src="images/cellular-analysis.jpg" alt="Cellular Analysis Line">
+          <h3>Cellular Analysis Line</h3>
+        </div>
+        <div class="product-card">
+          <img src="images/5-part-analyzer.jpg" alt="5-Part Differential Analyzer">
+          <h3>5-Part Differential Analyzer</h3>
+        </div>
+        <div class="product-card">
+          <img src="images/3-part-analyzer.jpg" alt="3-Part Differential Analyzer">
+          <h3>3-Part Differential Analyzer</h3>
+        </div>
+        <div class="product-card">
+          <img src="images/hematology-reagents.jpg" alt="Hematology Reagents">
+          <h3>Hematology Reagents</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chemistry Section -->
+    <section class="lab-section">
+      <h2>Chemistry</h2>
+      <div class="product-grid">
+        <div class="product-card">
+          <img src="images/large-test-volume.jpg" alt="Large Test Volume">
+          <h3>Large Test Volume</h3>
+        </div>
+        <div class="product-card">
+          <img src="images/medium-test-volume.jpg" alt="Medium Test Volume">
+          <h3>Medium Test Volume</h3>
+        </div>
+        <div class="product-card">
+          <img src="images/small-test-volume.jpg" alt="Small Test Volume">
+          <h3>Small Test Volume</h3>
+        </div>
+        <div class="product-card">
+          <img src="images/chemistry-reagents.jpg" alt="Chemistry Reagents">
+          <h3>Chemistry Reagents</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reagents Section -->
+    <section class="lab-section">
+      <h2>Reagents</h2>
+      <div class="product-grid">
+        <div class="product-card">
+          <img src="images/hematology-controls.jpg" alt="Hematology Controls and Calibrators">
+          <h3>Hematology Controls & Calibrators</h3>
+        </div>
+        <div class="product-card">
+          <img src="images/chemistry-reagents-2.jpg" alt="Chemistry Reagents">
+          <h3>Chemistry Reagents</h3>
+        </div>
+        <div class="product-card">
+          <img src="images/cia-controls.jpg" alt="CIA Calibrators & Controls">
+          <h3>Chemiluminescence Immunoassay Calibrators & Controls</h3>
+        </div>
+        <div class="product-card">
+          <img src="images/hytest.jpg" alt="HyTest">
+          <h3>HyTest</h3>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
