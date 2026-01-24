@@ -367,14 +367,14 @@
         <!-- Left Column: Images -->
         <aside class="product-gallery">
             <!-- Main Image -->
-            <!-- Using relative path for GitHub/Local Server compatibility -->
+            <!-- FIXED: Forward slash for GitHub/Web -->
             <img src="images/dp-50-expert-inside-1.png" alt="Mindray DP-50 Expert Main View" class="main-image" id="mainImg">
             
             <!-- Thumbnails -->
             <div class="thumbnail-list">
-                <!-- Relative paths used here as well -->
-                <img src="images\dp-50-expert-inside-1.png" class="thumbnail active" onclick="changeImage(this, 'images/dp-50-expert-inside-1.png')">
-                <img src="images\dp-50-expert-inside-1.png" class="thumbnail" onclick="changeImage(this, 'images/dp-50-expert-inside-2.png')">
+                <!-- FIXED: Forward slash and ensure second image is correct -->
+                <img src="images/dp-50-expert-inside-1.png" class="thumbnail active" onclick="changeImage(this, 'images/dp-50-expert-inside-1.png')">
+                <img src="images/dp-50-expert-inside-2.png" class="thumbnail" onclick="changeImage(this, 'images/dp-50-expert-inside-2.png')">
             </div>
         </aside>
 
@@ -527,4 +527,3 @@
 
 </body>
 </html>
-
