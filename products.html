@@ -4,12 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Empire Healthcare - Products</title>
-  <!-- Kept internal styles for preview purposes. In your real project, move this to products.css -->
   <style>
-    /* =========================================
-       YOUR ORIGINAL CSS (UNCHANGED BASE)
-       ========================================= */
-
     /* RESET AND BASE SETUP */
     * {
       margin: 0;
@@ -19,7 +14,7 @@
 
     html, body {
       min-height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
       color: #222;
       overflow-x: hidden;
@@ -41,7 +36,7 @@
     /* LOGO TEXT */
     .logo {
       font-size: 24px;
-      color: white;
+      color: #ffffff;
       font-weight: bold;
       letter-spacing: 1px;
     }
@@ -50,7 +45,11 @@
     .nav-links {
       list-style: none;
       display: flex;
-      gap: 20px; /* Increased slightly for better clickability */
+      gap: 15px; /* Slightly increased gap for better readability */
+    }
+
+    .nav-links li {
+      display: inline-block;
     }
 
     .nav-links li a {
@@ -74,13 +73,11 @@
       transition: width 0.3s ease;
     }
 
-    .nav-links li a:hover,
-    .nav-links li a.active { /* Added support for active class */
+    .nav-links li a:hover {
       color: #ffc107;
     }
 
-    .nav-links li a:hover::after,
-    .nav-links li a.active::after {
+    .nav-links li a:hover::after {
       width: 100%;
     }
 
@@ -103,15 +100,16 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 30px;
+      align-items: stretch;
     }
 
     /* ANIMATION */
     @keyframes fadeInUp {
-      from {
+      0% {
         opacity: 0;
         transform: translateY(40px);
       }
-      to {
+      100% {
         opacity: 1;
         transform: translateY(0);
       }
@@ -119,7 +117,7 @@
 
     /* PRODUCT CARD */
     .product-box {
-      background-color: #ffffff;
+      background-color: #fff;
       border: 2px solid #083d77;
       border-radius: 12px;
       width: 340px;
@@ -128,17 +126,25 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       transition: transform 0.3s ease;
       animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
     }
 
-    .product-box:nth-child(1) { animation-delay: 0.2s; }
-    .product-box:nth-child(2) { animation-delay: 0.4s; }
+    .product-box:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+    .product-box:nth-child(2) {
+      animation-delay: 0.4s;
+    }
 
+    /* HOVER EFFECT */
     .product-box:hover {
       transform: translateY(-8px);
     }
 
+    /* PRODUCT TEXTS */
     .product-box h2 {
       font-size: 1.6rem;
       margin-bottom: 15px;
@@ -150,30 +156,28 @@
       color: #444;
       margin-bottom: 20px;
       flex-grow: 1;
-      line-height: 1.5;
     }
 
     /* EXPLORE BUTTON */
     .explore-btn {
+      display: inline-block;
       background-color: #083d77;
       color: white;
       padding: 12px 24px;
       border-radius: 6px;
       text-decoration: none;
       font-weight: 600;
+      font-size: 1rem;
       transition: background-color 0.3s;
-      align-self: center; /* Centers button in the flex column */
+      margin-top: auto;
     }
 
     .explore-btn:hover {
       background-color: #005acc;
     }
-
-    /* =========================================
-       MOBILE RESPONSIVE FIXES
-       ========================================= */
     
-    @media screen and (max-width: 768px) {
+    /* Responsive tweaks for mobile */
+    @media (max-width: 768px) {
       /* 1. Stack Header */
       header {
         flex-direction: column;
@@ -222,8 +226,8 @@
     <div class="logo">Empire HealthCare</div>
     <nav>
       <ul class="nav-links">
-        <li><a href="home.html">Home</a></li>
-        <li><a href="products.html" class="active">Products</a></li>
+        <li><a href="home.html" class="active">Home</a></li>
+        <li><a href="products.html">Products</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="career.html">Career</a></li>
         <li><a href="about.html">About Us</a></li>
@@ -237,14 +241,12 @@
     <h1 class="title">Our Product Categories</h1>
 
     <div class="product-grid">
-      <!-- Card 1 -->
       <div class="product-box">
         <h2>Medical Imaging Ultrasound</h2>
         <p>High-performance Color Doppler Systems designed for precision imaging and accurate diagnostics.</p>
         <a href="ultrasound.html" class="explore-btn">Explore</a>
       </div>
 
-      <!-- Card 2 -->
       <div class="product-box">
         <h2>Laboratory Equipment</h2>
         <p>Reliable, high-quality lab equipment tailored for advanced medical analysis and research.</p>
