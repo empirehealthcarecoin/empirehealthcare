@@ -125,6 +125,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      
+      /* ADDED for Link behavior: */
+      text-decoration: none; /* Removes underline from text inside the link */
+      cursor: pointer;
+      color: inherit;
     }
 
     .product-card img {
@@ -243,120 +248,123 @@
   <div class="ultrasound-container">
     <h1 class="page-title">Medical Imaging Ultrasound</h1>
     <div class="product-list">
-      <!-- Product Cards for each item -->
-      <div class="product-card fade-in">
-        <img src="images/dp-50-expert.png" alt="DP 50 Expert" />
+      
+      <!-- Product Cards (Changed from DIV to A tags) -->
+      
+      <a href="C:\empirehealthcare\empirehealthcare-main\products\DP50Expert.html" class="product-card fade-in">
+        <img src="images/dp-50-expert.png" alt="DP 50 Expert" onerror="this.src='https://placehold.co/250x200?text=DP+50'" />
         <h2>DP 50 Expert</h2>
         <p>High-performance compact system for general diagnostic imaging.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/dc-30-full-hd.png" alt="DC-30 Full HD" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/dc-30-full-hd.png" alt="DC-30 Full HD" onerror="this.src='https://placehold.co/250x200?text=DC-30'" />
         <h2>DC-30 Full HD</h2>
         <p>Advanced imaging with intuitive workflow and premium features.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/dc-40-crystal.png" alt="DC-40 Crystal" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/dc-40-crystal.png" alt="DC-40 Crystal" onerror="this.src='https://placehold.co/250x200?text=DC-40'" />
         <h2>DC-40 Crystal</h2>
         <p>Crystal-clear imaging and advanced scanning modes.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/dc-60.png" alt="DC-60" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/dc-60.png" alt="DC-60" onerror="this.src='https://placehold.co/250x200?text=DC-60'" />
         <h2>DC-60</h2>
         <p>Versatile system designed for confidence in diagnostics.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/dc-60-xinsight.png" alt="DC-60 Xinsight" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/dc-60-xinsight.png" alt="DC-60 Xinsight" onerror="this.src='https://placehold.co/250x200?text=DC-60+X'" />
         <h2>DC-60 Xinsight</h2>
         <p>Improved precision and faster response with X-Insight platform.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/dc-70-xinsight.png" alt="DC-70 Xinsight" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/dc-70-xinsight.png" alt="DC-70 Xinsight" onerror="this.src='https://placehold.co/250x200?text=DC-70+X'" />
         <h2>DC-70 Xinsight</h2>
         <p>Smart tools for women's health, cardiology, and more.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/dc-80-xinsight.png" alt="DC-80 Xinsight" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/dc-80-xinsight.png" alt="DC-80 Xinsight" onerror="this.src='https://placehold.co/250x200?text=DC-80+X'" />
         <h2>DC-80 Xinsight</h2>
         <p>Flagship X-insight tech for top-tier diagnostics.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/consona-n6.png" alt="Consona N6" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/consona-n6.png" alt="Consona N6" onerror="this.src='https://placehold.co/250x200?text=Consona+N6'" />
         <h2>Consona N6</h2>
         <p>Advanced ergonomic design with superior imaging.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/consona-n7.png" alt="Consona N7" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/consona-n7.png" alt="Consona N7" onerror="this.src='https://placehold.co/250x200?text=Consona+N7'" />
         <h2>Consona N7</h2>
         <p>Reliable imaging system for versatile clinical applications.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/consona-n8.png" alt="Consona N8" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/consona-n8.png" alt="Consona N8" onerror="this.src='https://placehold.co/250x200?text=Consona+N8'" />
         <h2>Consona N8</h2>
         <p>Improved transducer tech and deep tissue clarity.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/consona-n9.png" alt="Consona N9" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/consona-n9.png" alt="Consona N9" onerror="this.src='https://placehold.co/250x200?text=Consona+N9'" />
         <h2>Consona N9</h2>
         <p>Premium system with AI-enhanced diagnostic assistance.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/resona-i9.png" alt="Resona I9" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/resona-i9.png" alt="Resona I9" onerror="this.src='https://placehold.co/250x200?text=Resona+I9'" />
         <h2>Resona I9</h2>
         <p>Next-gen intelligence for faster, more confident results.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/nuewa-i9.png" alt="Nuewa I9" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/nuewa-i9.png" alt="Nuewa I9" onerror="this.src='https://placehold.co/250x200?text=Nuewa+I9'" />
         <h2>Nuewa I9</h2>
         <p>Customized OB/GYN care with dedicated AI tools.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/resona-r9.png" alt="Resona R9" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/resona-r9.png" alt="Resona R9" onerror="this.src='https://placehold.co/250x200?text=Resona+R9'" />
         <h2>Resona R9</h2>
         <p>Expert cardiac and vascular imaging system.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/te7.png" alt="TE7" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/te7.png" alt="TE7" onerror="this.src='https://placehold.co/250x200?text=TE7'" />
         <h2>TE7</h2>
         <p>Portable touchscreen ultrasound for POC applications.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/m6.png" alt="M6" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/m6.png" alt="M6" onerror="this.src='https://placehold.co/250x200?text=M6'" />
         <h2>M6</h2>
         <p>Compact, smart ultrasound with mobile flexibility.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/mx7.png" alt="MX7" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/mx7.png" alt="MX7" onerror="this.src='https://placehold.co/250x200?text=MX7'" />
         <h2>MX7</h2>
         <p>Smart portable system with wireless probes support.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/m8.png" alt="M8" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/m8.png" alt="M8" onerror="this.src='https://placehold.co/250x200?text=M8'" />
         <h2>M8</h2>
         <p>Advanced capabilities in a slim, powerful unit.</p>
-      </div>
+      </a>
 
-      <div class="product-card fade-in">
-        <img src="images/te-air.png" alt="TE Air" />
+      <a href="about.html" class="product-card fade-in">
+        <img src="images/te-air.png" alt="TE Air" onerror="this.src='https://placehold.co/250x200?text=TE+Air'" />
         <h2>TE Air</h2>
         <p>Wireless, handheld ultrasound with smart connectivity.</p>
-      </div>
+      </a>
+
     </div>
   </div>
 </body>
