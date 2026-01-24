@@ -351,12 +351,12 @@
         <div class="logo">Empire HealthCare</div>
         <nav>
             <ul class="nav-links">
-                <li><a href="C:\empirehealthcare\empirehealthcare-main\home.html">Home</a></li>
-                <li><a href="C:\empirehealthcare\empirehealthcare-main\products.html" class="active">Products</a></li>
-                <li><a href="C:\empirehealthcare\empirehealthcare-main\services.html">Services</a></li>
-                <li><a href="C:\empirehealthcare\empirehealthcare-main\career.html">Career</a></li>
-                <li><a href="C:\empirehealthcare\empirehealthcare-main\about.html">About Us</a></li>
-                <li><a href="C:\empirehealthcare\empirehealthcare-main\contact.html">Contact</a></li>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="products.html" class="active">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
     </header> 
@@ -367,12 +367,14 @@
         <!-- Left Column: Images -->
         <aside class="product-gallery">
             <!-- Main Image -->
-            <img src="C:\empirehealthcare\empirehealthcare-main\images\dp-50-expert-inside-1.png" alt="Mindray DP-50 Expert Main View" class="main-image" id="mainImg">
+            <!-- Using relative path for GitHub/Local Server compatibility -->
+            <img src="images/dp-50-expert-inside-1.png" alt="Mindray DP-50 Expert Main View" class="main-image" id="mainImg">
             
             <!-- Thumbnails -->
             <div class="thumbnail-list">
-                <img src="C:\empirehealthcare\empirehealthcare-main\images\dp-50-expert-inside-1.png" class="thumbnail active" onclick="changeImage(this, 'C:\\empirehealthcare\\empirehealthcare-main\\images\\dp-50-expert-inside-1.png')">
-                <img src="C:\empirehealthcare\empirehealthcare-main\images\dp-50-expert-inside-2.png" class="thumbnail" onclick="changeImage(this, 'C:\\empirehealthcare\\empirehealthcare-main\\images\\dp-50-expert-inside-2.png')">
+                <!-- Relative paths used here as well -->
+                <img src="images/dp-50-expert-inside-1.png" class="thumbnail active" onclick="changeImage(this, 'images/dp-50-expert-inside-1.png')">
+                <img src="images/dp-50-expert-inside-2.png" class="thumbnail" onclick="changeImage(this, 'images/dp-50-expert-inside-2.png')">
             </div>
         </aside>
 
@@ -396,7 +398,8 @@
             </div>
 
             <div class="action-buttons">
-                <a href="C:\empirehealthcare\empirehealthcare-main\products\brochures\DP-50-Expert-brochure.pdf" class="btn btn-outline" target="_blank">Download Brochure</a>
+                <!-- Relative path for brochure -->
+                <a href="products/brochures/DP-50-Expert-brochure.pdf" class="btn btn-outline" target="_blank">Download Brochure</a>
             </div>
 
             <!-- Tabs Navigation -->
