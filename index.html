@@ -3,15 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Welcome to Empire HealthCare - Beyond Everything">
+    <meta name="keywords" content="Healthcare, Empire, Medical, Wellness">
+    <meta name="author" content="Empire HealthCare">
+    
+    <!-- Matches mobile browser toolbar color to your brand -->
+    <meta name="theme-color" content="#083d77"> 
+
     <title>Welcome - Empire HealthCare</title>
-    <!-- Added Google Font link for Montserrat to make it look right -->
+
+    <!-- Preconnect for faster font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         /* =========================================
-           YOUR ORIGINAL CSS
+           1. CONFIG: CSS VARIABLES
+           Single source of truth for all styles.
            ========================================= */
-        
-        /* Reset */
+        :root {
+            /* Typography */
+            --font-main: 'Montserrat', sans-serif;
+            --fw-regular: 400;
+            --fw-bold: 700;
+
+            /* Palette */
+            --color-primary: #083d77;       /* Dark Blue Title */
+            --color-secondary: #7d7d7d;     /* Grey Slogan */
+            --color-text-main: #000000;     /* Body Text */
+            
+            /* Background Gradient */
+            --bg-gradient-start: #bcdcff;
+            --bg-gradient-mid: #d6ebff;
+            --bg-gradient-end: #ffffff;
+        }
+
+        /* =========================================
+           2. RESET & GLOBAL STYLES
+           ========================================= */
         * {
             margin: 0;
             padding: 0;
@@ -24,80 +54,103 @@
         }
 
         body {
-            background: linear-gradient(to bottom right, #bcdcff, #d6ebff, #ffffff);
-            color: #000;
+            /* Layout */
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden; /* Prevents scrollbars on the splash screen */
-            cursor: pointer; /* Shows a hand cursor to indicate the whole page is clickable */
+            overflow: hidden; /* Prevents scrollbars during animations */
+            
+            /* Appearance */
+            background: linear-gradient(
+                to bottom right, 
+                var(--bg-gradient-start), 
+                var(--bg-gradient-mid), 
+                var(--bg-gradient-end)
+            );
+            color: var(--color-text-main);
+            font-family: var(--font-main);
+            
+            /* Interaction */
+            cursor: pointer;
+            outline: none; /* Removes default focus ring (we add custom styles if needed) */
         }
 
-        /* Container */
+        /* Focus state for accessibility (Keyboard users) */
+        body:focus-visible {
+            outline: 3px solid var(--color-primary);
+            outline-offset: -3px;
+        }
+
+        /* =========================================
+           3. MAIN LAYOUT COMPONENTS
+           ========================================= */
         .intro-container {
             text-align: center;
             padding: 20px;
             width: 100%;
-            max-width: 900px; /* Limits width on large screens */
+            max-width: 900px;
+            position: relative;
+            z-index: 10;
         }
 
-        /* Title */
         h1 {
             font-size: 4rem;
-            color: #083d77;
+            color: var(--color-primary);
             margin-bottom: 40px;
             letter-spacing: 2px;
-            animation: fadeIn 1s ease forwards;
-            opacity: 0;
             line-height: 1.2;
+            font-weight: var(--fw-bold);
+            
+            /* Animation */
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
         }
 
-        /* Slogan wrapper */
-        .slogan-wrapper {
+        .slogan-wrapper p {
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            white-space: nowrap;
+            font-weight: var(--fw-regular);
+            
+            /* Animation */
             opacity: 0;
             animation: fadeIn 1.5s ease forwards;
             animation-delay: 0.5s;
         }
 
-        /* Just the text */
-        .slogan-wrapper p {
-            font-size: 1.5rem;
-            color: #7d7d7d; /* Changed slightly from #b5b5b5 for better readability on light backgrounds */
-            white-space: nowrap;
-        }
-
-        /* Animations */
+        /* =========================================
+           4. ANIMATIONS
+           ========================================= */
         @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; transform: translateY(10px); } /* Slight movement adds polish */
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* =========================================
-           MOBILE RESPONSIVE FIXES
+           5. MOBILE RESPONSIVENESS
            ========================================= */
         
+        /* Tablets and Laptops */
         @media (max-width: 768px) {
             body {
-                padding: 15px; /* Adds safety padding around the edges */
+                padding: 15px;
             }
 
             h1 {
-                font-size: 2.2rem; /* Reduced size for mobile */
+                font-size: 2.2rem;
                 margin-bottom: 20px;
                 letter-spacing: 1px;
             }
 
             .slogan-wrapper p {
-                font-size: 1.1rem; /* Smaller text */
-                white-space: normal; /* CRITICAL FIX: Allows text to wrap to the next line */
-                line-height: 1.5; /* Adds space between wrapped lines */
-                padding: 0 10px; /* Prevents text from hitting the screen edge */
+                font-size: 1.1rem;
+                white-space: normal; /* Allows text to wrap on small screens */
+                line-height: 1.5;
+                padding: 0 10px;
             }
         }
 
-        /* For very small screens */
+        /* Small Phones (iPhone SE, etc.) */
         @media (max-width: 380px) {
             h1 {
                 font-size: 1.8rem;
@@ -105,21 +158,42 @@
         }
     </style>
 </head>
-<body>
+<!-- 
+    Accessibility Improvement: 
+    Added tabindex="0" to make the body focusable by keyboard.
+    Added aria-label to explain what clicking does.
+-->
+<body tabindex="0" aria-label="Click anywhere or press Enter to enter the site">
 
-    <div class="intro-container">
-        <!-- Inferred content based on your previous file -->
+    <main class="intro-container">
         <h1>Empire HealthCare</h1>
         
         <div class="slogan-wrapper">
             <p>beyond everything</p>
         </div>
-    </div>
+    </main>
 
     <script>
-        // Redirect to home.html when clicking anywhere on the body
-        document.body.addEventListener('click', function() {
+        /**
+         * REDIRECT LOGIC
+         * Handles both mouse clicks and keyboard 'Enter' presses.
+         */
+        const redirectToHome = () => {
+            // Check if we are in the preview environment or live site
+            // In a real file, you just need: window.location.href = 'home.html';
+            console.log("Redirecting to home.html...");
             window.location.href = 'home.html';
+        };
+
+        // Mouse Click
+        document.body.addEventListener('click', redirectToHome);
+
+        // Keyboard Accessibility (Enter or Space key)
+        document.body.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault(); // Prevent scrolling if Space is pressed
+                redirectToHome();
+            }
         });
     </script>
 
