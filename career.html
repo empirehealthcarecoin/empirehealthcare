@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Careers at Empire Healthcare - Join our team">
     <meta name="theme-color" content="#083d77"> <!-- Brand color for mobile browser bars -->
-    <title>Careers - Empire Healthcare</title>
+    <title>EmpireHealthCare</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images\Favicon.png" type="image/png">
 
     <!-- Preconnect & Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -288,14 +291,21 @@
             opacity: 0.9;
         }
 
-        /* APPLICATION FORM */
+        /* APPLICATION FORM - UPDATED TO MATCH CONTACT PAGE */
         .apply-section {
             max-width: 800px;
             margin: 0 auto 60px;
             padding: 40px;
-            background: white;
+            background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            /* Updated shadow and border to be cleaner */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(8, 61, 119, 0.1);
+            
+            /* Entry Animation */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
         }
 
         .apply-form .form-group {
@@ -306,9 +316,10 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #444;
+            color: var(--color-text-muted);
         }
 
+        /* Updated inputs to match Contact Page exactly */
         .apply-form input, 
         .apply-form select,
         .apply-form textarea {
@@ -316,36 +327,44 @@
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 1rem;
-            font-family: inherit; /* Ensure font matches */
+            font-size: 16px; /* 16px prevents zoom on mobile */
+            font-family: inherit;
+            background-color: #fff;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         
         .apply-form input:focus, 
         .apply-form select:focus,
         .apply-form textarea:focus {
-            outline: 2px solid var(--color-primary);
-            border-color: transparent;
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(8, 61, 119, 0.1);
         }
 
         .apply-form button {
             width: 100%;
             background-color: var(--color-primary);
             color: var(--color-text-light);
-            padding: 15px;
+            padding: 14px 28px;
             border: none;
             border-radius: 6px;
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background-color 0.3s ease;
         }
 
         .apply-form button:hover {
             background-color: #062a52; /* Slightly darker shade */
         }
 
+        /* Animation Keyframes */
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -378,7 +397,7 @@
             }
 
             .nav-links li a {
-                padding: 8px 12px; /* Consistency: Matches other pages */
+                padding: 8px 12px;
                 font-size: 0.95rem;
             }
 
@@ -388,7 +407,11 @@
 
             .career-hero h1 { font-size: 2rem; }
             .culture-section { grid-template-columns: 1fr; }
-            .apply-section { padding: 25px; margin: 0 20px 60px; }
+            
+            .apply-section { 
+                padding: 25px; 
+                margin: 0 20px 60px; 
+            }
         }
     </style>
 </head>
@@ -396,7 +419,6 @@
 
     <!-- Header -->
     <header>
-        <!-- Consistency: Logo now links to home -->
         <a href="home.html" class="logo">Empire HealthCare</a>
         <nav>
             <ul class="nav-links">
@@ -484,9 +506,9 @@
         </section>
 
         <!-- Application Form -->
-        <section id="apply-form" class="apply-section">
+        <section id="apply-form" class="apply-section apply-form">
             <h2 class="section-title">Apply Now</h2>
-            <p style="text-align:center; margin-bottom:20px; color:#666;">Don't see a role that fits? Send us your details anyway!</p>
+            <p style="text-align:center; margin-bottom:30px; color:var(--color-text-muted);">Don't see a role that fits? Send us your details anyway!</p>
             
             <!-- BACKEND: Formsubmit.co connected to your email -->
             <form action="https://formsubmit.co/empirehealthcaresales@gmail.com" method="POST">
@@ -496,12 +518,12 @@
 
                 <div class="form-group">
                     <label for="full-name">Full Name</label>
-                    <input type="text" id="full-name" name="name" required placeholder="your name">
+                    <input type="text" id="full-name" name="name" required placeholder="Enter your full name">
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required placeholder="yourmail@example.com">
+                    <input type="email" id="email" name="email" required placeholder="example@mail.com">
                 </div>
 
                 <div class="form-group">
@@ -522,12 +544,12 @@
                 <div class="form-group">
                     <label for="resume-link">Link to Resume (Google Drive / LinkedIn)</label>
                     <input type="url" id="resume-link" name="resume_link" placeholder="https://drive.google.com/..." required>
-                    <small style="color: #777;">*Please paste a sharable link to your CV.</small>
+                    <small style="display:block; margin-top:5px; color:#777;">*Please paste a sharable link to your CV.</small>
                 </div>
 
                 <div class="form-group">
                     <label for="message">Cover Letter / Message</label>
-                    <textarea id="message" name="message" rows="4" placeholder="Tell us why you'd be a great fit..."></textarea>
+                    <textarea id="message" name="message" rows="5" placeholder="Tell us why you'd be a great fit..."></textarea>
                 </div>
 
                 <button type="submit">Submit Application</button>
@@ -561,6 +583,4 @@
     </script>
 
 </body>
-
 </html>
-
