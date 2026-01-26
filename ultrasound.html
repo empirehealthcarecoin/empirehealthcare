@@ -1,365 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Medical Imaging Ultrasound</title>
-  <!-- Kept internal styles for preview purposes. In your real project, move this to ultrasound.css -->
-  <style>
-    /* =========================================
-       YOUR ORIGINAL CSS (UNCHANGED BASE)
-       ========================================= */
-    
-    /* RESET AND BASE SETUP */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Medical Imaging Ultrasound Systems - Empire HealthCare">
+    <meta name="theme-color" content="#083d77"> <!-- Brand color for mobile browser bars -->
+    <title>Medical Imaging Ultrasound</title>
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
-      color: #222;
-      overflow-x: hidden;
-    }
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 
-    /* ===== HEADER / TOP NAVIGATION ===== */
-    header {
-      background-color: #083d77;
-      padding: 15px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 999;
-    }
+    <style>
+        /* =========================================
+           1. CONFIG: CSS VARIABLES
+           ========================================= */
+        :root {
+            /* Fonts */
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-    /* LOGO TEXT */
-    .logo {
-      font-size: 24px;
-      color: #ffffff;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
+            /* Palette */
+            --color-primary: #083d77;      /* Deep Blue */
+            --color-accent: #ffc107;       /* Gold/Yellow */
+            --color-text-dark: #222222;
+            --color-text-light: #ffffff;
+            --color-text-muted: #666666;
+            
+            /* Gradients */
+            --bg-gradient: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
+            
+            /* Layout */
+            --header-height: 70px;
+            --max-width: 1200px;
+        }
 
-    /* NAVIGATION LINKS */
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 20px; /* Increased slightly for better clickability */
-    }
+        /* =========================================
+           2. RESET & GLOBAL STYLES
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .nav-links li {
-      display: inline-block;
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    .nav-links li a {
-      color: white;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 10px;
-      position: relative;
-      transition: color 0.3s ease;
-    }
+        body {
+            min-height: 100vh;
+            font-family: var(--font-body);
+            background: var(--bg-gradient);
+            color: var(--color-text-dark);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .nav-links li a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      background-color: #ffc107;
-      left: 0;
-      bottom: 0;
-      transition: width 0.3s ease;
-    }
+        h1, h2, .logo, .nav-links a {
+            font-family: var(--font-heading);
+        }
 
-    .nav-links li a:hover,
-    .nav-links li a.active {
-      color: #ffc107;
-    }
+        /* =========================================
+           3. HEADER / NAVIGATION
+           ========================================= */
+        header {
+            background-color: var(--color-primary);
+            padding: 0 40px;
+            min-height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
 
-    .nav-links li a:hover::after,
-    .nav-links li a.active::after {
-      width: 100%;
-    }
+        /* Logo acts as a link but looks like text */
+        .logo {
+            font-size: 24px;
+            color: var(--color-text-light);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-decoration: none; /* Removes underline */
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+        
+        .logo:hover {
+            opacity: 0.9;
+        }
 
-    /* Main Container for the Products */
-    .ultrasound-container {
-      padding: 40px 20px;
-      text-align: center;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
 
-    /* Page Title */
-    .page-title {
-      font-size: 36px;
-      margin-bottom: 40px;
-      color: #083d77;
-      font-weight: bold;
-    }
+        .nav-links li a {
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px;
+            position: relative;
+            transition: color 0.3s ease;
+            display: inline-block;
+        }
 
-    /* Product List Styles */
-    .product-list {
-      display: grid;
-      /* Responsive grid: fits as many 250px columns as possible */
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 30px;
-      padding: 10px;
-    }
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accent);
+            left: 0;
+            bottom: 5px;
+            transition: width 0.3s ease;
+        }
 
-    /* Individual Product Card Styles */
-    .product-card {
-      background-color: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(50px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      
-      /* ADDED for Link behavior: */
-      text-decoration: none; /* Removes underline from text inside the link */
-      cursor: pointer;
-      color: inherit;
-    }
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: var(--color-accent);
+        }
 
-    .product-card img {
-      width: 100%;
-      height: 200px; /* Fixed height for consistency */
-      object-fit: contain; /* Keeps image aspect ratio */
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
+        .nav-links li a:hover::after,
+        .nav-links li a.active::after {
+            width: 100%;
+        }
 
-    .product-card h2 {
-      margin-top: auto; /* Pushes content down if needed */
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #083d77;
-    }
+        /* =========================================
+           4. MAIN CONTAINER
+           ========================================= */
+        .ultrasound-container {
+            padding: 40px 20px;
+            text-align: center;
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            flex: 1; /* Pushes potential footer to bottom */
+        }
 
-    .product-card p {
-      font-size: 0.95rem;
-      color: #666;
-      line-height: 1.4;
-    }
+        .page-title {
+            font-size: 2.8rem;
+            margin-bottom: 40px;
+            color: var(--color-primary);
+            font-weight: 700;
+        }
 
-    /* Fade-in Animation */
-    .fade-in {
-      animation: fadeIn 0.5s forwards;
-    }
+        /* =========================================
+           5. PRODUCT GRID & CARDS
+           ========================================= */
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 30px;
+            padding: 20px 10px;
+        }
 
-    /* Stagger animations for a nice effect */
-    .product-card:nth-child(1) { animation-delay: 0.1s; }
-    .product-card:nth-child(2) { animation-delay: 0.2s; }
-    .product-card:nth-child(3) { animation-delay: 0.3s; }
-    .product-card:nth-child(4) { animation-delay: 0.4s; }
-    /* ... add more if needed or rely on base animation */
+        .product-card {
+            background-color: white;
+            border: 1px solid #e1e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            
+            /* The Animation Setup */
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        box-shadow 0.3s ease, 
+                        border-color 0.3s ease;
+            
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            cursor: pointer;
+            color: inherit;
+            height: 100%;
 
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+            /* Initial State for Page Load Entry */
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUpFade 0.6s forwards ease-out;
+        }
 
-    /* Hover Effect for Product Cards */
-    .product-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    }
+        /* POP-OUT HOVER EFFECT */
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02); /* Pop out and slightly up */
+            box-shadow: 0 15px 30px rgba(8, 61, 119, 0.15); /* Soft themed shadow */
+            border-color: var(--color-primary); /* Subtle border highlight */
+        }
 
-    /* =========================================
-       MOBILE RESPONSIVE FIXES
-       ========================================= */
-    
-    @media screen and (max-width: 768px) {
-      /* 1. Header Fixes */
-      header {
-        flex-direction: column;
-        padding: 15px 20px;
-        gap: 15px;
-      }
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
 
-      .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-      }
-      
-      .nav-links li a {
-        padding: 8px;
-        font-size: 0.95rem;
-      }
+        /* Image interaction on card hover */
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
 
-      /* 2. Page Layout */
-      .page-title {
-        font-size: 28px;
-        margin-bottom: 30px;
-      }
+        .product-card h2 {
+            margin-bottom: 12px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
 
-      .ultrasound-container {
-        padding: 20px 15px;
-      }
+        .product-card p {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+            margin-top: auto; /* Keeps text at bottom of flexible space */
+        }
 
-      /* 3. Grid Adjustments */
-      .product-list {
-        gap: 20px;
-        /* On mobile, allow cards to be a bit smaller if needed, or stack fully */
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      }
-    }
+        /* Entry Animation Keyframes */
+        @keyframes slideUpFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    /* Extra small devices */
-    @media (max-width: 480px) {
-      .product-list {
-        /* Force single column on very small screens for better readability */
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+        /* Staggered Entry Delays (Automated for first 15 items roughly) */
+        .product-card:nth-child(1) { animation-delay: 0.05s; }
+        .product-card:nth-child(2) { animation-delay: 0.1s; }
+        .product-card:nth-child(3) { animation-delay: 0.15s; }
+        .product-card:nth-child(4) { animation-delay: 0.2s; }
+        .product-card:nth-child(5) { animation-delay: 0.25s; }
+        .product-card:nth-child(6) { animation-delay: 0.3s; }
+        .product-card:nth-child(7) { animation-delay: 0.35s; }
+        .product-card:nth-child(8) { animation-delay: 0.4s; }
+
+        /* =========================================
+           6. MOBILE RESPONSIVENESS
+           ========================================= */
+        @media screen and (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .nav-links li a {
+                padding: 8px 12px; /* Consistency: Matches Home/Products mobile padding */
+                font-size: 0.9rem;
+            }
+
+            .nav-links li a::after {
+                bottom: 2px;
+            }
+
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .product-list {
+                gap: 20px;
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            
+            /* Disable aggressive scale on mobile to prevent layout jumps */
+            .product-card:hover {
+                transform: translateY(-5px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Navigation Bar -->
-  <header>
-    <div class="logo">Empire HealthCare</div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="home.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="career.html">Career</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <div class="ultrasound-container">
-    <h1 class="page-title">Medical Imaging Ultrasound</h1>
-    <div class="product-list">
-      
-      <!-- Product Cards (Changed from DIV to A tags) -->
-      
-      <a href="DP50Expert.html" class="product-card fade-in">
-        <img src="images/dp-50-expert.png" alt="DP 50 Expert" onerror="this.src='https://placehold.co/250x200?text=DP+50'" />
-        <h2>DP 50 Expert</h2>
-        <p>High-performance compact system for general diagnostic imaging.</p>
-      </a>
+    <!-- Navigation Bar -->
+    <header>
+        <!-- Consistency: Logo now links to home -->
+        <a href="home.html" class="logo">Empire HealthCare</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <!-- Note: Products is active since this is a sub-category -->
+                <li><a href="products.html" class="active">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-      <a href="DC30Fullhd.html" class="product-card fade-in">
-        <img src="images/dc-30-full-hd.png" alt="DC-30 Full HD" onerror="this.src='https://placehold.co/250x200?text=DC-30'" />
-        <h2>DC-30 Full HD</h2>
-        <p>Advanced imaging with intuitive workflow and premium features.</p>
-      </a>
+    <!-- Main Content -->
+    <main class="ultrasound-container">
+        <h1 class="page-title">Medical Imaging Ultrasound</h1>
+        
+        <div class="product-list">
+            
+            <!-- Items use existing paths -->
+            <a href="DP50Expert.html" class="product-card">
+                <img src="images/dp-50-expert.png" alt="DP 50 Expert" onerror="this.src='https://placehold.co/250x200?text=DP+50'" />
+                <h2>DP 50 Expert</h2>
+                <p>High-performance compact system for general diagnostic imaging.</p>
+            </a>
 
-      <a href="DC40Crystal.html" class="product-card fade-in">
-        <img src="images/dc-40-crystal.png" alt="DC-40 Crystal" onerror="this.src='https://placehold.co/250x200?text=DC-40'" />
-        <h2>DC-40 Crystal</h2>
-        <p>Crystal-clear imaging and advanced scanning modes.</p>
-      </a>
+            <a href="DC30Fullhd.html" class="product-card">
+                <img src="images/dc-30-full-hd.png" alt="DC-30 Full HD" onerror="this.src='https://placehold.co/250x200?text=DC-30'" />
+                <h2>DC-30 Full HD</h2>
+                <p>Advanced imaging with intuitive workflow and premium features.</p>
+            </a>
 
-      <a href="DC60Xinsight.html" class="product-card fade-in">
-        <img src="images/dc-60-xinsight.png" alt="DC-60 Xinsight" onerror="this.src='https://placehold.co/250x200?text=DC-60+X'" />
-        <h2>DC-60 Xinsight</h2>
-        <p>Improved precision and faster response with X-Insight platform.</p>
-      </a>
+            <a href="DC40Crystal.html" class="product-card">
+                <img src="images/dc-40-crystal.png" alt="DC-40 Crystal" onerror="this.src='https://placehold.co/250x200?text=DC-40'" />
+                <h2>DC-40 Crystal</h2>
+                <p>Crystal-clear imaging and advanced scanning modes.</p>
+            </a>
 
-      <a href="DC70Xinsight.html" class="product-card fade-in">
-        <img src="images/dc-70-xinsight.png" alt="DC-70 Xinsight" onerror="this.src='https://placehold.co/250x200?text=DC-70+X'" />
-        <h2>DC-70 Xinsight</h2>
-        <p>Smart tools for women's health, cardiology, and more.</p>
-      </a>
+            <a href="DC60Xinsight.html" class="product-card">
+                <img src="images/dc-60-xinsight.png" alt="DC-60 Xinsight" onerror="this.src='https://placehold.co/250x200?text=DC-60+X'" />
+                <h2>DC-60 Xinsight</h2>
+                <p>Improved precision and faster response with X-Insight platform.</p>
+            </a>
 
-      <a href="DC80Xinsight.html" class="product-card fade-in">
-        <img src="images/dc-80-xinsight.png" alt="DC-80 Xinsight" onerror="this.src='https://placehold.co/250x200?text=DC-80+X'" />
-        <h2>DC-80 Xinsight</h2>
-        <p>Flagship X-insight tech for top-tier diagnostics.</p>
-      </a>
+            <a href="DC70Xinsight.html" class="product-card">
+                <img src="images/dc-70-xinsight.png" alt="DC-70 Xinsight" onerror="this.src='https://placehold.co/250x200?text=DC-70+X'" />
+                <h2>DC-70 Xinsight</h2>
+                <p>Smart tools for women's health, cardiology, and more.</p>
+            </a>
 
-      <a href="ConsonaN6.html" class="product-card fade-in">
-        <img src="images/consona-n6.png" alt="Consona N6" onerror="this.src='https://placehold.co/250x200?text=Consona+N6'" />
-        <h2>Consona N6</h2>
-        <p>Advanced ergonomic design with superior imaging.</p>
-      </a>
+            <a href="DC80Xinsight.html" class="product-card">
+                <img src="images/dc-80-xinsight.png" alt="DC-80 Xinsight" onerror="this.src='https://placehold.co/250x200?text=DC-80+X'" />
+                <h2>DC-80 Xinsight</h2>
+                <p>Flagship X-insight tech for top-tier diagnostics.</p>
+            </a>
 
-      <a href="ConsonaN7.html" class="product-card fade-in">
-        <img src="images/consona-n7.png" alt="Consona N7" onerror="this.src='https://placehold.co/250x200?text=Consona+N7'" />
-        <h2>Consona N7</h2>
-        <p>Reliable imaging system for versatile clinical applications.</p>
-      </a>
+            <a href="ConsonaN6.html" class="product-card">
+                <img src="images/consona-n6.png" alt="Consona N6" onerror="this.src='https://placehold.co/250x200?text=Consona+N6'" />
+                <h2>Consona N6</h2>
+                <p>Advanced ergonomic design with superior imaging.</p>
+            </a>
 
-      <a href="ConsonaN8.html" class="product-card fade-in">
-        <img src="images/consona-n8.png" alt="Consona N8" onerror="this.src='https://placehold.co/250x200?text=Consona+N8'" />
-        <h2>Consona N8</h2>
-        <p>Improved transducer tech and deep tissue clarity.</p>
-      </a>
+            <a href="ConsonaN7.html" class="product-card">
+                <img src="images/consona-n7.png" alt="Consona N7" onerror="this.src='https://placehold.co/250x200?text=Consona+N7'" />
+                <h2>Consona N7</h2>
+                <p>Reliable imaging system for versatile clinical applications.</p>
+            </a>
 
-      <a href="ConsonaN9.html" class="product-card fade-in">
-        <img src="images/consona-n9.png" alt="Consona N9" onerror="this.src='https://placehold.co/250x200?text=Consona+N9'" />
-        <h2>Consona N9</h2>
-        <p>Premium system with AI-enhanced diagnostic assistance.</p>
-      </a>
+            <a href="ConsonaN8.html" class="product-card">
+                <img src="images/consona-n8.png" alt="Consona N8" onerror="this.src='https://placehold.co/250x200?text=Consona+N8'" />
+                <h2>Consona N8</h2>
+                <p>Improved transducer tech and deep tissue clarity.</p>
+            </a>
 
-      <a href="ResonaI9.html" class="product-card fade-in">
-        <img src="images/resona-i9.png" alt="Resona I9" onerror="this.src='https://placehold.co/250x200?text=Resona+I9'" />
-        <h2>Resona I9</h2>
-        <p>Next-gen intelligence for faster, more confident results.</p>
-      </a>
+            <a href="ConsonaN9.html" class="product-card">
+                <img src="images/consona-n9.png" alt="Consona N9" onerror="this.src='https://placehold.co/250x200?text=Consona+N9'" />
+                <h2>Consona N9</h2>
+                <p>Premium system with AI-enhanced diagnostic assistance.</p>
+            </a>
 
-      <a href="NuewaI9.html" class="product-card fade-in">
-        <img src="images/nuewa-i9.png" alt="Nuewa I9" onerror="this.src='https://placehold.co/250x200?text=Nuewa+I9'" />
-        <h2>Nuewa I9</h2>
-        <p>Customized OB/GYN care with dedicated AI tools.</p>
-      </a>
+            <a href="ResonaI9.html" class="product-card">
+                <img src="images/resona-i9.png" alt="Resona I9" onerror="this.src='https://placehold.co/250x200?text=Resona+I9'" />
+                <h2>Resona I9</h2>
+                <p>Next-gen intelligence for faster, more confident results.</p>
+            </a>
 
-      <a href="ResonaR9.html" class="product-card fade-in">
-        <img src="images/resona-r9.png" alt="Resona R9" onerror="this.src='https://placehold.co/250x200?text=Resona+R9'" />
-        <h2>Resona R9</h2>
-        <p>Expert cardiac and vascular imaging system.</p>
-      </a>
+            <a href="NuewaI9.html" class="product-card">
+                <img src="images/nuewa-i9.png" alt="Nuewa I9" onerror="this.src='https://placehold.co/250x200?text=Nuewa+I9'" />
+                <h2>Nuewa I9</h2>
+                <p>Customized OB/GYN care with dedicated AI tools.</p>
+            </a>
 
-      <a href="TE7.html" class="product-card fade-in">
-        <img src="images/te7.png" alt="TE7" onerror="this.src='https://placehold.co/250x200?text=TE7'" />
-        <h2>TE7</h2>
-        <p>Portable touchscreen ultrasound for POC applications.</p>
-      </a>
+            <a href="ResonaR9.html" class="product-card">
+                <img src="images/resona-r9.png" alt="Resona R9" onerror="this.src='https://placehold.co/250x200?text=Resona+R9'" />
+                <h2>Resona R9</h2>
+                <p>Expert cardiac and vascular imaging system.</p>
+            </a>
 
-      <a href="M6.html" class="product-card fade-in">
-        <img src="images/m6.png" alt="M6" onerror="this.src='https://placehold.co/250x200?text=M6'" />
-        <h2>M6</h2>
-        <p>Compact, smart ultrasound with mobile flexibility.</p>
-      </a>
+            <a href="TE7.html" class="product-card">
+                <img src="images/te7.png" alt="TE7" onerror="this.src='https://placehold.co/250x200?text=TE7'" />
+                <h2>TE7</h2>
+                <p>Portable touchscreen ultrasound for POC applications.</p>
+            </a>
 
-      <a href="MX7.html" class="product-card fade-in">
-        <img src="images/mx7.png" alt="MX7" onerror="this.src='https://placehold.co/250x200?text=MX7'" />
-        <h2>MX7</h2>
-        <p>Smart portable system with wireless probes support.</p>
-      </a>
+            <a href="M6.html" class="product-card">
+                <img src="images/m6.png" alt="M6" onerror="this.src='https://placehold.co/250x200?text=M6'" />
+                <h2>M6</h2>
+                <p>Compact, smart ultrasound with mobile flexibility.</p>
+            </a>
 
-      <a href="M8.html" class="product-card fade-in">
-        <img src="images/m8.png" alt="M8" onerror="this.src='https://placehold.co/250x200?text=M8'" />
-        <h2>M8</h2>
-        <p>Advanced capabilities in a slim, powerful unit.</p>
-      </a>
+            <a href="MX7.html" class="product-card">
+                <img src="images/mx7.png" alt="MX7" onerror="this.src='https://placehold.co/250x200?text=MX7'" />
+                <h2>MX7</h2>
+                <p>Smart portable system with wireless probes support.</p>
+            </a>
 
-      <a href="TEAir.html" class="product-card fade-in">
-        <img src="images/te-air.png" alt="TE Air" onerror="this.src='https://placehold.co/250x200?text=TE+Air'" />
-        <h2>TE Air</h2>
-        <p>Wireless, handheld ultrasound with smart connectivity.</p>
-      </a>
+            <a href="M8.html" class="product-card">
+                <img src="images/m8.png" alt="M8" onerror="this.src='https://placehold.co/250x200?text=M8'" />
+                <h2>M8</h2>
+                <p>Advanced capabilities in a slim, powerful unit.</p>
+            </a>
 
-    </div>
-  </div>
+            <a href="TEAir.html" class="product-card">
+                <img src="images/te-air.png" alt="TE Air" onerror="this.src='https://placehold.co/250x200?text=TE+Air'" />
+                <h2>TE Air</h2>
+                <p>Wireless, handheld ultrasound with smart connectivity.</p>
+            </a>
+
+        </div>
+    </main>
+
 </body>
 </html>

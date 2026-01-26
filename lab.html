@@ -1,297 +1,410 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Laboratory Equipment - Empire Healthcare</title>
-  <!-- Kept internal styles for preview purposes. In your real project, move this to lab.css -->
-  <style>
-    /* =========================================
-       YOUR ORIGINAL CSS (UNCHANGED BASE)
-       ========================================= */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Laboratory Equipment - Empire HealthCare">
+    <meta name="theme-color" content="#083d77"> <!-- Brand color for mobile browser bars -->
+    <title>Laboratory Equipment - Empire Healthcare</title>
 
-    /* RESET AND BASE SETUP */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
-      color: #222;
-      overflow-x: hidden;
-    }
+    <style>
+        /* =========================================
+           1. CONFIG: CSS VARIABLES
+           ========================================= */
+        :root {
+            /* Fonts */
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-    /* ===== HEADER / TOP NAVIGATION ===== */
-    header {
-      background-color: #083d77;
-      padding: 15px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 999;
-    }
+            /* Palette */
+            --color-primary: #083d77;      /* Deep Blue */
+            --color-accent: #ffc107;       /* Gold/Yellow */
+            --color-text-dark: #222222;
+            --color-text-light: #ffffff;
+            --color-text-muted: #666666;
+            
+            /* Gradients */
+            --bg-gradient: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
+            
+            /* Layout */
+            --header-height: 70px;
+            --max-width: 1200px;
+        }
 
-    /* LOGO TEXT */
-    .logo {
-      font-size: 24px;
-      color: #ffffff;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
+        /* =========================================
+           2. RESET & GLOBAL STYLES
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* NAVIGATION LINKS */
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 20px; /* Increased slightly for better clickability */
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    .nav-links li {
-      display: inline-block;
-    }
+        body {
+            min-height: 100vh;
+            font-family: var(--font-body);
+            background: var(--bg-gradient);
+            color: var(--color-text-dark);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .nav-links li a {
-      color: white;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 10px;
-      position: relative;
-      transition: color 0.3s ease;
-    }
+        h1, h2, h3, .logo, .nav-links a {
+            font-family: var(--font-heading);
+        }
 
-    .nav-links li a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      background-color: #ffc107;
-      left: 0;
-      bottom: 0;
-      transition: width 0.3s ease;
-    }
+        /* =========================================
+           3. HEADER / NAVIGATION
+           ========================================= */
+        header {
+            background-color: var(--color-primary);
+            padding: 0 40px;
+            min-height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
 
-    .nav-links li a:hover,
-    .nav-links li a.active {
-      color: #ffc107;
-    }
+        /* Logo acts as a link but looks like text */
+        .logo {
+            font-size: 24px;
+            color: var(--color-text-light);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+        
+        .logo:hover {
+            opacity: 0.9;
+        }
 
-    .nav-links li a:hover::after,
-    .nav-links li a.active::after {
-      width: 100%;
-    }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
 
-    /* Page Container */
-    .lab-container {
-      padding: 60px 20px;
-      max-width: 1200px;
-      margin: auto;
-      text-align: center;
-    }
+        .nav-links li a {
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px;
+            position: relative;
+            transition: color 0.3s ease;
+            display: inline-block;
+        }
 
-    .title {
-      font-size: 2.8rem;
-      color: #083d77; /* Matched to theme (was #0077ff) */
-      margin-bottom: 40px;
-    }
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accent);
+            left: 0;
+            bottom: 5px;
+            transition: width 0.3s ease;
+        }
 
-    /* Sections */
-    .lab-section {
-      margin-bottom: 60px;
-    }
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: var(--color-accent);
+        }
 
-    .lab-section h2 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-      color: #083d77;
-    }
+        .nav-links li a:hover::after,
+        .nav-links li a.active::after {
+            width: 100%;
+        }
 
-    /* Grid */
-    .product-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      justify-content: center;
-    }
+        /* =========================================
+           4. MAIN CONTAINER & SECTIONS
+           ========================================= */
+        .lab-container {
+            padding: 60px 20px;
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            text-align: center;
+            flex: 1; /* Pushes potential footer to bottom */
+        }
 
-    /* Product Card */
-    .product-card {
-      background-color: #ffffff;
-      border: 2px solid #083d77; /* Matched to theme */
-      border-radius: 12px;
-      width: 260px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .title {
+            font-size: 2.8rem;
+            margin-bottom: 40px;
+            color: var(--color-primary);
+            font-weight: 700;
+        }
 
-    .product-card:hover {
-      transform: translateY(-5px);
-    }
+        .lab-section {
+            margin-bottom: 60px;
+        }
 
-    .product-card img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover; /* Ensures images fill the box nicely */
-      margin-bottom: 15px;
-      border-radius: 8px;
-    }
+        .lab-section h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--color-primary);
+            position: relative;
+            display: inline-block;
+        }
 
-    .product-card h3 {
-      font-size: 1.1rem;
-      color: #083d77;
-      margin-top: auto; /* Pushes title to center/bottom */
-    }
+        /* Optional underline for section titles */
+        .lab-section h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--color-accent);
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
 
-    /* =========================================
-       MOBILE RESPONSIVE FIXES
-       ========================================= */
-    
-    @media screen and (max-width: 768px) {
-      /* 1. Header Fixes */
-      header {
-        flex-direction: column;
-        padding: 15px 20px;
-        gap: 15px;
-      }
+        /* =========================================
+           5. PRODUCT GRID & CARDS
+           ========================================= */
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
 
-      .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-      }
-      
-      .nav-links li a {
-        padding: 8px;
-        font-size: 0.95rem;
-      }
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
 
-      /* 2. Page Layout */
-      .lab-container {
-        padding: 40px 15px;
-      }
+        .product-card {
+            background-color: #ffffff;
+            border: 2px solid var(--color-primary);
+            border-radius: 12px;
+            width: 260px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            
+            /* Animations */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUpFade 0.6s forwards ease-out;
+        }
 
-      .title {
-        font-size: 2.2rem;
-        margin-bottom: 30px;
-      }
+        /* Staggered Delay for grid items (up to 12) */
+        .card-link:nth-child(1) .product-card { animation-delay: 0.1s; }
+        .card-link:nth-child(2) .product-card { animation-delay: 0.2s; }
+        .card-link:nth-child(3) .product-card { animation-delay: 0.3s; }
+        .card-link:nth-child(4) .product-card { animation-delay: 0.4s; }
 
-      .lab-section h2 {
-        font-size: 1.8rem;
-      }
+        .card-link:hover .product-card {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(8, 61, 119, 0.15);
+        }
 
-      /* 3. Card Adjustments for Mobile */
-      .product-grid {
-        gap: 20px;
-      }
+        .product-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover; /* Ensures images look neat */
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
 
-      .product-card {
-        width: 100%;       /* Fill container width on small screens... */
-        max-width: 320px;  /* ...but don't get huge */
-      }
-    }
-  </style>
+        .product-card h3 {
+            font-size: 1.1rem;
+            color: var(--color-primary);
+            margin-top: auto; /* Pushes title to bottom */
+            font-weight: 600;
+        }
+
+        @keyframes slideUpFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================================
+           6. MOBILE RESPONSIVENESS
+           ========================================= */
+        @media screen and (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .nav-links li a {
+                padding: 8px 12px; /* Consistency: Matches other pages */
+                font-size: 0.9rem;
+            }
+
+            .nav-links li a::after {
+                bottom: 2px;
+            }
+
+            .lab-container {
+                padding: 40px 15px;
+            }
+
+            .title {
+                font-size: 2.2rem;
+                margin-bottom: 30px;
+            }
+
+            .lab-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .product-grid {
+                gap: 20px;
+            }
+
+            .card-link, .product-card {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <header>
-    <div class="logo">Empire HealthCare</div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="home.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="career.html">Career</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+    <!-- Navigation Bar -->
+    <header>
+        <!-- Consistency: Logo now links to home -->
+        <a href="home.html" class="logo">Empire HealthCare</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <!-- Products is Active -->
+                <li><a href="products.html" class="active">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <main class="lab-container">
-    <h1 class="title">Laboratory Equipment</h1>
+    <main class="lab-container">
+        <h1 class="title">Laboratory Equipment</h1>
 
-    <!-- Hematology Section -->
-    <section class="lab-section">
-      <h2>Hematology</h2>
-      <div class="product-grid">
-        <div class="product-card">
-          <img src="images/cellular-analysis.jpg" alt="Cellular Analysis Line">
-          <h3>Cellular Analysis Line</h3>
-        </div>
-        <div class="product-card">
-          <img src="images/5-part-analyzer.jpg" alt="5-Part Differential Analyzer">
-          <h3>5-Part Differential Analyzer</h3>
-        </div>
-        <div class="product-card">
-          <img src="images/3-part-analyzer.jpg" alt="3-Part Differential Analyzer">
-          <h3>3-Part Differential Analyzer</h3>
-        </div>
-        <div class="product-card">
-          <img src="images/hematology-reagents.jpg" alt="Hematology Reagents">
-          <h3>Hematology Reagents</h3>
-        </div>
-      </div>
-    </section>
+        <!-- Hematology Section -->
+        <section class="lab-section">
+            <h2>Hematology</h2>
+            <div class="product-grid">
+                <a href="cellular-analysis.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/cellular-analysis.png" alt="Cellular Analysis Line" onerror="this.src='https://placehold.co/260x160?text=Cellular+Analysis'">
+                        <h3>Cellular Analysis Line</h3>
+                    </div>
+                </a>
+                <a href="5-part-analyzer.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/5-part-analyzer.png" alt="5-Part Differential Analyzer" onerror="this.src='https://placehold.co/260x160?text=5-Part+Analyzer'">
+                        <h3>5-Part Differential Analyzer</h3>
+                    </div>
+                </a>
+                <a href="3-part-analyzer.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/3-part-analyzer-1.png" alt="3-Part Differential Analyzer" onerror="this.src='https://placehold.co/260x160?text=3-Part+Analyzer'">
+                        <h3>3-Part Differential Analyzer</h3>
+                    </div>
+                </a>
+                <a href="hematology-reagents.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/hematology-reagents-1.png" alt="Hematology Reagents" onerror="this.src='https://placehold.co/260x160?text=Reagents'">
+                        <h3>Hematology Reagents</h3>
+                    </div>
+                </a>
+            </div>
+        </section>
 
-    <!-- Chemistry Section -->
-    <section class="lab-section">
-      <h2>Chemistry</h2>
-      <div class="product-grid">
-        <div class="product-card">
-          <img src="images/large-test-volume.jpg" alt="Large Test Volume">
-          <h3>Large Test Volume</h3>
-        </div>
-        <div class="product-card">
-          <img src="images/medium-test-volume.jpg" alt="Medium Test Volume">
-          <h3>Medium Test Volume</h3>
-        </div>
-        <div class="product-card">
-          <img src="images/small-test-volume.jpg" alt="Small Test Volume">
-          <h3>Small Test Volume</h3>
-        </div>
-        <div class="product-card">
-          <img src="images/chemistry-reagents.jpg" alt="Chemistry Reagents">
-          <h3>Chemistry Reagents</h3>
-        </div>
-      </div>
-    </section>
+        <!-- Chemistry Section -->
+        <section class="lab-section">
+            <h2>Chemistry</h2>
+            <div class="product-grid">
+                <a href="large-test-volume.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/large-test-volume.png" alt="Large Test Volume" onerror="this.src='https://placehold.co/260x160?text=Large+Volume'">
+                        <h3>Large Test Volume</h3>
+                    </div>
+                </a>
+                <a href="medium-test-volume.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/medium-test-volume.png" alt="Medium Test Volume" onerror="this.src='https://placehold.co/260x160?text=Medium+Volume'">
+                        <h3>Medium Test Volume</h3>
+                    </div>
+                </a>
+                <a href="small-test-volume.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/small-test-volume.png" alt="Small Test Volume" onerror="this.src='https://placehold.co/260x160?text=Small+Volume'">
+                        <h3>Small Test Volume</h3>
+                    </div>
+                </a>
+                <a href="chemistry-reagents.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/chemistry-reagents-1.png" alt="Chemistry Reagents" onerror="this.src='https://placehold.co/260x160?text=Chem+Reagents'">
+                        <h3>Chemistry Reagents</h3>
+                    </div>
+                </a>
+            </div>
+        </section>
 
-    <!-- Reagents Section -->
-    <section class="lab-section">
-      <h2>Reagents</h2>
-      <div class="product-grid">
-        <div class="product-card">
-          <img src="images/hematology-controls.jpg" alt="Hematology Controls and Calibrators">
-          <h3>Hematology Controls & Calibrators</h3>
-        </div>
-        <div class="product-card">
-          <img src="images/chemistry-reagents-2.jpg" alt="Chemistry Reagents">
-          <h3>Chemistry Reagents</h3>
-        </div>
-        <div class="product-card">
-          <img src="images/cia-controls.jpg" alt="CIA Calibrators & Controls">
-          <h3>Chemiluminescence Immunoassay Calibrators & Controls</h3>
-        </div>
-        <div class="product-card">
-          <img src="images/hytest.jpg" alt="HyTest">
-          <h3>HyTest</h3>
-        </div>
-      </div>
-    </section>
+        <!-- Reagents Section -->
+        <section class="lab-section">
+            <h2>Reagents</h2>
+            <div class="product-grid">
+                <a href="hematology-controls.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/hematology-controls-1.png" alt="Hematology Controls and Calibrators" onerror="this.src='https://placehold.co/260x160?text=Controls'">
+                        <h3>Hematology Controls & Calibrators</h3>
+                    </div>
+                </a>
+                <!-- FIXED PATH: Changed backslash to forward slash -->
+                <a href="cia-controls.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/cia-controls.png" alt="CIA Calibrators & Controls" onerror="this.src='https://placehold.co/260x160?text=CIA+Controls'">
+                        <h3>CIA Calibrators & Controls</h3>
+                    </div>
+                </a>
+                <!-- FIXED PATH: Changed backslash to forward slash -->
+                <a href="hytest.html" class="card-link">
+                    <div class="product-card">
+                        <img src="images/hytest.png" alt="HyTest" onerror="this.src='https://placehold.co/260x160?text=HyTest'">
+                        <h3>HyTest</h3>
+                    </div>
+                </a>
+            </div>
+        </section>
 
-  </main>
+    </main>
 
 </body>
 </html>

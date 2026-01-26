@@ -2,34 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Empire HealthCare</title>
-    <!-- Kept internal styles for preview purposes. In your real project, move this to home.css -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Empire HealthCare - Revolutionizing Diagnostics">
+    <meta name="theme-color" content="#083d77"> <!-- Brand color for mobile browser bars -->
+    <title>Empire HealthCare - Home</title>
+
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
     <style>
         /* =========================================
-           YOUR ORIGINAL CSS (UNCHANGED BASE)
+           1. CONFIG: CSS VARIABLES
            ========================================= */
-        
-        /* RESET AND BASE SETUP */
+        :root {
+            /* Typography */
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            /* Palette */
+            --color-primary: #083d77;      /* Deep Blue */
+            --color-accent: #ffc107;       /* Gold/Yellow for active links */
+            --color-text-dark: #222222;
+            --color-text-light: #ffffff;
+            --color-bg-light: #fcf7f7;
+
+            /* Gradients */
+            --bg-gradient-hero: linear-gradient(to bottom right, #bcdcff, #d6ebff, #ffffff);
+            
+            /* Layout Dimensions */
+            --header-height: 70px;
+            --max-width: 1200px; /* Limits content width on huge screens */
+        }
+
+        /* =========================================
+           2. RESET & GLOBAL STYLES
+           ========================================= */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
-            width: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fcf7f7;
-            color: #222;
-            overflow-x: hidden; /* Allows vertical scroll, hides horizontal overflow */
+        html {
+            scroll-behavior: smooth;
         }
 
-        /* ===== HEADER / TOP NAVIGATION ===== */
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg-light);
+            color: var(--color-text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, .logo, .nav-links a, .cta {
+            font-family: var(--font-heading);
+        }
+
+        /* =========================================
+           3. HEADER / NAVIGATION
+           ========================================= */
         header {
-            background-color: #083d77;
-            padding: 15px 40px;
+            background-color: var(--color-primary);
+            padding: 0 40px;
+            height: var(--header-height);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -39,50 +79,52 @@
             z-index: 1000;
         }
 
-        /* LOGO TEXT */
+        /* Logo acts as a link but looks like text */
         .logo {
             font-size: 24px;
-            color: #ffffff;
-            font-weight: bold;
+            color: var(--color-text-light);
+            font-weight: 700;
             letter-spacing: 1px;
+            text-decoration: none; /* Removes underline */
+            transition: opacity 0.2s;
+        }
+        
+        .logo:hover {
+            opacity: 0.9;
         }
 
-        /* NAVIGATION LINKS */
-        /* Note: Since your HTML wraps this in a <nav>, this class selector still works perfectly */
         .nav-links {
             list-style: none;
             display: flex;
-            gap: 20px; 
-        }
-
-        .nav-links li {
-            display: inline-block;
+            gap: 20px;
         }
 
         .nav-links li a {
-            color: white;
+            color: var(--color-text-light);
             text-decoration: none;
             font-size: 1rem;
             font-weight: 500;
             padding: 10px;
             position: relative;
             transition: color 0.3s ease;
+            display: inline-block; /* Improves clickability */
         }
 
+        /* Animated Underline Effect */
         .nav-links li a::after {
             content: '';
             position: absolute;
             width: 0;
             height: 2px;
-            background-color: #ffc107;
+            background-color: var(--color-accent);
             left: 0;
-            bottom: 0;
+            bottom: 5px;
             transition: width 0.3s ease;
         }
 
         .nav-links li a:hover,
-        .nav-links li a.active { /* Added support for your active class */
-            color: #ffc107;
+        .nav-links li a.active {
+            color: var(--color-accent);
         }
 
         .nav-links li a:hover::after,
@@ -90,136 +132,158 @@
             width: 100%;
         }
 
-        /* Content Wrapper */
+        /* =========================================
+           4. HERO SECTION
+           ========================================= */
         .content {
-            /* Ensuring this doesn't trap scroll on mobile unless intended */
-            height: 100vh;
-            overflow-y: auto;
-            scroll-behavior: smooth;
+            flex: 1; /* Pushes footer down if you add one later */
         }
 
-        /* Hero section */
         .hero {
-            min-height: 100vh;
-            background: linear-gradient(to bottom right, #bcdcff, #d6ebff, #ffffff);
+            min-height: 90vh; /* Takes up most of the screen */
+            background: var(--bg-gradient-hero);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px 20px 80px 20px; /* Added bottom padding to account for navbar height if needed */
+            padding: 40px 20px;
+        }
+
+        .hero-logo {
+            width: 500px; 
+            max-width: 100%; 
+            height: auto;
+            margin-bottom: 40px;
+            display: block;
+            /* Optional: Add a subtle drop shadow to logo if transparent png */
+            /* filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); */
         }
 
         .hero h1 {
-            font-size: 2.3rem;
-            color: #083d77;
+            font-size: 2.5rem;
+            color: var(--color-primary);
             margin-bottom: 20px;
             padding: 0 10px;
+            line-height: 1.3;
+            max-width: 900px;
         }
 
         .hero p {
             font-size: 1.4rem;
             color: #444;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             max-width: 600px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .cta {
-            background-color: #083d77;
-            color: #fff;
-            padding: 12px 25px;
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 14px 30px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            letter-spacing: 0.5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: inline-block;
         }
 
         .cta:hover {
             background-color: #062a52; 
-        }
-
-        /* Hero Logo Image */
-        .hero-logo {
-            width: 500px; 
-            max-width: 100%; /* CRITICAL FIX: Ensures image shrinks on mobile */
-            height: auto;
-            margin-bottom: 50px;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
+            transform: translateY(-2px);
         }
 
         /* =========================================
-           MOBILE RESPONSIVE FIXES
+           5. FOOTER
            ========================================= */
-        
+        footer {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 20px;
+            text-align: center;
+            margin-top: auto; /* Ensures footer sits at bottom */
+        }
+
+        /* =========================================
+           6. MOBILE RESPONSIVENESS
+           ========================================= */
         @media screen and (max-width: 768px) {
-            /* 1. Stack the Header elements */
             header {
+                height: auto;
                 flex-direction: column;
                 padding: 15px 20px; 
                 gap: 15px; 
             }
 
-            /* 2. Adjust Navigation for touch */
             .nav-links {
                 gap: 10px;
                 flex-wrap: wrap; 
                 justify-content: center;
+                width: 100%;
             }
 
             .nav-links li a {
-                padding: 8px; 
+                padding: 8px 12px; /* Increased touch target for mobile */
                 font-size: 0.95rem;
             }
 
-            /* 3. Scale down the Hero Image */
+            .nav-links li a::after {
+                bottom: 4px;
+            }
+
             .hero-logo {
-                width: 80%; /* Logo takes 80% of screen width */
+                width: 70%; 
                 margin-bottom: 30px;
             }
 
-            /* 4. Adjust Typography sizes */
             .hero h1 {
                 font-size: 1.8rem; 
             }
 
             .hero p {
                 font-size: 1.1rem; 
-                max-width: 90%; 
+                max-width: 95%; 
             }
         }
     </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <header>
-    <div class="logo">Empire HealthCare</div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="home.html" class="active">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="career.html">Career</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header> 
+    <!-- Navigation Bar -->
+    <header>
+        <!-- Standard UX: Logo links to home -->
+        <a href="home.html" class="logo">Empire HealthCare</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html" class="active">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header> 
 
-  <!-- Scrollable Content Wrapper -->
-  <main class="content">
-    <!-- Hero Section -->
-    <section class="hero">
-      <img src="images/logo.png" alt="Empire Healthcare Logo" class="hero-logo">
-      
-      <h1>Revolutionizing Diagnostics Powering Progress in Patient Care.</h1>
-      <p>Empowering healthcare with world-class biomedical equipment and innovation.</p>
-      <a href="products.html" class="cta">Explore Our Products</a>
-    </section>
-  </main>
+    <!-- Main Content -->
+    <main class="content">
+        <section class="hero">
+            <!-- Ensure this path is correct in your folder structure -->
+            <img src="images/logo.png" alt="Empire Healthcare Logo" class="hero-logo" onerror="this.style.display='none'"> 
+            
+            <h1>Revolutionizing Diagnostics Powering Progress in Patient Care.</h1>
+            <p>Empowering healthcare with world-class biomedical equipment and innovation.</p>
+            
+            <a href="products.html" class="cta">Explore Our Products</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Empire HealthCare. All Rights Reserved.</p>
+    </footer>
 
 </body>
 </html>

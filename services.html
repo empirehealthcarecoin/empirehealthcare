@@ -1,298 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Our Services - Empire Healthcare</title>
-  <!-- Kept internal styles for preview purposes. In your real project, move this to services.css -->
-  <style>
-    /* =========================================
-       YOUR ORIGINAL CSS (UNCHANGED BASE)
-       ========================================= */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Our Services - Empire Healthcare">
+    <meta name="theme-color" content="#083d77"> <!-- Brand color for mobile browser bars -->
+    <title>Our Services - Empire Healthcare</title>
 
-    /* RESET AND BASE SETUP */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
-      color: #222;
-      overflow-x: hidden;
-    }
+    <style>
+        /* =========================================
+           1. CONFIG: CSS VARIABLES
+           ========================================= */
+        :root {
+            /* Fonts */
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-    /* ===== HEADER / TOP NAVIGATION ===== */
-    header {
-      background-color: #083d77;
-      padding: 15px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 999;
-    }
+            /* Palette */
+            --color-primary: #083d77;      /* Deep Blue */
+            --color-accent: #ffc107;       /* Gold/Yellow */
+            --color-text-dark: #222222;
+            --color-text-light: #ffffff;
+            --color-text-muted: #555555;
+            
+            /* Gradients */
+            --bg-gradient: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
+            
+            /* Layout */
+            --header-height: 70px;
+            --max-width: 1400px; /* Slightly wider for service grid */
+        }
 
-    /* LOGO TEXT */
-    .logo {
-      font-size: 24px;
-      color: #ffffff;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
+        /* =========================================
+           2. RESET & GLOBAL STYLES
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* NAVIGATION LINKS */
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 20px; /* Increased slightly for better clickability */
-    }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-gradient);
+            color: var(--color-text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .nav-links li {
-      display: inline-block;
-    }
+        h1, h2, h3, .logo, .nav-links a, .explore-btn {
+            font-family: var(--font-heading);
+        }
 
-    .nav-links li a {
-      color: white;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 10px;
-      position: relative;
-      transition: color 0.3s ease;
-    }
+        /* =========================================
+           3. HEADER / NAVIGATION
+           ========================================= */
+        header {
+            background-color: var(--color-primary);
+            padding: 0 40px;
+            min-height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
 
-    .nav-links li a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      background-color: #ffc107;
-      left: 0;
-      bottom: 0;
-      transition: width 0.3s ease;
-    }
+        /* Logo acts as a link but looks like text */
+        .logo {
+            font-size: 24px;
+            color: var(--color-text-light);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
 
-    .nav-links li a:hover,
-    .nav-links li a.active {
-      color: #ffc107;
-    }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
 
-    .nav-links li a:hover::after,
-    .nav-links li a.active::after {
-      width: 100%;
-    }
+        .nav-links li a {
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px;
+            position: relative;
+            transition: color 0.3s ease;
+            display: inline-block;
+        }
 
-    /* Page Title */
-    .page-title {
-      text-align: center;
-      margin: 40px 0 10px;
-      font-size: 36px;
-      color: #083d77; /* Matched to header theme */
-    }
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accent);
+            left: 0;
+            bottom: 5px;
+            transition: width 0.3s ease;
+        }
 
-    .intro {
-      text-align: center;
-      font-size: 18px;
-      color: #444;
-      margin-bottom: 40px;
-      padding: 0 20px;
-    }
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: var(--color-accent);
+        }
 
-    /* Services Grid */
-    .service-grid {
-      display: grid;
-      /* Responsive grid that fits cards automatically */
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      padding: 0 50px 60px;
-      max-width: 1400px; /* Prevent it from stretching too wide on huge screens */
-      margin: 0 auto;
-    }
+        .nav-links li a:hover::after,
+        .nav-links li a.active::after {
+            width: 100%;
+        }
 
-    .service-card {
-      background-color: #ffffff;
-      padding: 25px 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; /* Pushes button to bottom */
-      animation: fadeInUp 0.8s ease forwards;
-      opacity: 0;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      min-height: 320px;
-      text-align: center;
-      border: 1px solid rgba(8, 61, 119, 0.1); /* Subtle border matching theme */
-    }
+        /* =========================================
+           4. SERVICES SECTION
+           ========================================= */
+        .services-container {
+            flex: 1; /* Pushes footer down */
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding-bottom: 60px;
+        }
 
-    .service-card h2 {
-      color: #083d77;
-      margin-bottom: 15px;
-      font-size: 22px;
-    }
+        .page-title {
+            text-align: center;
+            margin: 40px 0 10px;
+            font-size: 36px;
+            color: var(--color-primary);
+            font-weight: 700;
+        }
 
-    .service-card p {
-      color: #555;
-      font-size: 16px;
-      margin-bottom: 20px;
-      line-height: 1.5;
-      flex-grow: 1; /* Allows text area to grow and push button down */
-    }
+        .intro {
+            text-align: center;
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
 
-    .service-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 50px;
+        }
 
-    /* EXPLORE BUTTON */
-    .explore-btn {
-      display: inline-block;
-      background-color: #083d77;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-      margin-top: auto; /* Ensures button stays at bottom */
-      align-self: center;
-    }
+        /* Service Card Styling */
+        .service-card {
+            background-color: #ffffff;
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 320px;
+            text-align: center;
+            
+            /* Theme accent */
+            border-left: 5px solid var(--color-primary);
+            
+            /* Animations */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    .explore-btn:hover {
-      background-color: #005acc;
-    }
+        .service-card h2 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            font-size: 22px;
+            font-weight: 700;
+        }
 
-    /* Animation */
-    .fade-in {
-      opacity: 0;
-      animation: fadeInUp 0.8s ease forwards;
-    }
-    
-    /* Staggered animation delays */
-    .service-card:nth-child(1) { animation-delay: 0.1s; }
-    .service-card:nth-child(2) { animation-delay: 0.2s; }
-    .service-card:nth-child(3) { animation-delay: 0.3s; }
-    .service-card:nth-child(4) { animation-delay: 0.4s; }
-    .service-card:nth-child(5) { animation-delay: 0.5s; }
+        .service-card p {
+            color: var(--color-text-muted);
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
 
-    /* =========================================
-       MOBILE RESPONSIVE FIXES
-       ========================================= */
-    
-    @media screen and (max-width: 768px) {
-      /* 1. Header Fixes */
-      header {
-        flex-direction: column;
-        padding: 15px 20px;
-        gap: 15px;
-      }
+        /* Button Styling */
+        .explore-btn {
+            display: inline-block;
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            align-self: center;
+        }
 
-      .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-      }
-      
-      .nav-links li a {
-        padding: 8px;
-        font-size: 0.95rem;
-      }
+        .explore-btn:hover {
+            background-color: #062a52; /* Slightly darker shade manually defined or use a variable */
+        }
 
-      /* 2. Page Content */
-      .page-title {
-        font-size: 28px;
-        margin-top: 30px;
-      }
+        /* Staggered animation */
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(5) { animation-delay: 0.5s; }
 
-      .intro {
-        font-size: 1rem;
-        margin-bottom: 30px;
-      }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-      /* 3. Grid Adjustments */
-      .service-grid {
-        padding: 0 20px 40px; /* Reduced side padding */
-        gap: 20px;
-        /* Allow cards to be smaller than 300px on narrow phones */
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      }
+        /* =========================================
+           5. FOOTER
+           ========================================= */
+        footer {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 20px;
+            text-align: center;
+            margin-top: auto;
+        }
 
-      .service-card {
-        padding: 20px;
-        min-height: auto; /* Remove fixed height on mobile so it fits content naturally */
-      }
-    }
-  </style>
+        /* =========================================
+           6. MOBILE RESPONSIVENESS
+           ========================================= */
+        @media screen and (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .nav-links li a {
+                padding: 8px 12px; /* Consistency: Matches other pages */
+                font-size: 0.95rem;
+            }
+            
+            .nav-links li a::after {
+                bottom: 2px;
+            }
+
+            .page-title {
+                font-size: 28px;
+                margin-top: 30px;
+            }
+
+            .intro {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
+
+            .service-grid {
+                padding: 0 20px;
+                gap: 20px;
+                grid-template-columns: 1fr; /* Stack cards on mobile */
+            }
+
+            .service-card {
+                padding: 20px;
+                min-height: auto; /* Allow auto height on mobile */
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Header & Navigation -->
-  <header>
-    <div class="logo">Empire HealthCare</div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="home.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="services.html" class="active">Services</a></li>
-        <li><a href="career.html">Career</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+    <!-- Header -->
+    <header>
+        <!-- Consistency: Logo now links to home -->
+        <a href="home.html" class="logo">Empire HealthCare</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="services.html" class="active">Services</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <!-- Main Services Section -->
-  <section class="services">
-    <h1 class="page-title">Our Services</h1>
-    <p class="intro">Empowering healthcare through precision, performance, and personalized service.</p>
+    <!-- Main Services Section -->
+    <main class="services-container">
+        <h1 class="page-title">Our Services</h1>
+        <p class="intro">Empowering healthcare through precision, performance, and personalized service.</p>
 
-    <div class="service-grid">
-      <div class="service-card fade-in">
-        <h2>Biomedical Equipment Supply</h2>
-        <p>Supplying top-tier medical gear like ultrasound machines, analyzers, and more.</p>
-        <a href="#" class="explore-btn">Explore</a>
-      </div>
+        <div class="service-grid">
+            <!-- 1 -->
+            <div class="service-card">
+                <h2>Biomedical Equipment Supply</h2>
+                <p>Supplying top-tier medical gear like ultrasound machines, analyzers, and more from world-class brands like Mindray.</p>
+                <a href="service-supply.html" class="explore-btn">Explore</a>
+            </div>
 
-      <div class="service-card fade-in">
-        <h2>Installation & Setup</h2>
-        <p>Professional setup with calibration to get your facility running smooth.</p>
-        <a href="#" class="explore-btn">Explore</a>
-      </div>
+            <!-- 2 -->
+            <div class="service-card">
+                <h2>Installation & Setup</h2>
+                <p>Professional site planning, unboxing, and calibration to ensure your facility is running safely and accurately.</p>
+                <a href="service-installation.html" class="explore-btn">Explore</a>
+            </div>
 
-      <div class="service-card fade-in">
-        <h2>Training & Support</h2>
-        <p>Hands-on training + 24/7 tech support for clinical staff and engineers.</p>
-        <a href="#" class="explore-btn">Explore</a>
-      </div>
+            <!-- 3 -->
+            <div class="service-card">
+                <h2>Training & Support</h2>
+                <p>Comprehensive application training and 24/7 technical support for your clinical staff and engineers.</p>
+                <a href="service-training.html" class="explore-btn">Explore</a>
+            </div>
 
-      <div class="service-card fade-in">
-        <h2>Maintenance & Repairs</h2>
-        <p>Certified technicians handling all your servicing and repair needs.</p>
-        <a href="#" class="explore-btn">Explore</a>
-      </div>
+            <!-- 4 -->
+            <div class="service-card">
+                <h2>Maintenance & Repairs</h2>
+                <p>Annual Maintenance Contracts (AMC), breakdown repairs, and genuine spare parts to minimize downtime.</p>
+                <a href="service-maintenance.html" class="explore-btn">Explore</a>
+            </div>
 
-      <div class="service-card fade-in">
-        <h2>Customized Healthcare Solutions</h2>
-        <p>Tailor-made packages and solutions based on your facility’s needs.</p>
-        <a href="#" class="explore-btn">Explore</a>
-      </div>
-    </div>
-  </section>
+            <!-- 5 -->
+            <div class="service-card">
+                <h2>Customized Healthcare Solutions</h2>
+                <p>Tailor-made equipment packages, workflow planning, and consultancy for new hospitals and diagnostic centers.</p>
+                <a href="service-solutions.html" class="explore-btn">Explore</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Empire HealthCare. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>

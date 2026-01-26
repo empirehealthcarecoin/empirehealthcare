@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training & Support - Empire Healthcare</title>
+    <style>
+        /* Shared Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff); color: #222; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background-color: #083d77; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 24px; color: #fff; font-weight: bold; letter-spacing: 1px; }
+        .nav-links { list-style: none; display: flex; gap: 20px; }
+        .nav-links li a { color: white; text-decoration: none; font-weight: 500; padding: 10px; transition: color 0.3s; }
+        .nav-links li a:hover, .nav-links li a.active { color: #ffc107; }
+        footer { background-color: #083d77; color: white; padding: 20px; text-align: center; margin-top: auto; }
+
+        /* Page Specific */
+        .detail-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; flex: 1; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #083d77; text-decoration: none; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+        
+        .service-header { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 8px solid #083d77; margin-bottom: 30px; }
+        .service-header h1 { color: #083d77; font-size: 2.5rem; margin-bottom: 15px; }
+        .service-header p { font-size: 1.1rem; line-height: 1.6; color: #555; }
+
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .feature-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .feature-card h3 { color: #083d77; margin-bottom: 10px; font-size: 1.2rem; }
+        .feature-card ul { list-style: none; padding-left: 5px; }
+        .feature-card li { margin-bottom: 8px; position: relative; padding-left: 20px; font-size: 0.95rem; color: #444; }
+        .feature-card li::before { content: '•'; color: #ffc107; font-weight: bold; position: absolute; left: 0; font-size: 1.2rem; line-height: 1; }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+            .service-header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Empire HealthCare</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="services.html" class="active">Services</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="detail-container">
+        <a href="services.html" class="back-link">← Back to Services</a>
+        
+        <section class="service-header">
+            <h1>Training & Support</h1>
+            <p>Technology advances rapidly, and we ensure your team keeps up. Our Application Specialists provide in-depth training to help your doctors and technicians utilize the full potential of your Mindray equipment, optimizing patient care.</p>
+        </section>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Application Training</h3>
+                <ul>
+                    <li><strong>On-Site Training:</strong> Personalized sessions for doctors to master features like 4D imaging, Elastography, and Auto-Measurements.</li>
+                    <li><strong>Technician Workshops:</strong> Teaching lab staff best practices for sample handling and analyzer maintenance.</li>
+                    <li><strong>Refresher Courses:</strong> Regular updates when new software features or upgrades are released.</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h3>Technical Support</h3>
+                <ul>
+                    <li><strong>24/7 Helpline:</strong> Immediate assistance for critical breakdowns or software errors.</li>
+                    <li><strong>Remote Diagnostics:</strong> Solving minor software issues remotely to save time.</li>
+                    <li><strong>User Manuals:</strong> Providing simplified quick-reference guides for daily operations.</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h3>Post-Sales Care</h3>
+                <ul>
+                    <li><strong>Dedicated Specialist:</strong> A specific application specialist assigned to your account.</li>
+                    <li><strong>Feedback Loop:</strong> Regular check-ins to ensure the equipment meets your clinical expectations.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Empire HealthCare. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

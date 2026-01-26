@@ -1,305 +1,564 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Career - Empire HealthCare</title>
-  <!-- Kept internal styles for preview purposes. In your real project, move this to career.css -->
-  <style>
-    /* =========================================
-       YOUR ORIGINAL CSS (UNCHANGED BASE)
-       ========================================= */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Careers at Empire Healthcare - Join our team">
+    <meta name="theme-color" content="#083d77"> <!-- Brand color for mobile browser bars -->
+    <title>Careers - Empire Healthcare</title>
 
-    /* RESET AND BASE SETUP */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 
-    html, body {
-      min-height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
-      color: #222;
-      overflow-x: hidden;
-    }
+    <style>
+        /* =========================================
+           1. CONFIG: CSS VARIABLES
+           ========================================= */
+        :root {
+            /* Fonts */
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-    /* ===== HEADER / TOP NAVIGATION ===== */
-    header {
-      background-color: #083d77;
-      padding: 15px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 999;
-    }
+            /* Palette */
+            --color-primary: #083d77;      /* Deep Blue */
+            --color-accent: #ffc107;       /* Gold/Yellow */
+            --color-text-dark: #222222;
+            --color-text-light: #ffffff;
+            --color-text-muted: #555555;
+            --color-bg-light: #f9f9f9;
+            --color-border: #eeeeee;
 
-    /* LOGO TEXT */
-    .logo {
-      font-size: 24px;
-      color: #ffffff;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
+            /* Gradients */
+            --bg-gradient: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
+            
+            /* Layout */
+            --header-height: 70px;
+            --max-width: 1200px;
+        }
 
-    /* NAVIGATION LINKS */
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 20px; /* Increased slightly for better clickability */
-    }
+        /* =========================================
+           2. RESET & GLOBAL STYLES
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .nav-links li a {
-      color: white;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 10px;
-      position: relative;
-      transition: color 0.3s ease;
-    }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-gradient);
+            color: var(--color-text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .nav-links li a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      background-color: #ffc107;
-      left: 0;
-      bottom: 0;
-      transition: width 0.3s ease;
-    }
+        h1, h2, h3, .logo, .nav-links a, .accordion-btn, button {
+            font-family: var(--font-heading);
+        }
 
-    .nav-links li a:hover,
-    .nav-links li a.active {
-      color: #ffc107;
-    }
+        /* =========================================
+           3. HEADER / NAVIGATION
+           ========================================= */
+        header {
+            background-color: var(--color-primary);
+            padding: 0 40px;
+            min-height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-    .nav-links li a:hover::after,
-    .nav-links li a.active::after {
-      width: 100%;
-    }
+        /* Logo acts as a link but looks like text */
+        .logo {
+            font-size: 24px;
+            color: var(--color-text-light);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+        
+        .logo:hover {
+            opacity: 0.9;
+        }
 
-    /* ===== CAREER HERO ===== */
-    .career-hero {
-      padding: 120px 20px 60px;
-      text-align: center;
-      background: transparent; 
-    }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
 
-    .career-hero h1 {
-      font-size: 2.8em;
-      margin-bottom: 20px;
-      color: #083d77; /* Matched theme color */
-    }
+        .nav-links li a {
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px;
+            position: relative;
+            transition: color 0.3s ease;
+            display: inline-block;
+        }
 
-    .career-hero p {
-      font-size: 1.2em;
-      color: #555;
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accent);
+            left: 0;
+            bottom: 5px;
+            transition: width 0.3s ease;
+        }
 
-    /* ===== EXPANDABLE SECTION ===== */
-    .expandable-section {
-      padding: 20px 20px 60px;
-      max-width: 900px;
-      margin: auto;
-    }
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: var(--color-accent);
+        }
 
-    /* Accordion cards float over gradient */
-    .accordion {
-      margin-bottom: 20px;
-      border-radius: 6px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.95); 
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      border: 1px solid rgba(8, 61, 119, 0.1);
-    }
+        .nav-links li a:hover::after,
+        .nav-links li a.active::after {
+            width: 100%;
+        }
 
-    /* Accordion button */
-    .accordion-btn {
-      background-color: #083d77; /* Matched theme color */
-      color: white;
-      padding: 15px 20px;
-      width: 100%;
-      text-align: left;
-      border: none;
-      font-size: 1.1em;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        /* =========================================
+           4. MAIN CONTENT
+           ========================================= */
+        main {
+            flex: 1; /* Pushes footer down */
+            width: 100%;
+        }
 
-    .accordion-btn:hover {
-      background-color: #005acc;
-    }
-    
-    /* Add a visual indicator (plus/minus) */
-    .accordion-btn::after {
-      content: '+';
-      font-size: 1.5em;
-      line-height: 1;
-    }
+        /* HERO SECTION */
+        .career-hero {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
 
-    .accordion-btn.active::after {
-      content: '-';
-    }
+        .career-hero h1 {
+            font-size: 3rem;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
 
-    /* Accordion content */
-    .accordion-content {
-      display: none; /* Hidden by default */
-      padding: 20px;
-      background: rgba(249, 249, 249, 0.95);
-    }
+        .career-hero p {
+            font-size: 1.2rem;
+            color: var(--color-text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
 
-    /* Class to show content (toggled by JS) */
-    .accordion-content.show {
-      display: block;
-      animation: slideDown 0.3s ease-out;
-    }
+        /* CULTURE GRID */
+        .culture-section {
+            max-width: 1100px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
 
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        .culture-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 4px solid var(--color-primary);
+            transition: transform 0.3s ease;
+        }
 
-    .accordion-content ul {
-      list-style-type: none; /* Removed default bullets for custom look */
-      padding-left: 10px;
-    }
+        .culture-card:hover {
+            transform: translateY(-5px);
+        }
 
-    .accordion-content li {
-      margin: 10px 0;
-      color: #333;
-      padding-left: 20px;
-      position: relative;
-    }
+        .culture-card h3 {
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
 
-    .accordion-content li::before {
-      content: '•';
-      color: #083d77;
-      font-weight: bold;
-      position: absolute;
-      left: 0;
-    }
+        .culture-card p {
+            color: #666;
+            line-height: 1.6;
+        }
 
-    /* =========================================
-       MOBILE RESPONSIVE FIXES
-       ========================================= */
-    
-    @media screen and (max-width: 768px) {
-      /* 1. Header Fixes */
-      header {
-        flex-direction: column;
-        padding: 15px 20px;
-        gap: 15px;
-      }
+        /* OPENINGS (ACCORDION) */
+        .openings-section {
+            max-width: 900px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
 
-      .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-      }
-      
-      .nav-links li a {
-        padding: 8px;
-        font-size: 0.95rem;
-      }
+        .section-title {
+            text-align: center;
+            color: var(--color-primary);
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
 
-      /* 2. Content Fixes */
-      .career-hero {
-        padding: 80px 20px 40px;
-      }
+        .accordion {
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: white;
+        }
 
-      .career-hero h1 {
-        font-size: 2rem;
-      }
+        .accordion-btn {
+            background-color: white;
+            color: var(--color-primary);
+            padding: 20px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            border-left: 6px solid var(--color-primary);
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
 
-      .career-hero p {
-        font-size: 1rem;
-      }
+        .accordion-btn:hover {
+            background-color: #f0f7ff;
+        }
 
-      .accordion-btn {
-        font-size: 1rem;
-        padding: 12px 15px;
-      }
-    }
-  </style>
+        .accordion-btn::after {
+            content: '+';
+            font-size: 1.5rem;
+            font-weight: normal;
+            color: var(--color-primary);
+        }
+
+        .accordion-btn.active::after {
+            content: '-';
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 25px;
+            background-color: var(--color-bg-light);
+            border-top: 1px solid var(--color-border);
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .accordion-content.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .accordion-content ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .accordion-content li {
+            margin-bottom: 5px;
+        }
+
+        .apply-btn-small {
+            display: inline-block;
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        
+        .apply-btn-small:hover {
+            opacity: 0.9;
+        }
+
+        /* APPLICATION FORM */
+        .apply-section {
+            max-width: 800px;
+            margin: 0 auto 60px;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .apply-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .apply-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .apply-form input, 
+        .apply-form select,
+        .apply-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit; /* Ensure font matches */
+        }
+        
+        .apply-form input:focus, 
+        .apply-form select:focus,
+        .apply-form textarea:focus {
+            outline: 2px solid var(--color-primary);
+            border-color: transparent;
+        }
+
+        .apply-form button {
+            width: 100%;
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .apply-form button:hover {
+            background-color: #062a52; /* Slightly darker shade */
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================
+           5. FOOTER
+           ========================================= */
+        footer {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 20px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        /* =========================================
+           6. MOBILE RESPONSIVENESS
+           ========================================= */
+        @media screen and (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .nav-links li a {
+                padding: 8px 12px; /* Consistency: Matches other pages */
+                font-size: 0.95rem;
+            }
+
+            .nav-links li a::after {
+                bottom: 2px;
+            }
+
+            .career-hero h1 { font-size: 2rem; }
+            .culture-section { grid-template-columns: 1fr; }
+            .apply-section { padding: 25px; margin: 0 20px 60px; }
+        }
+    </style>
 </head>
 <body>
-  <!-- Header & Navbar -->
-  <header>
-    <div class="logo">Empire HealthCare</div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="home.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="career.html" class="active">Career</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header> 
 
-  <section class="career-hero">
-    <h1>Join Us to Improve Healthcare</h1>
-    <p>Be part of a team that's redefining care, technology, and trust.</p>
-  </section>
+    <!-- Header -->
+    <header>
+        <!-- Consistency: Logo now links to home -->
+        <a href="home.html" class="logo">Empire HealthCare</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="career.html" class="active">Career</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header> 
 
-  <section class="expandable-section">
-    <div class="accordion">
-      <button class="accordion-btn">Job Functions</button>
-      <div class="accordion-content">
-        <ul>
-          <li>Account Management</li>
-          <li>Administration</li>
-          <li>Channel Management</li>
-          <li>Clinical Application</li>
-          <li>Clinical Training</li>
-        </ul>
-      </div>
-    </div>
+    <main>
+        <!-- Hero Section -->
+        <section class="career-hero">
+            <h1>Build Your Career with Empire</h1>
+            <p>Join a team dedicated to revolutionizing healthcare diagnostics. We are looking for passionate individuals who want to make a difference.</p>
+        </section>
 
-    <div class="accordion">
-      <button class="accordion-btn">Countries</button>
-      <div class="accordion-content">
-        <ul>
-          <li>India</li>
-          <li>USA</li>
-          <li>Germany</li>
-          <li>Japan</li>
-          <li>Australia</li>
-          <li>UK</li>
-          <li>UAE</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+        <!-- Culture Grid -->
+        <section class="culture-section">
+            <div class="culture-card">
+                <h3>Growth & Learning</h3>
+                <p>Continuous training on the latest Mindray technologies and biomedical advancements to keep you ahead of the curve.</p>
+            </div>
+            <div class="culture-card">
+                <h3>Make an Impact</h3>
+                <p>Your work directly supports hospitals and diagnostic centers, ensuring patients get accurate and timely care.</p>
+            </div>
+            <div class="culture-card">
+                <h3>Inclusive Team</h3>
+                <p>We believe in a collaborative environment where every voice is heard and every contribution matters.</p>
+            </div>
+        </section>
 
-  <script>
-    // Simple JavaScript to toggle accordion visibility
-    const accButtons = document.querySelectorAll(".accordion-btn");
+        <!-- Current Openings (Accordions) -->
+        <section class="openings-section">
+            <h2 class="section-title">Current Openings</h2>
 
-    accButtons.forEach(btn => {
-      btn.addEventListener("click", function() {
-        // Toggle the active class on the button (for the +/- icon)
-        this.classList.toggle("active");
+            <!-- Job 1 -->
+            <div class="accordion">
+                <button class="accordion-btn">Biomedical Sales Engineer - Coimbatore</button>
+                <div class="accordion-content">
+                    <p><strong>Role Overview:</strong> Driving sales for Ultrasound and Laboratory equipment in the assigned territory.</p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Meet sales targets for Mindray products.</li>
+                        <li>Build relationships with doctors and hospital administrators.</li>
+                        <li>Conduct product demonstrations and coordinate installations.</li>
+                    </ul>
+                    <a href="#apply-form" class="apply-btn-small">Apply Now</a>
+                </div>
+            </div>
 
-        // Toggle the show class on the content
-        const content = this.nextElementSibling;
-        content.classList.toggle("show");
-      });
-    });
-  </script>
+            <!-- Job 2 -->
+            <div class="accordion">
+                <button class="accordion-btn">Service Engineer (Ultrasound)</button>
+                <div class="accordion-content">
+                    <p><strong>Role Overview:</strong> Providing technical support, installation, and maintenance for our client base.</p>
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Degree/Diploma in Biomedical or Electronics Engineering.</li>
+                        <li>Experience in troubleshooting medical equipment.</li>
+                        <li>Willingness to travel for on-site repairs.</li>
+                    </ul>
+                    <a href="#apply-form" class="apply-btn-small">Apply Now</a>
+                </div>
+            </div>
+
+            <!-- Job 3 -->
+            <div class="accordion">
+                <button class="accordion-btn">Application Specialist</button>
+                <div class="accordion-content">
+                    <p><strong>Role Overview:</strong> Training doctors and technicians on how to use our advanced ultrasound features.</p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Conduct post-sales application training.</li>
+                        <li>Assist sales team with technical demos.</li>
+                        <li>Resolve image quality queries from customers.</li>
+                    </ul>
+                    <a href="#apply-form" class="apply-btn-small">Apply Now</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Application Form -->
+        <section id="apply-form" class="apply-section">
+            <h2 class="section-title">Apply Now</h2>
+            <p style="text-align:center; margin-bottom:20px; color:#666;">Don't see a role that fits? Send us your details anyway!</p>
+            
+            <!-- BACKEND: Formsubmit.co connected to your email -->
+            <form class="apply-form" action="https://formsubmit.co/freak7600x@gmail.com" method="POST">
+                
+                <input type="hidden" name="_subject" value="New Job Application - Empire Healthcare">
+                <input type="hidden" name="_captcha" value="false">
+
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" name="name" required placeholder="your name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="yourmail@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="+91 98765 43210">
+                </div>
+
+                <div class="form-group">
+                    <label for="position">Position Applied For</label>
+                    <select id="position" name="position">
+                        <option value="General Application">General Application</option>
+                        <option value="Sales Engineer">Biomedical Sales Engineer</option>
+                        <option value="Service Engineer">Service Engineer</option>
+                        <option value="Application Specialist">Application Specialist</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="resume-link">Link to Resume (Google Drive / LinkedIn)</label>
+                    <input type="url" id="resume-link" name="resume_link" placeholder="https://drive.google.com/..." required>
+                    <small style="color: #777;">*Please paste a sharable link to your CV.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Cover Letter / Message</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Tell us why you'd be a great fit..."></textarea>
+                </div>
+
+                <button type="submit">Submit Application</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Empire HealthCare. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Accordion Logic
+        const accButtons = document.querySelectorAll(".accordion-btn");
+
+        accButtons.forEach(btn => {
+            btn.addEventListener("click", function() {
+                // Close other open accordions (optional, keeps UI cleaner)
+                accButtons.forEach(otherBtn => {
+                    if (otherBtn !== this) {
+                        otherBtn.classList.remove("active");
+                        otherBtn.nextElementSibling.classList.remove("show");
+                    }
+                });
+
+                this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                content.classList.toggle("show");
+            });
+        });
+    </script>
+
 </body>
 </html>

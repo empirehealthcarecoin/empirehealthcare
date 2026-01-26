@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biomedical Supply - Empire Healthcare</title>
+    <style>
+        /* Shared Styles (Same as Main Theme) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff); color: #222; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background-color: #083d77; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 24px; color: #fff; font-weight: bold; letter-spacing: 1px; }
+        .nav-links { list-style: none; display: flex; gap: 20px; }
+        .nav-links li a { color: white; text-decoration: none; font-weight: 500; padding: 10px; transition: color 0.3s; }
+        .nav-links li a:hover, .nav-links li a.active { color: #ffc107; }
+        footer { background-color: #083d77; color: white; padding: 20px; text-align: center; margin-top: auto; }
+
+        /* Page Specific */
+        .detail-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; flex: 1; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #083d77; text-decoration: none; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+        
+        .service-header { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 8px solid #083d77; margin-bottom: 30px; }
+        .service-header h1 { color: #083d77; font-size: 2.5rem; margin-bottom: 15px; }
+        .service-header p { font-size: 1.1rem; line-height: 1.6; color: #555; }
+
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .feature-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .feature-card h3 { color: #083d77; margin-bottom: 10px; font-size: 1.2rem; }
+        .feature-card ul { list-style: none; padding-left: 5px; }
+        .feature-card li { margin-bottom: 8px; position: relative; padding-left: 20px; font-size: 0.95rem; color: #444; }
+        .feature-card li::before { content: '•'; color: #ffc107; font-weight: bold; position: absolute; left: 0; font-size: 1.2rem; line-height: 1; }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+            .service-header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Empire HealthCare</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="services.html" class="active">Services</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="detail-container">
+        <a href="services.html" class="back-link">← Back to Services</a>
+        
+        <section class="service-header">
+            <h1>Biomedical Equipment Supply</h1>
+            <p>At Empire Healthcare, we bridge the gap between advanced technology and clinical needs. As authorized distributors for global leaders like Mindray, we provide a comprehensive range of cutting-edge biomedical equipment tailored to hospitals, diagnostic centers, and clinics.</p>
+        </section>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Ultrasound Systems</h3>
+                <ul>
+                    <li><strong>Cart-Based:</strong> DC-Series (DC-30, DC-60, DC-70, DC-80) and Resona Series for premium imaging.</li>
+                    <li><strong>Portable:</strong> M-Series (M6, M7, M8) and TE-Series for point-of-care and mobile diagnostics.</li>
+                    <li><strong>Specialty:</strong> Dedicated systems for OB/GYN (Nuewa), Cardiology, and Radiology.</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h3>Laboratory Diagnostics</h3>
+                <ul>
+                    <li><strong>Hematology Analyzers:</strong> 3-part and 5-part differential analyzers for precise blood counts.</li>
+                    <li><strong>Biochemistry Analyzers:</strong> Semi-auto and fully automated systems for routine chemistries.</li>
+                    <li><strong>Reagents & Consumables:</strong> Genuine Mindray reagents ensuring result accuracy and machine longevity.</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h3>Why Choose Us?</h3>
+                <ul>
+                    <li><strong>Authorized Partners:</strong> Genuine products with manufacturer warranty.</li>
+                    <li><strong>Demo Availability:</strong> On-site demonstrations to help you make informed decisions.</li>
+                    <li><strong>Competitive Pricing:</strong> Best value for investment with flexible payment options.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Empire HealthCare. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

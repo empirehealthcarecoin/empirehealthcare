@@ -1,259 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Empire Healthcare - Products</title>
-  <style>
-    /* RESET AND BASE SETUP */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Empire HealthCare - Our Products">
+    <meta name="theme-color" content="#083d77"> <!-- Brand color for mobile browser bars -->
+    <title>Empire Healthcare - Products</title>
 
-    html, body {
-      min-height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
-      color: #222;
-      overflow-x: hidden;
-    }
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 
-    /* ===== HEADER / TOP NAVIGATION ===== */
-    header {
-      background-color: #083d77;
-      padding: 15px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 999;
-    }
+    <style>
+        /* =========================================
+           1. CONFIG: CSS VARIABLES
+           ========================================= */
+        :root {
+            /* Fonts */
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-    /* LOGO TEXT */
-    .logo {
-      font-size: 24px;
-      color: #ffffff;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
+            /* Palette */
+            --color-primary: #083d77;      /* Deep Blue */
+            --color-accent: #ffc107;       /* Gold/Yellow */
+            --color-text-dark: #222222;
+            --color-text-light: #ffffff;
+            --color-text-muted: #444444;
+            --color-bg-light: #fcf7f7;
+            
+            /* Specific Button Hover for this page (Brighter Blue) */
+            --btn-hover-bright: #005acc; 
 
-    /* NAVIGATION LINKS */
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 15px; /* Slightly increased gap for better readability */
-    }
+            /* Layout */
+            --header-height: 70px;
+            --max-width: 1200px;
+        }
 
-    .nav-links li {
-      display: inline-block;
-    }
+        /* =========================================
+           2. RESET & GLOBAL STYLES
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .nav-links li a {
-      color: white;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 10px;
-      position: relative;
-      transition: color 0.3s ease;
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    .nav-links li a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      background-color: #ffc107;
-      left: 0;
-      bottom: 0;
-      transition: width 0.3s ease;
-    }
+        body {
+            min-height: 100vh;
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #bcdcff, #d6ebff, #ffffff);
+            color: var(--color-text-dark);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .nav-links li a:hover {
-      color: #ffc107;
-    }
+        h1, h2, .logo, .nav-links a, .explore-btn {
+            font-family: var(--font-heading);
+        }
 
-    .nav-links li a:hover::after {
-      width: 100%;
-    }
+        /* =========================================
+           3. HEADER / NAVIGATION
+           ========================================= */
+        header {
+            background-color: var(--color-primary);
+            padding: 0 40px;
+            height: auto;
+            min-height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
 
-    /* ===== PRODUCT SECTION ===== */
-    .products-container {
-      padding: 60px 20px;
-      max-width: 1200px;
-      margin: auto;
-      text-align: center;
-    }
+        /* Logo acts as a link but looks like text */
+        .logo {
+            font-size: 24px;
+            color: var(--color-text-light);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-decoration: none; /* Removes underline */
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+        
+        .logo:hover {
+            opacity: 0.9;
+        }
 
-    .title {
-      font-size: 2.8rem;
-      color: #083d77;
-      margin-bottom: 50px;
-    }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
 
-    .product-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-      align-items: stretch;
-    }
+        .nav-links li a {
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px;
+            position: relative;
+            transition: color 0.3s ease;
+            display: inline-block;
+        }
 
-    /* ANIMATION */
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accent);
+            left: 0;
+            bottom: 5px;
+            transition: width 0.3s ease;
+        }
 
-    /* PRODUCT CARD */
-    .product-box {
-      background-color: #fff;
-      border: 2px solid #083d77;
-      border-radius: 12px;
-      width: 340px;
-      max-width: 100%; /* Ensure it doesn't overflow small screens */
-      padding: 30px 25px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.3s ease;
-      animation: fadeInUp 0.6s ease forwards;
-      opacity: 0;
-    }
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: var(--color-accent);
+        }
 
-    .product-box:nth-child(1) {
-      animation-delay: 0.2s;
-    }
-    .product-box:nth-child(2) {
-      animation-delay: 0.4s;
-    }
+        .nav-links li a:hover::after,
+        .nav-links li a.active::after {
+            width: 100%;
+        }
 
-    /* HOVER EFFECT */
-    .product-box:hover {
-      transform: translateY(-8px);
-    }
+        /* =========================================
+           4. PRODUCTS CONTAINER
+           ========================================= */
+        .products-container {
+            padding: 60px 20px;
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            text-align: center;
+            flex: 1; /* Pushes potential footer to bottom */
+            min-height: 90vh; /* UPDATED: Forces footer below the fold so you must scroll to see it */
+        }
 
-    /* PRODUCT TEXTS */
-    .product-box h2 {
-      font-size: 1.6rem;
-      margin-bottom: 15px;
-      color: #083d77;
-    }
+        .title {
+            font-size: 2.8rem;
+            color: var(--color-primary);
+            margin-bottom: 50px;
+            font-weight: 700;
+        }
 
-    .product-box p {
-      font-size: 1rem;
-      color: #444;
-      margin-bottom: 20px;
-      flex-grow: 1;
-    }
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            align-items: stretch;
+        }
 
-    /* EXPLORE BUTTON */
-    .explore-btn {
-      display: inline-block;
-      background-color: #083d77;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-      margin-top: auto;
-    }
+        /* =========================================
+           5. PRODUCT CARD
+           ========================================= */
+        .product-box {
+            background-color: #fff;
+            border: 2px solid var(--color-primary);
+            border-radius: 12px;
+            width: 340px;
+            max-width: 100%;
+            padding: 30px 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+            
+            /* Animation */
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
 
-    .explore-btn:hover {
-      background-color: #005acc;
-    }
-    
-    /* Responsive tweaks for mobile */
-    @media (max-width: 768px) {
-      /* 1. Stack Header */
-      header {
-        flex-direction: column;
-        padding: 15px 20px;
-        gap: 15px;
-      }
+        /* Staggered Animation Delays */
+        .product-box:nth-child(1) { animation-delay: 0.2s; }
+        .product-box:nth-child(2) { animation-delay: 0.4s; }
 
-      /* 2. Adjust Navigation */
-      .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-      }
-      
-      .nav-links li a {
-        padding: 8px;
-        font-size: 0.95rem;
-      }
+        .product-box:hover {
+            transform: translateY(-8px);
+        }
 
-      /* 3. Adjust Titles */
-      .title {
-        font-size: 2rem;
-        margin-bottom: 30px;
-      }
+        .product-box h2 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--color-primary);
+        }
 
-      /* 4. Fluid Product Cards */
-      .product-grid {
-        gap: 20px;
-      }
+        .product-box p {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            margin-bottom: 20px;
+            flex-grow: 1; /* Pushes button to bottom */
+            line-height: 1.5;
+        }
 
-      .product-box {
-        width: 100%; /* Take full available width */
-        max-width: 400px; /* But don't get too wide on tablets */
-      }
-      
-      .products-container {
-          padding: 40px 15px; /* Reduce padding on sides */
-      }
-    }
-  </style>
+        /* =========================================
+           6. BUTTONS
+           ========================================= */
+        .explore-btn {
+            display: inline-block;
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            margin-top: auto;
+        }
+
+        .explore-btn:hover {
+            background-color: var(--btn-hover-bright);
+        }
+
+        /* =========================================
+           7. ANIMATIONS
+           ========================================= */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================================
+           8. FOOTER
+           ========================================= */
+        footer {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 20px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        /* =========================================
+           9. MOBILE RESPONSIVENESS
+           ========================================= */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .nav-links li a {
+                padding: 8px 12px; /* Consistency: Matches Home Page mobile padding */
+                font-size: 0.95rem;
+            }
+
+            .nav-links li a::after {
+                bottom: 2px;
+            }
+
+            .title {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+
+            .products-container {
+                padding: 40px 15px;
+            }
+
+            .product-grid {
+                gap: 20px;
+            }
+
+            .product-box {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <header>
-    <div class="logo">Empire HealthCare</div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="home.html" class="active">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="career.html">Career</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+    <!-- Navigation Bar -->
+    <header>
+        <!-- Consistency: Logo now links to home -->
+        <a href="home.html" class="logo">Empire HealthCare</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="products.html" class="active">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <!-- Product Section -->
-  <div class="products-container">
-    <h1 class="title">Our Product Categories</h1>
+    <!-- Main Content -->
+    <main class="products-container">
+        <h1 class="title">Our Product Categories</h1>
 
-    <div class="product-grid">
-      <div class="product-box">
-        <h2>Medical Imaging Ultrasound</h2>
-        <p>High-performance Color Doppler Systems designed for precision imaging and accurate diagnostics.</p>
-        <a href="ultrasound.html" class="explore-btn">Explore</a>
-      </div>
+        <div class="product-grid">
+            <!-- Card 1 -->
+            <div class="product-box">
+                <h2>Medical Imaging Ultrasound</h2>
+                <p>High-performance Color Doppler Systems designed for precision imaging and accurate diagnostics.</p>
+                <a href="ultrasound.html" class="explore-btn">Explore</a>
+            </div>
 
-      <div class="product-box">
-        <h2>Laboratory Equipment</h2>
-        <p>Reliable, high-quality lab equipment tailored for advanced medical analysis and research.</p>
-        <a href="lab.html" class="explore-btn">Explore</a>
-      </div>
-    </div>
-  </div>
+            <!-- Card 2 -->
+            <div class="product-box">
+                <h2>Laboratory Equipment</h2>
+                <p>Reliable, high-quality lab equipment tailored for advanced medical analysis and research.</p>
+                <a href="lab.html" class="explore-btn">Explore</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Empire HealthCare. All Rights Reserved.</p>
+    </footer>
 
 </body>
 </html>
