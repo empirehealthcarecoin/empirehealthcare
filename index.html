@@ -6,59 +6,39 @@
     <meta name="description" content="Welcome to Empire HealthCare - Beyond Everything">
     <meta name="keywords" content="Healthcare, Empire, Medical, Wellness">
     <meta name="author" content="Empire HealthCare">
-    
-    <!-- Matches mobile browser toolbar color to your brand -->
-    <meta name="theme-color" content="#083d77"> 
 
-    <title>EmpireHealthCare</title>
+    <!-- Matches mobile browser toolbar color -->
+    <meta name="theme-color" content="#083d77">
+
+    <title>Empire HealthCare</title>
 
     <!-- =========================================
-         FAVICON / SITE ICON SETUP 
+         FAVICON (FIXED & CORRECT)
+         File location: /images/favicon.png
          ========================================= -->
-    <!-- 1. The Standard Favicon (Fixed the backslash '\' to forward slash '/') -->
-    <link rel="icon" type="image/png" sizes="32x32" href="images\Favicon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images\Favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
 
-    <!-- 2. Apple Touch Icon (For iPhone/iPad home screens) -->
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-
-    <!-- 3. Android Chrome Icon -->
-    <link rel="manifest" href="images/site.webmanifest">
-
-    <!-- 4. Fallback for older browsers (Optional) -->
-    <link rel="shortcut icon" href="images/favicon.ico">
-
-
-    <!-- Preconnect for faster font loading -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* =========================================
-           1. CONFIG: CSS VARIABLES
-           Single source of truth for all styles.
-           ========================================= */
         :root {
-            /* Typography */
             --font-main: 'Montserrat', sans-serif;
             --fw-regular: 400;
             --fw-bold: 700;
 
-            /* Palette */
-            --color-primary: #083d77;       /* Dark Blue Title */
-            --color-secondary: #7d7d7d;     /* Grey Slogan */
-            --color-text-main: #000000;     /* Body Text */
-            
-            /* Background Gradient */
+            --color-primary: #083d77;
+            --color-secondary: #7d7d7d;
+            --color-text-main: #000000;
+
             --bg-gradient-start: #bcdcff;
             --bg-gradient-mid: #d6ebff;
             --bg-gradient-end: #ffffff;
         }
 
-        /* =========================================
-           2. RESET & GLOBAL STYLES
-           ========================================= */
         * {
             margin: 0;
             padding: 0;
@@ -71,42 +51,32 @@
         }
 
         body {
-            /* Layout */
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Prevents scrollbars during animations */
-            
-            /* Appearance */
+            overflow: hidden;
+
             background: linear-gradient(
-                to bottom right, 
-                var(--bg-gradient-start), 
-                var(--bg-gradient-mid), 
+                to bottom right,
+                var(--bg-gradient-start),
+                var(--bg-gradient-mid),
                 var(--bg-gradient-end)
             );
+
             color: var(--color-text-main);
             font-family: var(--font-main);
-            
-            /* Interaction */
             cursor: pointer;
-            outline: none; /* Removes default focus ring (we add custom styles if needed) */
         }
 
-        /* Focus state for accessibility (Keyboard users) */
         body:focus-visible {
             outline: 3px solid var(--color-primary);
             outline-offset: -3px;
         }
 
-        /* =========================================
-           3. MAIN LAYOUT COMPONENTS
-           ========================================= */
         .intro-container {
             text-align: center;
             padding: 20px;
-            width: 100%;
             max-width: 900px;
-            position: relative;
             z-index: 10;
         }
 
@@ -115,10 +85,7 @@
             color: var(--color-primary);
             margin-bottom: 40px;
             letter-spacing: 2px;
-            line-height: 1.2;
             font-weight: var(--fw-bold);
-            
-            /* Animation */
             opacity: 0;
             animation: fadeIn 1s ease forwards;
         }
@@ -126,48 +93,34 @@
         .slogan-wrapper p {
             font-size: 1.5rem;
             color: var(--color-secondary);
-            white-space: nowrap;
-            font-weight: var(--fw-regular);
-            
-            /* Animation */
             opacity: 0;
             animation: fadeIn 1.5s ease forwards;
             animation-delay: 0.5s;
         }
 
-        /* =========================================
-           4. ANIMATIONS
-           ========================================= */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); } /* Slight movement adds polish */
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* =========================================
-           5. MOBILE RESPONSIVENESS
-           ========================================= */
-        
-        /* Tablets and Laptops */
         @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-
             h1 {
                 font-size: 2.2rem;
                 margin-bottom: 20px;
-                letter-spacing: 1px;
             }
 
             .slogan-wrapper p {
                 font-size: 1.1rem;
-                white-space: normal; /* Allows text to wrap on small screens */
                 line-height: 1.5;
-                padding: 0 10px;
             }
         }
 
-        /* Small Phones (iPhone SE, etc.) */
         @media (max-width: 380px) {
             h1 {
                 font-size: 1.8rem;
@@ -175,40 +128,26 @@
         }
     </style>
 </head>
-<!-- 
-    Accessibility Improvement: 
-    Added tabindex="0" to make the body focusable by keyboard.
-    Added aria-label to explain what clicking does.
--->
+
 <body tabindex="0" aria-label="Click anywhere or press Enter to enter the site">
 
     <main class="intro-container">
         <h1>Empire HealthCare</h1>
-        
         <div class="slogan-wrapper">
             <p>beyond everything</p>
         </div>
     </main>
 
     <script>
-        /**
-         * REDIRECT LOGIC
-         * Handles both mouse clicks and keyboard 'Enter' presses.
-         */
         const redirectToHome = () => {
-            // Check if we are in the preview environment or live site
-            // In a real file, you just need: window.location.href = 'home.html';
-            console.log("Redirecting to home.html...");
             window.location.href = 'home.html';
         };
 
-        // Mouse Click
         document.body.addEventListener('click', redirectToHome);
 
-        // Keyboard Accessibility (Enter or Space key)
-        document.body.addEventListener('keydown', function(event) {
+        document.body.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault(); // Prevent scrolling if Space is pressed
+                event.preventDefault();
                 redirectToHome();
             }
         });
