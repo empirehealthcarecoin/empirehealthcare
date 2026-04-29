@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Empire HealthCare - Employee Dashboard">
+    <meta name="theme-color" content="#083d77">
+    <title>Employee Dashboard - EmpireHealthCare</title>
+
+    <link rel="icon" href="images\Favicon.png" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           1. CONFIG: CSS VARIABLES (Matches Theme)
+           ========================================= */
+        :root {
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --color-primary: #083d77;      
+            --color-accent: #ffc107;       
+            --color-text-dark: #222222;
+            --color-text-light: #ffffff;
+            --color-bg-light: #fcf7f7;
+            --bg-gradient-hero: linear-gradient(to bottom right, #bcdcff, #d6ebff, #ffffff);
+            --header-height: 70px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg-light);
+            color: var(--color-text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        h1, h2, h3, .logo, button { font-family: var(--font-heading); }
+
+        /* =========================================
+           2. HEADER & NAVIGATION
+           ========================================= */
+        header {
+            background-color: var(--color-primary);
+            padding: 0 40px;
+            height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo { font-size: 24px; color: var(--color-text-light); font-weight: 700; text-decoration: none; }
+        .logout-btn {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover { background-color: #c9302c; }
+
+        /* =========================================
+           3. DASHBOARD LAYOUT & GRADIENT
+           ========================================= */
+        .dashboard-wrapper {
+            background: var(--bg-gradient-hero); 
+            flex: 1;
+            padding: 40px 20px;
+            display: none; /* Hidden until auth is verified */
+        }
+        
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .welcome-banner {
+            background-color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 6px solid var(--color-primary);
+        }
+        .welcome-banner h1 { color: var(--color-primary); font-size: 1.8rem; margin-bottom: 5px; }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .card h2 { color: var(--color-primary); margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+
+        /* =========================================
+           4. TABLE & INTERACTIVE STYLES
+           ========================================= */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: var(--color-primary); color: white; font-weight: 500; }
+        tr:hover { background-color: #f9f9f9; }
+        
+        .status-dropdown {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-family: var(--font-body);
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        /* Dynamic colors for the dropdown based on selection */
+        .status-dropdown.pending { background-color: #fcf8e3; color: #8a6d3b; border-color: #faebcc; }
+        .status-dropdown.in-progress { background-color: #d9edf7; color: #31708f; border-color: #bce8f1; }
+        .status-dropdown.completed { background-color: #dff0d8; color: #3c763d; border-color: #d6e9c6; }
+
+        #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
+        .empty-state { text-align: center; padding: 20px; color: #777; font-style: italic; }
+        
+        footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; }
+
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { border: 1px solid #ccc; margin-bottom: 15px; border-radius: 8px; overflow: hidden; }
+            td { border: none; border-bottom: 1px solid #eee; position: relative; padding-left: 40%; }
+            td:before { position: absolute; top: 15px; left: 15px; width: 35%; padding-right: 10px; white-space: nowrap; font-weight: bold; color: var(--color-primary); }
+            td:nth-of-type(1):before { content: "Task Title"; }
+            td:nth-of-type(2):before { content: "Description"; }
+            td:nth-of-type(3):before { content: "Deadline"; }
+            td:nth-of-type(4):before { content: "Update Status"; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Empire HealthCare - Portal</div>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+    </header> 
+
+    <div id="loader">Fetching your assigned tasks...</div>
+
+    <main id="dashboard" class="dashboard-wrapper">
+        <div class="dashboard-container">
+            
+            <div class="welcome-banner">
+                <h1>Welcome, <span id="employee-name">Employee</span>!</h1>
+                <p>View your upcoming assignments and update your progress below.</p>
+            </div>
+
+            <div class="card">
+                <h2>My Active Tasks</h2>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task Title</th>
+                                <th>Description</th>
+                                <th>Deadline</th>
+                                <th>Update Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="task-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Empire HealthCare. All Rights Reserved.</p>
+    </footer>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+        import { doc, getDoc, collection, query, where, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+        const loader = document.getElementById('loader');
+        const dashboard = document.getElementById('dashboard');
+        const employeeNameSpan = document.getElementById('employee-name');
+        const logoutBtn = document.getElementById('logout-btn');
+        const taskTableBody = document.getElementById('task-table-body');
+
+        let currentUserUid = null;
+
+        // 1. Authenticate & Route Protection
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html"; // Kick out if not logged in
+            } else {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().isAdmin === false) {
+                    // It's a valid employee!
+                    currentUserUid = user.uid;
+                    employeeNameSpan.textContent = userDoc.data().fullName;
+                    loader.style.display = 'none';
+                    dashboard.style.display = 'block';
+                    
+                    // Fetch their specific tasks
+                    loadMyTasks();
+                } else {
+                    // If they are an admin, send them to the admin panel
+                    window.location.href = "admin.html"; 
+                }
+            }
+        });
+
+        // 2. Fetch Only Tasks Assigned to This Employee
+        function loadMyTasks() {
+            // Query: Look into "tasks" where "assignedToUid" equals my UID
+            const q = query(collection(db, "tasks"), where("assignedToUid", "==", currentUserUid));
+            
+            // Listen for real-time updates
+            onSnapshot(q, (snapshot) => {
+                taskTableBody.innerHTML = ""; 
+                
+                if (snapshot.empty) {
+                    taskTableBody.innerHTML = `<tr><td colspan="4" class="empty-state">You have no pending tasks. Great job!</td></tr>`;
+                    return;
+                }
+
+                snapshot.forEach((docSnap) => {
+                    const task = docSnap.data();
+                    const taskId = docSnap.id;
+                    const tr = document.createElement('tr');
+                    
+                    // Format class name based on current status
+                    let statusClass = "pending";
+                    if(task.status === "In Progress") statusClass = "in-progress";
+                    if(task.status === "Completed") statusClass = "completed";
+
+                    tr.innerHTML = `
+                        <td><strong>${task.title}</strong></td>
+                        <td>${task.description}</td>
+                        <td>${task.deadline}</td>
+                        <td>
+                            <select class="status-dropdown ${statusClass}" data-id="${taskId}">
+                                <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                            </select>
+                        </td>
+                    `;
+                    taskTableBody.appendChild(tr);
+                });
+
+                // Attach event listeners to all newly created dropdowns
+                attachDropdownListeners();
+            });
+        }
+
+        // 3. Handle Status Updates
+        function attachDropdownListeners() {
+            const dropdowns = document.querySelectorAll('.status-dropdown');
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('change', async (e) => {
+                    const newStatus = e.target.value;
+                    const taskId = e.target.getAttribute('data-id');
+                    
+                    try {
+                        // Update the document in Firestore
+                        const taskRef = doc(db, "tasks", taskId);
+                        await updateDoc(taskRef, {
+                            status: newStatus
+                        });
+                        // Visual update is handled automatically by onSnapshot!
+                    } catch (error) {
+                        console.error("Error updating task: ", error);
+                        alert("Failed to update task status. Please try again.");
+                    }
+                });
+            });
+        }
+
+        // 4. Logout
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth).then(() => window.location.href = "login.html");
+        });
+    </script>
+</body>
+</html>
