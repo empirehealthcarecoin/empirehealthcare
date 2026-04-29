@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Empire HealthCare - Admin Dashboard">
+    <meta name="theme-color" content="#083d77">
+    <title>Admin Dashboard - EmpireHealthCare</title>
+
+    <link rel="icon" href="images\Favicon.png" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           1. CONFIG: CSS VARIABLES (Matches Theme)
+           ========================================= */
+        :root {
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --color-primary: #083d77;      
+            --color-accent: #ffc107;       
+            --color-text-dark: #222222;
+            --color-text-light: #ffffff;
+            --color-bg-light: #fcf7f7;
+            --bg-gradient-hero: linear-gradient(to bottom right, #bcdcff, #d6ebff, #ffffff);
+            --header-height: 70px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg-light);
+            color: var(--color-text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        h1, h2, h3, .logo, button { font-family: var(--font-heading); }
+
+        /* =========================================
+           2. HEADER & NAVIGATION
+           ========================================= */
+        header {
+            background-color: var(--color-primary);
+            padding: 0 40px;
+            height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo { font-size: 24px; color: var(--color-text-light); font-weight: 700; text-decoration: none; }
+        .logout-btn {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover { background-color: #c9302c; }
+
+        /* =========================================
+           3. DASHBOARD LAYOUT & GRADIENT
+           ========================================= */
+        .dashboard-wrapper {
+            background: var(--bg-gradient-hero); /* Gradient Applied Here! */
+            flex: 1;
+            padding: 40px 20px;
+            display: none; /* Hidden until auth is verified */
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .welcome-banner {
+            background-color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 6px solid var(--color-primary);
+        }
+        .welcome-banner h1 { color: var(--color-primary); font-size: 1.8rem; margin-bottom: 5px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .card h2 { color: var(--color-primary); margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+
+        /* =========================================
+           4. FORM & TABLE STYLES
+           ========================================= */
+        .task-form input, .task-form select, .task-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: var(--font-body);
+        }
+        .task-form button {
+            width: 100%;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .task-form button:hover { background-color: #062a52; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: var(--color-primary); color: white; font-weight: 500; }
+        tr:hover { background-color: #f9f9f9; }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .status-Pending { background-color: #fcf8e3; color: #8a6d3b; }
+        .status-In-Progress { background-color: #d9edf7; color: #31708f; }
+        .status-Completed { background-color: #dff0d8; color: #3c763d; }
+
+        #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
+        
+        footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            table { display: block; overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Empire HealthCare - Admin</div>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+    </header> 
+
+    <div id="loader">Verifying secure connection...</div>
+
+    <main id="dashboard" class="dashboard-wrapper">
+        <div class="dashboard-container">
+            
+            <div class="welcome-banner">
+                <h1>Welcome, <span id="admin-name">Admin</span>!</h1>
+                <p>Assign tasks, monitor progress, and manage team deadlines.</p>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h2>Assign New Task</h2>
+                    <form id="task-form" class="task-form">
+                        <input type="text" id="task-title" placeholder="Task Title (e.g., Calibrate MRI)" required>
+                        <textarea id="task-desc" rows="3" placeholder="Detailed Description..." required></textarea>
+                        
+                        <select id="employee-select" required>
+                            <option value="" disabled selected>Select Employee...</option>
+                        </select>
+                        
+                        <input type="date" id="task-deadline" required>
+                        <button type="submit">Assign Task</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Overall Activity</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task Title</th>
+                                <th>Assigned To</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="task-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Empire HealthCare. All Rights Reserved.</p>
+    </footer>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+        import { doc, getDoc, collection, addDoc, onSnapshot, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+        const loader = document.getElementById('loader');
+        const dashboard = document.getElementById('dashboard');
+        const adminNameSpan = document.getElementById('admin-name');
+        const logoutBtn = document.getElementById('logout-btn');
+        const taskForm = document.getElementById('task-form');
+        const employeeSelect = document.getElementById('employee-select');
+        const taskTableBody = document.getElementById('task-table-body');
+
+        // 1. Authenticate & Route Protection
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html"; // Kick out if not logged in
+            } else {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().isAdmin === true) {
+                    adminNameSpan.textContent = userDoc.data().fullName;
+                    loader.style.display = 'none';
+                    dashboard.style.display = 'block';
+                    
+                    // Once verified, load dashboard data
+                    loadEmployees();
+                    loadTasks();
+                } else {
+                    window.location.href = "employee.html"; // Kick out if not admin
+                }
+            }
+        });
+
+        // 2. Fetch Employees for the Dropdown
+        async function loadEmployees() {
+            const q = query(collection(db, "users"), where("isAdmin", "==", false));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                const emp = doc.data();
+                const option = document.createElement('option');
+                option.value = doc.id; // Store UID behind the scenes
+                option.textContent = `${emp.fullName} (${emp.email})`; // Show name
+                employeeSelect.appendChild(option);
+            });
+        }
+
+        // 3. Handle Assigning a New Task
+        taskForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('task-title').value;
+            const desc = document.getElementById('task-desc').value;
+            const assignedUid = employeeSelect.value;
+            const assignedName = employeeSelect.options[employeeSelect.selectedIndex].text.split(' (')[0];
+            const deadline = document.getElementById('task-deadline').value;
+
+            try {
+                // Push to Firestore
+                await addDoc(collection(db, "tasks"), {
+                    title: title,
+                    description: desc,
+                    assignedToUid: assignedUid,
+                    assignedToName: assignedName,
+                    deadline: deadline,
+                    status: "Pending",
+                    createdAt: new Date().toISOString()
+                });
+                taskForm.reset(); // Clear form on success
+                alert("Task successfully assigned!");
+            } catch (error) {
+                console.error("Error adding task: ", error);
+                alert("Error assigning task. Check console.");
+            }
+        });
+
+        // 4. Real-time Task Table
+        function loadTasks() {
+            const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
+            // onSnapshot listens for real-time updates!
+            onSnapshot(q, (snapshot) => {
+                taskTableBody.innerHTML = ""; // Clear table
+                snapshot.forEach((doc) => {
+                    const task = doc.data();
+                    const tr = document.createElement('tr');
+                    
+                    // Format status string for CSS class (e.g., "In Progress" -> "In-Progress")
+                    const statusClass = task.status.replace(/\s+/g, '-');
+                    
+                    tr.innerHTML = `
+                        <td><strong>${task.title}</strong></td>
+                        <td>${task.assignedToName}</td>
+                        <td>${task.deadline}</td>
+                        <td><span class="status-badge status-${statusClass}">${task.status}</span></td>
+                    `;
+                    taskTableBody.appendChild(tr);
+                });
+            });
+        }
+
+        // 5. Logout
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth).then(() => window.location.href = "login.html");
+        });
+    </script>
+</body>
+</html>
