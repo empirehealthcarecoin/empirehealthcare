@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Empire HealthCare - Employee Dashboard">
     <meta name="theme-color" content="#083d77">
-    <title>Employee Dashboard - EmpireHealthCare</title>
+    <title>Employee Portal - EmpireHealthCare</title>
 
     <link rel="icon" href="images\Favicon.png" type="image/png">
 
@@ -80,7 +80,7 @@
         }
         
         .dashboard-container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
             width: 100%;
         }
@@ -97,51 +97,77 @@
 
         .card {
             background: white;
-            padding: 25px;
+            padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .card h2 { color: var(--color-primary); margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
 
         /* =========================================
-           4. TABLE & INTERACTIVE STYLES
+           4. DYNAMIC FORM STYLES
            ========================================= */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: var(--color-primary); color: white; font-weight: 500; }
-        tr:hover { background-color: #f9f9f9; }
-        
-        .status-dropdown {
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            font-family: var(--font-body);
+        .dynamic-form label {
             font-weight: bold;
-            cursor: pointer;
-            outline: none;
+            display: block;
+            margin-bottom: 5px;
+            color: var(--color-primary);
+        }
+        .dynamic-form input, .dynamic-form select {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            box-sizing: border-box;
             transition: border-color 0.3s;
         }
-        
-        /* Dynamic colors for the dropdown based on selection */
-        .status-dropdown.pending { background-color: #fcf8e3; color: #8a6d3b; border-color: #faebcc; }
-        .status-dropdown.in-progress { background-color: #d9edf7; color: #31708f; border-color: #bce8f1; }
-        .status-dropdown.completed { background-color: #dff0d8; color: #3c763d; border-color: #d6e9c6; }
+        .dynamic-form input:focus, .dynamic-form select:focus {
+            border-color: var(--color-primary);
+            outline: none;
+        }
+        .dynamic-form h3 {
+            color: #062a52;
+            margin: 25px 0 15px 0;
+            font-size: 1.1rem;
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 5px;
+        }
+        .grid-2-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .section-box {
+            background-color: #f9fbfd;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e1e8ed;
+            margin-bottom: 20px;
+        }
+        .submit-btn {
+            width: 100%;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 20px;
+        }
+        .submit-btn:hover { background-color: #062a52; transform: translateY(-2px); }
 
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
-        .empty-state { text-align: center; padding: 20px; color: #777; font-style: italic; }
         
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; }
 
         @media (max-width: 768px) {
-            table, thead, tbody, th, td, tr { display: block; }
-            thead tr { position: absolute; top: -9999px; left: -9999px; }
-            tr { border: 1px solid #ccc; margin-bottom: 15px; border-radius: 8px; overflow: hidden; }
-            td { border: none; border-bottom: 1px solid #eee; position: relative; padding-left: 40%; }
-            td:before { position: absolute; top: 15px; left: 15px; width: 35%; padding-right: 10px; white-space: nowrap; font-weight: bold; color: var(--color-primary); }
-            td:nth-of-type(1):before { content: "Task Title"; }
-            td:nth-of-type(2):before { content: "Description"; }
-            td:nth-of-type(3):before { content: "Deadline"; }
-            td:nth-of-type(4):before { content: "Update Status"; }
+            .grid-2-col { grid-template-columns: 1fr; gap: 0; }
+            .card { padding: 20px; }
         }
     </style>
 </head>
@@ -152,32 +178,119 @@
         <button id="logout-btn" class="logout-btn">Logout</button>
     </header> 
 
-    <div id="loader">Fetching your assigned tasks...</div>
+    <div id="loader">Verifying secure connection...</div>
 
     <main id="dashboard" class="dashboard-wrapper">
         <div class="dashboard-container">
             
             <div class="welcome-banner">
                 <h1>Welcome, <span id="employee-name">Employee</span>!</h1>
-                <p>View your upcoming assignments and update your progress below.</p>
+                <p>Please submit your daily attendance and activity report below.</p>
             </div>
 
             <div class="card">
-                <h2>My Active Tasks</h2>
-                <div style="overflow-x:auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Task Title</th>
-                                <th>Description</th>
-                                <th>Deadline</th>
-                                <th>Update Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="task-table-body">
-                            </tbody>
-                    </table>
-                </div>
+                <h2>Daily Report</h2>
+                <form id="attendance-form" class="dynamic-form">
+                    
+                    <div class="grid-2-col">
+                        <div>
+                            <label>Date</label>
+                            <input type="date" id="report-date" required>
+                        </div>
+                        <div>
+                            <label>Status</label>
+                            <select id="report-status" required>
+                                <option value="" disabled selected>Select Work or Leave...</option>
+                                <option value="Work">Work</option>
+                                <option value="Leave">Leave</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="work-details" style="display: none;">
+                        <div class="section-box">
+                            <div class="grid-2-col">
+                                <div>
+                                    <label>In-Time</label>
+                                    <input type="time" id="in-time">
+                                </div>
+                                <div>
+                                    <label>Out-Time</label>
+                                    <input type="time" id="out-time">
+                                </div>
+                            </div>
+
+                            <h3>Hospital Details</h3>
+                            <input type="text" id="hosp-name" placeholder="Hospital Name">
+                            <input type="text" id="hosp-area" placeholder="Area">
+                            <input type="text" id="hosp-doctor" placeholder="Doctor Name">
+                            <input type="text" id="hosp-tech" placeholder="Technician Name">
+                            <input type="text" id="hosp-machine" placeholder="Existing Machine">
+                            <input type="text" id="hosp-enduser" placeholder="End User">
+                        </div>
+
+                        <div class="section-box">
+                            <label>Activity Category</label>
+                            <select id="activity-category">
+                                <option value="" disabled selected>Select Category...</option>
+                                <option value="Sales">Sales</option>
+                                <option value="Service">Service</option>
+                                <option value="Application Support">Application Support</option>
+                            </select>
+
+                            <div id="sales-section" style="display: none; margin-top: 15px;">
+                                <label>Call Type</label>
+                                <select id="sales-call-type">
+                                    <option value="" disabled selected>Select Call Type...</option>
+                                    <option value="Cold Call">Cold Call</option>
+                                    <option value="Follow-up Call">Follow-up Call</option>
+                                </select>
+
+                                <div id="cold-call-fields" style="display: none; margin-top: 15px;">
+                                    <input type="text" id="cc-req-no" placeholder="No. of requirement as of now">
+                                    <input type="text" id="cc-req" placeholder="Requirement">
+                                </div>
+
+                                <div id="follow-up-fields" style="display: none; margin-top: 15px;">
+                                    <input type="text" id="fu-general" placeholder="General Visit">
+                                    <input type="text" id="fu-payment" placeholder="Payment Follow Up">
+                                    <input type="text" id="fu-prospect" placeholder="Prospect">
+                                    <input type="text" id="fu-hot" placeholder="Hot Prospect">
+                                    <input type="text" id="fu-order-col" placeholder="Order Collected">
+                                    <input type="text" id="fu-order-loss" placeholder="Order Loss">
+                                    <input type="text" id="fu-jd" placeholder="JD Office">
+                                </div>
+                            </div>
+
+                            <div id="service-section" style="display: none; margin-top: 15px;">
+                                <input type="text" id="srv-pms" placeholder="Preventive Maintenance Service">
+                                <input type="text" id="srv-inst" placeholder="Installation">
+                                
+                                <label>Breakdown</label>
+                                <select id="srv-breakdown">
+                                    <option value="" disabled selected>Select Breakdown Status...</option>
+                                    <option value="Updated in FSM">Updated in FSM</option>
+                                    <option value="Not Updated">Not Updated</option>
+                                </select>
+
+                                <input type="text" id="srv-amc" placeholder="AMC/CMC">
+                                <input type="text" id="srv-others" placeholder="Others">
+                            </div>
+
+                            <div id="app-support-section" style="display: none; margin-top: 15px;">
+                                <input type="text" id="app-pre-demo" placeholder="Pre Sale Demo">
+                                <input type="text" id="app-inst" placeholder="Installation">
+                                <input type="text" id="app-post-demo" placeholder="Post Sale Demo">
+                                <input type="text" id="app-post-support" placeholder="Post Sale Support">
+                                <input type="text" id="app-call" placeholder="Support Call">
+                                <input type="text" id="app-follow" placeholder="Follow Up On">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Report</button>
+                    <p id="success-message" style="color: #28a745; font-weight: bold; margin-top: 15px; text-align: center; display: none; font-size: 1.1rem;"></p>
+                </form>
             </div>
         </div>
     </main>
@@ -189,104 +302,196 @@
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        import { doc, getDoc, collection, query, where, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+        import { doc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
+        // DOM Elements
         const loader = document.getElementById('loader');
         const dashboard = document.getElementById('dashboard');
         const employeeNameSpan = document.getElementById('employee-name');
         const logoutBtn = document.getElementById('logout-btn');
-        const taskTableBody = document.getElementById('task-table-body');
+        const attendanceForm = document.getElementById('attendance-form');
+        const successMessage = document.getElementById('success-message');
+
+        // Dynamic Form Elements
+        const statusSelect = document.getElementById('report-status');
+        const workDetails = document.getElementById('work-details');
+        const categorySelect = document.getElementById('activity-category');
+        
+        const salesSection = document.getElementById('sales-section');
+        const serviceSection = document.getElementById('service-section');
+        const appSupportSection = document.getElementById('app-support-section');
+        
+        const salesCallType = document.getElementById('sales-call-type');
+        const coldCallFields = document.getElementById('cold-call-fields');
+        const followUpFields = document.getElementById('follow-up-fields');
 
         let currentUserUid = null;
 
         // 1. Authenticate & Route Protection
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                window.location.href = "login.html"; // Kick out if not logged in
+                window.location.href = "login.html"; 
             } else {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists() && userDoc.data().isAdmin === false) {
-                    // It's a valid employee!
                     currentUserUid = user.uid;
                     employeeNameSpan.textContent = userDoc.data().fullName;
+                    
+                    // Set today's date automatically
+                    document.getElementById('report-date').valueAsDate = new Date();
+
                     loader.style.display = 'none';
                     dashboard.style.display = 'block';
-                    
-                    // Fetch their specific tasks
-                    loadMyTasks();
                 } else {
-                    // If they are an admin, send them to the admin panel
                     window.location.href = "admin.html"; 
                 }
             }
         });
 
-        // 2. Fetch Only Tasks Assigned to This Employee
-        function loadMyTasks() {
-            // Query: Look into "tasks" where "assignedToUid" equals my UID
-            const q = query(collection(db, "tasks"), where("assignedToUid", "==", currentUserUid));
+        // 2. Form UI Logic (Hiding/Showing Fields)
+        statusSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'Work') {
+                workDetails.style.display = 'block';
+                document.getElementById('in-time').required = true;
+                categorySelect.required = true;
+            } else {
+                workDetails.style.display = 'none';
+                document.getElementById('in-time').required = false;
+                categorySelect.required = false;
+            }
+        });
+
+        categorySelect.addEventListener('change', (e) => {
+            salesSection.style.display = 'none';
+            serviceSection.style.display = 'none';
+            appSupportSection.style.display = 'none';
+            salesCallType.required = false;
+
+            if (e.target.value === 'Sales') {
+                salesSection.style.display = 'block';
+                salesCallType.required = true;
+            } else if (e.target.value === 'Service') {
+                serviceSection.style.display = 'block';
+            } else if (e.target.value === 'Application Support') {
+                appSupportSection.style.display = 'block';
+            }
+        });
+
+        salesCallType.addEventListener('change', (e) => {
+            coldCallFields.style.display = 'none';
+            followUpFields.style.display = 'none';
+
+            if (e.target.value === 'Cold Call') {
+                coldCallFields.style.display = 'block';
+            } else if (e.target.value === 'Follow-up Call') {
+                followUpFields.style.display = 'block';
+            }
+        });
+
+        // 3. Submit Data to Firebase
+        attendanceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
             
-            // Listen for real-time updates
-            onSnapshot(q, (snapshot) => {
-                taskTableBody.innerHTML = ""; 
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.textContent = "Submitting...";
+            submitBtn.disabled = true;
+
+            const status = statusSelect.value;
+            
+            // Build the data object
+            const reportData = {
+                employeeUid: currentUserUid,
+                employeeName: employeeNameSpan.textContent,
+                date: document.getElementById('report-date').value,
+                status: status,
+                timestamp: new Date().toISOString()
+            };
+
+            // If "Work", capture all the complex fields
+            if (status === 'Work') {
+                reportData.inTime = document.getElementById('in-time').value;
+                reportData.outTime = document.getElementById('out-time').value;
                 
-                if (snapshot.empty) {
-                    taskTableBody.innerHTML = `<tr><td colspan="4" class="empty-state">You have no pending tasks. Great job!</td></tr>`;
-                    return;
-                }
+                reportData.hospital = {
+                    name: document.getElementById('hosp-name').value,
+                    area: document.getElementById('hosp-area').value,
+                    doctor: document.getElementById('hosp-doctor').value,
+                    technician: document.getElementById('hosp-tech').value,
+                    existingMachine: document.getElementById('hosp-machine').value,
+                    endUser: document.getElementById('hosp-enduser').value
+                };
+                
+                const category = categorySelect.value;
+                reportData.category = category;
 
-                snapshot.forEach((docSnap) => {
-                    const task = docSnap.data();
-                    const taskId = docSnap.id;
-                    const tr = document.createElement('tr');
+                if (category === 'Sales') {
+                    const callType = salesCallType.value;
+                    reportData.salesCallType = callType;
                     
-                    // Format class name based on current status
-                    let statusClass = "pending";
-                    if(task.status === "In Progress") statusClass = "in-progress";
-                    if(task.status === "Completed") statusClass = "completed";
-
-                    tr.innerHTML = `
-                        <td><strong>${task.title}</strong></td>
-                        <td>${task.description}</td>
-                        <td>${task.deadline}</td>
-                        <td>
-                            <select class="status-dropdown ${statusClass}" data-id="${taskId}">
-                                <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                                <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                                <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                            </select>
-                        </td>
-                    `;
-                    taskTableBody.appendChild(tr);
-                });
-
-                // Attach event listeners to all newly created dropdowns
-                attachDropdownListeners();
-            });
-        }
-
-        // 3. Handle Status Updates
-        function attachDropdownListeners() {
-            const dropdowns = document.querySelectorAll('.status-dropdown');
-            dropdowns.forEach(dropdown => {
-                dropdown.addEventListener('change', async (e) => {
-                    const newStatus = e.target.value;
-                    const taskId = e.target.getAttribute('data-id');
-                    
-                    try {
-                        // Update the document in Firestore
-                        const taskRef = doc(db, "tasks", taskId);
-                        await updateDoc(taskRef, {
-                            status: newStatus
-                        });
-                        // Visual update is handled automatically by onSnapshot!
-                    } catch (error) {
-                        console.error("Error updating task: ", error);
-                        alert("Failed to update task status. Please try again.");
+                    if (callType === 'Cold Call') {
+                        reportData.details = {
+                            requirementNo: document.getElementById('cc-req-no').value,
+                            requirement: document.getElementById('cc-req').value
+                        };
+                    } else if (callType === 'Follow-up Call') {
+                        reportData.details = {
+                            generalVisit: document.getElementById('fu-general').value,
+                            paymentFollowUp: document.getElementById('fu-payment').value,
+                            prospect: document.getElementById('fu-prospect').value,
+                            hotProspect: document.getElementById('fu-hot').value,
+                            orderCollected: document.getElementById('fu-order-col').value,
+                            orderLoss: document.getElementById('fu-order-loss').value,
+                            jdOffice: document.getElementById('fu-jd').value
+                        };
                     }
-                });
-            });
-        }
+                } else if (category === 'Service') {
+                    reportData.details = {
+                        preventiveMaintenance: document.getElementById('srv-pms').value,
+                        installation: document.getElementById('srv-inst').value,
+                        breakdownStatus: document.getElementById('srv-breakdown').value,
+                        amc: document.getElementById('srv-amc').value,
+                        others: document.getElementById('srv-others').value
+                    };
+                } else if (category === 'Application Support') {
+                    reportData.details = {
+                        preSaleDemo: document.getElementById('app-pre-demo').value,
+                        installation: document.getElementById('app-inst').value,
+                        postSaleDemo: document.getElementById('app-post-demo').value,
+                        postSaleSupport: document.getElementById('app-post-support').value,
+                        supportCall: document.getElementById('app-call').value,
+                        followUpOn: document.getElementById('app-follow').value
+                    };
+                }
+            }
+
+            try {
+                // Push to a new "reports" collection in Firestore
+                await addDoc(collection(db, "reports"), reportData);
+                
+                // Show Success Message
+                successMessage.textContent = status === 'Leave' ? "Leave successfully entered!" : "Daily report successfully submitted!";
+                successMessage.style.display = 'block';
+                
+                // Reset Form
+                attendanceForm.reset();
+                document.getElementById('report-date').valueAsDate = new Date();
+                workDetails.style.display = 'none';
+                salesSection.style.display = 'none';
+                serviceSection.style.display = 'none';
+                appSupportSection.style.display = 'none';
+                coldCallFields.style.display = 'none';
+                followUpFields.style.display = 'none';
+                
+                // Hide success message after 4 seconds
+                setTimeout(() => { successMessage.style.display = 'none'; }, 4000);
+            } catch (error) {
+                console.error("Error submitting report: ", error);
+                alert("Failed to submit report. Please check your connection.");
+            } finally {
+                submitBtn.textContent = "Submit Report";
+                submitBtn.disabled = false;
+            }
+        });
 
         // 4. Logout
         logoutBtn.addEventListener('click', () => {
