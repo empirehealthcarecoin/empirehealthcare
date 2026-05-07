@@ -15,7 +15,7 @@
 
     <style>
         /* =========================================
-           1. CONFIG: CSS VARIABLES (Matches Theme)
+           1. CONFIG: CSS VARIABLES 
            ========================================= */
         :root {
             --font-heading: 'Montserrat', sans-serif;
@@ -70,15 +70,14 @@
         .logout-btn:hover { background-color: #c9302c; }
 
         /* =========================================
-           3. DASHBOARD LAYOUT & GRADIENT
+           3. DASHBOARD LAYOUT
            ========================================= */
         .dashboard-wrapper {
-            background: var(--bg-gradient-hero); /* Gradient Applied Here! */
+            background: var(--bg-gradient-hero); 
             flex: 1;
             padding: 40px 20px;
-            display: none; /* Hidden until auth is verified */
+            display: none; 
         }
-        
         .dashboard-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -95,66 +94,89 @@
         }
         .welcome-banner h1 { color: var(--color-primary); font-size: 1.8rem; margin-bottom: 5px; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-        }
-
         .card {
             background: white;
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
         }
         .card h2 { color: var(--color-primary); margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
 
         /* =========================================
-           4. FORM & TABLE STYLES
+           4. TABLE STYLES
            ========================================= */
-        .task-form input, .task-form select, .task-form textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-family: var(--font-body);
-        }
-        .task-form button {
-            width: 100%;
-            background-color: var(--color-primary);
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .task-form button:hover { background-color: #062a52; }
-
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background-color: var(--color-primary); color: white; font-weight: 500; }
         tr:hover { background-color: #f9f9f9; }
         
         .status-badge {
-            padding: 5px 10px;
+            padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: bold;
         }
-        .status-Pending { background-color: #fcf8e3; color: #8a6d3b; }
-        .status-In-Progress { background-color: #d9edf7; color: #31708f; }
-        .status-Completed { background-color: #dff0d8; color: #3c763d; }
+        .status-work { background-color: #d9edf7; color: #31708f; }
+        .status-leave { background-color: #fcf8e3; color: #8a6d3b; }
+
+        .view-btn {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .view-btn:hover { background-color: #062a52; }
+
+        /* =========================================
+           5. MODAL (POP-UP) STYLES
+           ========================================= */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+        .close-btn:hover { color: #d9534f; }
+        
+        .report-section { margin-bottom: 20px; }
+        .report-section h3 { border-bottom: 2px solid var(--color-primary); color: var(--color-primary); padding-bottom: 5px; margin-bottom: 10px; }
+        .report-section ul { list-style: none; padding: 0; }
+        .report-section li { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #eee; }
+        .report-section li strong { display: inline-block; width: 160px; color: #555; }
 
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
-        
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; }
 
         @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-            table { display: block; overflow-x: auto; }
+            table { display: block; overflow-x: auto; white-space: nowrap; }
+            .report-section li strong { width: 100%; display: block; margin-bottom: 4px; }
         }
     </style>
 </head>
@@ -172,43 +194,37 @@
             
             <div class="welcome-banner">
                 <h1>Welcome, <span id="admin-name">Admin</span>!</h1>
-                <p>Assign tasks, monitor progress, and manage team deadlines.</p>
+                <p>Monitor daily employee attendance and field reports below.</p>
             </div>
 
-            <div class="grid">
-                <div class="card">
-                    <h2>Assign New Task</h2>
-                    <form id="task-form" class="task-form">
-                        <input type="text" id="task-title" placeholder="Task Title (e.g., Calibrate MRI)" required>
-                        <textarea id="task-desc" rows="3" placeholder="Detailed Description..." required></textarea>
-                        
-                        <select id="employee-select" required>
-                            <option value="" disabled selected>Select Employee...</option>
-                        </select>
-                        
-                        <input type="date" id="task-deadline" required>
-                        <button type="submit">Assign Task</button>
-                    </form>
-                </div>
-
-                <div class="card">
-                    <h2>Overall Activity</h2>
+            <div class="card">
+                <h2>Employee Daily Reports</h2>
+                <div style="overflow-x:auto;">
                     <table>
                         <thead>
                             <tr>
-                                <th>Task Title</th>
-                                <th>Assigned To</th>
-                                <th>Deadline</th>
+                                <th>Date</th>
+                                <th>Employee Name</th>
                                 <th>Status</th>
+                                <th>Category</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="task-table-body">
+                        <tbody id="report-table-body">
                             </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </main>
+
+    <div id="report-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" id="close-modal">&times;</button>
+            <div id="modal-details">
+                </div>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2024 Empire HealthCare. All Rights Reserved.</p>
@@ -217,20 +233,23 @@
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        import { doc, getDoc, collection, addDoc, onSnapshot, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+        import { doc, getDoc, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
         const loader = document.getElementById('loader');
         const dashboard = document.getElementById('dashboard');
         const adminNameSpan = document.getElementById('admin-name');
         const logoutBtn = document.getElementById('logout-btn');
-        const taskForm = document.getElementById('task-form');
-        const employeeSelect = document.getElementById('employee-select');
-        const taskTableBody = document.getElementById('task-table-body');
+        const tableBody = document.getElementById('report-table-body');
+        
+        // Modal Elements
+        const modal = document.getElementById('report-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const modalDetails = document.getElementById('modal-details');
 
         // 1. Authenticate & Route Protection
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                window.location.href = "login.html"; // Kick out if not logged in
+                window.location.href = "login.html"; 
             } else {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists() && userDoc.data().isAdmin === true) {
@@ -238,81 +257,113 @@
                     loader.style.display = 'none';
                     dashboard.style.display = 'block';
                     
-                    // Once verified, load dashboard data
-                    loadEmployees();
-                    loadTasks();
+                    loadReports();
                 } else {
-                    window.location.href = "employee.html"; // Kick out if not admin
+                    window.location.href = "employee.html"; 
                 }
             }
         });
 
-        // 2. Fetch Employees for the Dropdown
-        async function loadEmployees() {
-            const q = query(collection(db, "users"), where("isAdmin", "==", false));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                const emp = doc.data();
-                const option = document.createElement('option');
-                option.value = doc.id; // Store UID behind the scenes
-                option.textContent = `${emp.fullName} (${emp.email})`; // Show name
-                employeeSelect.appendChild(option);
-            });
+        // Helper: Convert camelCase keys to Title Case for nice reading
+        function formatKey(key) {
+            const result = key.replace(/([A-Z])/g, " $1");
+            return result.charAt(0).toUpperCase() + result.slice(1);
         }
 
-        // 3. Handle Assigning a New Task
-        taskForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('task-title').value;
-            const desc = document.getElementById('task-desc').value;
-            const assignedUid = employeeSelect.value;
-            const assignedName = employeeSelect.options[employeeSelect.selectedIndex].text.split(' (')[0];
-            const deadline = document.getElementById('task-deadline').value;
-
-            try {
-                // Push to Firestore
-                await addDoc(collection(db, "tasks"), {
-                    title: title,
-                    description: desc,
-                    assignedToUid: assignedUid,
-                    assignedToName: assignedName,
-                    deadline: deadline,
-                    status: "Pending",
-                    createdAt: new Date().toISOString()
-                });
-                taskForm.reset(); // Clear form on success
-                alert("Task successfully assigned!");
-            } catch (error) {
-                console.error("Error adding task: ", error);
-                alert("Error assigning task. Check console.");
-            }
-        });
-
-        // 4. Real-time Task Table
-        function loadTasks() {
-            const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
-            // onSnapshot listens for real-time updates!
+        // 2. Fetch and Display Reports
+        function loadReports() {
+            // Fetch reports ordered by timestamp descending (newest first)
+            const q = query(collection(db, "reports"), orderBy("timestamp", "desc"));
+            
             onSnapshot(q, (snapshot) => {
-                taskTableBody.innerHTML = ""; // Clear table
-                snapshot.forEach((doc) => {
-                    const task = doc.data();
+                tableBody.innerHTML = ""; 
+                
+                snapshot.forEach((docSnap) => {
+                    const report = docSnap.data();
                     const tr = document.createElement('tr');
                     
-                    // Format status string for CSS class (e.g., "In Progress" -> "In-Progress")
-                    const statusClass = task.status.replace(/\s+/g, '-');
+                    const statusClass = report.status === 'Work' ? 'status-work' : 'status-leave';
                     
                     tr.innerHTML = `
-                        <td><strong>${task.title}</strong></td>
-                        <td>${task.assignedToName}</td>
-                        <td>${task.deadline}</td>
-                        <td><span class="status-badge status-${statusClass}">${task.status}</span></td>
+                        <td>${report.date}</td>
+                        <td><strong>${report.employeeName}</strong></td>
+                        <td><span class="status-badge ${statusClass}">${report.status}</span></td>
+                        <td>${report.category || '-'}</td>
+                        <td class="action-cell"></td>
                     `;
-                    taskTableBody.appendChild(tr);
+                    
+                    // Add View Button dynamically
+                    const viewBtn = document.createElement('button');
+                    viewBtn.className = 'view-btn';
+                    viewBtn.textContent = 'View Details';
+                    viewBtn.addEventListener('click', () => openModal(report));
+                    
+                    tr.querySelector('.action-cell').appendChild(viewBtn);
+                    tableBody.appendChild(tr);
                 });
             });
         }
 
-        // 5. Logout
+        // 3. Modal Logic
+        function openModal(report) {
+            let html = `
+                <div class="report-section">
+                    <h3>General Info</h3>
+                    <ul>
+                        <li><strong>Employee:</strong> ${report.employeeName}</li>
+                        <li><strong>Date:</strong> ${report.date}</li>
+                        <li><strong>Status:</strong> ${report.status}</li>
+                    </ul>
+                </div>
+            `;
+
+            if (report.status === 'Work') {
+                html += `
+                    <div class="report-section">
+                        <h3>Time & Hospital</h3>
+                        <ul>
+                            <li><strong>In-Time:</strong> ${report.inTime || 'N/A'}</li>
+                            <li><strong>Out-Time:</strong> ${report.outTime || 'N/A'}</li>
+                            <li><strong>Hospital Name:</strong> ${report.hospital?.name || 'N/A'}</li>
+                            <li><strong>Area:</strong> ${report.hospital?.area || 'N/A'}</li>
+                            <li><strong>Doctor:</strong> ${report.hospital?.doctor || 'N/A'}</li>
+                            <li><strong>Technician:</strong> ${report.hospital?.technician || 'N/A'}</li>
+                            <li><strong>Existing Machine:</strong> ${report.hospital?.existingMachine || 'N/A'}</li>
+                            <li><strong>End User:</strong> ${report.hospital?.endUser || 'N/A'}</li>
+                        </ul>
+                    </div>
+                `;
+
+                html += `
+                    <div class="report-section">
+                        <h3>Activity: ${report.category}</h3>
+                        <ul>
+                `;
+
+                if (report.category === 'Sales') {
+                    html += `<li><strong>Call Type:</strong> ${report.salesCallType || 'N/A'}</li>`;
+                }
+
+                // Loop through all dynamic specific details and print them cleanly
+                if (report.details) {
+                    for (const [key, value] of Object.entries(report.details)) {
+                        html += `<li><strong>${formatKey(key)}:</strong> ${value || 'N/A'}</li>`;
+                    }
+                }
+                html += `</ul></div>`;
+            }
+
+            modalDetails.innerHTML = html;
+            modal.style.display = 'flex';
+        }
+
+        // Close Modal Handlers
+        closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+
+        // 4. Logout
         logoutBtn.addEventListener('click', () => {
             signOut(auth).then(() => window.location.href = "login.html");
         });
