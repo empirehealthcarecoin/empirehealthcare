@@ -68,7 +68,10 @@
         .signup-container h2 { color: var(--color-primary); margin-bottom: 10px; }
         .signup-container p { color: #555; margin-bottom: 25px; }
 
-        .signup-form input {
+        /* Form Inputs */
+        .signup-form input[type="text"], 
+        .signup-form input[type="password"],
+        .signup-form input[type="email"] {
             width: 100%;
             padding: 14px;
             margin-bottom: 15px;
@@ -81,6 +84,28 @@
         }
         .signup-form input:focus { border-color: var(--color-primary); }
 
+        /* Password Wrapper for Eye Icon */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .password-wrapper input {
+            padding-right: 45px; /* Give room for the icon */
+        }
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 14px;
+            cursor: pointer;
+            color: #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        .toggle-password:hover { color: var(--color-primary); }
+
+        /* Buttons & Links */
         .btn {
             width: 100%;
             background-color: var(--color-primary);
@@ -118,10 +143,22 @@
                 <p>Create your portal account to submit daily reports.</p>
                 
                 <form id="signup-form" class="signup-form">
-                    <input type="text" id="fullname" placeholder="Full Name (e.g. John Doe)" required>
-                    <input type="text" id="username" placeholder="Desired Username" required>
-                    <input type="password" id="password" placeholder="Password (Min 6 characters)" required minlength="6">
-                    <input type="password" id="confirm-password" placeholder="Confirm Password" required minlength="6">
+                    <input type="text" id="fullname" placeholder="Full Name" required>
+                    <input type="text" id="username" placeholder="Username" required>
+                    
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Password (Min 8 characters)" required minlength="8">
+                        <span class="toggle-password" data-target="password">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </span>
+                    </div>
+
+                    <div class="password-wrapper">
+                        <input type="password" id="confirm-password" placeholder="Confirm Password" required minlength="8">
+                        <span class="toggle-password" data-target="confirm-password">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </span>
+                    </div>
                     
                     <button type="submit" id="submit-btn" class="btn">Register Account</button>
                     <p id="error-message"></p>
@@ -139,9 +176,27 @@
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        // Notice we import 'setDoc' instead of 'addDoc' so we can link the Auth ID to the Database ID exactly
         import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
+        // UI Logic: Toggle Password Visibility
+        const toggleIcons = document.querySelectorAll('.toggle-password');
+        const eyeSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+        const eyeSlashSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
+        toggleIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const targetInput = document.getElementById(this.getAttribute('data-target'));
+                if (targetInput.type === 'password') {
+                    targetInput.type = 'text';
+                    this.innerHTML = eyeSlashSVG;
+                } else {
+                    targetInput.type = 'password';
+                    this.innerHTML = eyeSVG;
+                }
+            });
+        });
+
+        // Firebase Auth Logic
         const signupForm = document.getElementById('signup-form');
         const errorMessage = document.getElementById('error-message');
         const submitBtn = document.getElementById('submit-btn');
@@ -157,6 +212,10 @@
             errorMessage.style.display = "none";
 
             // 1. Validation Checks
+            if (password.length < 8) {
+                showError("Password must be at least 8 characters.");
+                return;
+            }
             if (password !== confirmPassword) {
                 showError("Passwords do not match!");
                 return;
@@ -173,18 +232,18 @@
             submitBtn.disabled = true;
 
             try {
-                // 3. Create Account in Firebase Authentication
+                // 3. Create Account
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // 4. Create Profile in Firestore Database (Securely defaulting to Employee)
+                // 4. Create Database Profile
                 await setDoc(doc(db, "users", user.uid), {
                     fullName: fullName,
                     email: email,
-                    isAdmin: false // STRICT SECURITY: Forces new signups to be standard employees
+                    isAdmin: false 
                 });
 
-                // 5. Success! Redirect to login (or directly to dashboard)
+                // 5. Success
                 alert("Account successfully created! You can now log in.");
                 window.location.href = "login.html";
 
@@ -193,7 +252,7 @@
                 if (error.code === 'auth/email-already-in-use') {
                     showError("This username is already taken. Please choose another.");
                 } else if (error.code === 'auth/weak-password') {
-                    showError("Password is too weak. Must be at least 6 characters.");
+                    showError("Password is too weak. Must be at least 8 characters.");
                 } else {
                     showError("An error occurred during registration. Please try again.");
                 }
