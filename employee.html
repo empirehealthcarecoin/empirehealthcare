@@ -15,6 +15,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        /* =========================================
+           1. CONFIG: CSS VARIABLES (Matches Theme)
+           ========================================= */
         :root {
             --font-heading: 'Montserrat', sans-serif;
             --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -32,6 +35,9 @@
         body { font-family: var(--font-body); background-color: var(--color-bg-light); color: var(--color-text-dark); min-height: 100vh; display: flex; flex-direction: column; }
         h1, h2, h3, .logo, button { font-family: var(--font-heading); }
 
+        /* =========================================
+           2. HEADER & NAVIGATION
+           ========================================= */
         header { background-color: var(--color-primary); padding: 0 40px; height: var(--header-height); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 24px; color: var(--color-text-light); font-weight: 700; text-decoration: none; }
         
@@ -41,6 +47,9 @@
         .target-btn { background-color: var(--color-accent); color: #222; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .target-btn:hover { background-color: #e0a800; }
 
+        /* =========================================
+           3. DASHBOARD LAYOUT & GRADIENT
+           ========================================= */
         .dashboard-wrapper { background: var(--bg-gradient-hero); flex: 1; padding: 40px 20px; display: none; }
         .dashboard-container { max-width: 800px; margin: 0 auto; width: 100%; }
         .welcome-banner { background-color: white; padding: 20px 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 30px; border-left: 6px solid var(--color-primary); }
@@ -49,6 +58,9 @@
         .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .card h2 { color: var(--color-primary); margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
 
+        /* =========================================
+           4. DYNAMIC FORM STYLES
+           ========================================= */
         .dynamic-form label { font-weight: bold; display: block; margin-bottom: 5px; color: var(--color-primary); }
         .dynamic-form input, .dynamic-form select { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-family: var(--font-body); font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s; }
         .dynamic-form input:focus, .dynamic-form select:focus { border-color: var(--color-primary); outline: none; }
@@ -68,16 +80,18 @@
 
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
         
-        /* Modal Styles */
+        /* =========================================
+           5. TARGET MODAL STYLES
+           ========================================= */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; position: relative; text-align: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 450px; position: relative; text-align: center; }
         .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #777; }
         .close-btn:hover { color: #d9534f; }
         .target-input-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; margin-top: 15px;}
         .target-input-group input { width: 100px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1.1rem; text-align: center;}
         .target-input-group input:disabled { background-color: #f0f0f0; color: #777; cursor: not-allowed; }
         .target-input-group button { background: var(--color-primary); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        #target-lock-msg { color: #d9534f; font-size: 0.85rem; font-weight: 500; display: none; margin-top: 10px; margin-bottom: 15px; }
+        #target-lock-msg { color: #d9534f; font-size: 0.85rem; font-weight: 500; display: none; margin-top: 5px; margin-bottom: 20px; }
 
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; margin-top: auto; }
 
@@ -219,11 +233,10 @@
                 <input type="number" id="weekly-target-input" placeholder="e.g. 10">
                 <button id="save-target-btn">Save</button>
             </div>
-            
             <p id="target-lock-msg">Your target is locked for 7 days.</p>
 
-            <h3 id="target-stats" style="margin-bottom:15px; color:#555; display:none;">Completed this week: 0 | Target: 0</h3>
-            <div id="chart-container" style="width: 100%; max-width: 250px; margin: 0 auto; display:none;">
+            <h3 id="target-stats" style="margin-bottom:15px; color:#555;">Completed this week: 0 | Target: 0</h3>
+            <div id="chart-container" style="width: 100%; max-width: 250px; margin: 0 auto;">
                 <canvas id="targetChart"></canvas>
             </div>
         </div>
@@ -257,7 +270,7 @@
         const followUpFields = document.getElementById('follow-up-fields');
 
         let currentUserUid = null;
-        let chartInstance = null; // Added Chart instance back
+        let chartInstance = null; // Re-initialized chart tracker
 
         const dateInput = document.getElementById('report-date');
         const todayStr = new Date().toISOString().split('T')[0];
@@ -273,6 +286,7 @@
                     employeeNameSpan.textContent = userDoc.data().fullName;
                     dateInput.value = todayStr;
                     
+                    // --- Check Target Lock Status on Load to Update Header Button ---
                     checkTargetLockStatus();
 
                     loader.style.display = 'none';
@@ -283,14 +297,12 @@
             }
         });
 
-        // --- NEW: TARGET LOCK LOGIC WITH CHART ---
+        // --- TARGET LOCK LOGIC WITH CHART ---
         const targetModal = document.getElementById('target-modal');
         const openTargetBtn = document.getElementById('open-target-btn');
         const saveTargetBtn = document.getElementById('save-target-btn');
         const targetInput = document.getElementById('weekly-target-input');
         const lockMsg = document.getElementById('target-lock-msg');
-        const targetStats = document.getElementById('target-stats');
-        const chartContainer = document.getElementById('chart-container');
 
         async function checkTargetLockStatus() {
             const targetDoc = await getDoc(doc(db, "targets", currentUserUid));
@@ -304,7 +316,7 @@
         }
 
         openTargetBtn.addEventListener('click', async () => {
-            targetModal.style.display = 'flex';
+            targetModal.style.display = 'flex'; // Open modal
             const targetDoc = await getDoc(doc(db, "targets", currentUserUid));
             
             let targetVal = 0;
@@ -314,6 +326,7 @@
                 targetVal = data.weeklyTarget || 0;
                 targetInput.value = targetVal;
                 
+                // Determine if they are locked
                 if (data.lastUpdated) {
                     const diffTime = Math.abs(new Date() - new Date(data.lastUpdated));
                     const diffDays = diffTime / (1000 * 60 * 60 * 24);
@@ -334,7 +347,7 @@
                 lockMsg.style.display = 'none';
             }
 
-            // Fetch Reports for the past 7 days to draw chart
+            // Fetch Reports for the past 7 days to calculate completion math
             const q = query(collection(db, "reports"), where("employeeUid", "==", currentUserUid));
             const snapshot = await getDocs(q);
             
@@ -346,7 +359,7 @@
                 if (new Date(docSnap.data().timestamp) >= sevenDaysAgo) completed++;
             });
 
-            // Draw Chart
+            // Draw Chart visually
             drawChart(completed, targetVal);
         });
 
@@ -356,29 +369,38 @@
             const newVal = parseInt(targetInput.value);
             if (!newVal || newVal <= 0) return alert("Please enter a valid target number.");
             
-            await setDoc(doc(db, "targets", currentUserUid), { 
-                weeklyTarget: newVal,
-                lastUpdated: new Date().toISOString()
-            }, { merge: true });
-            
-            alert("Weekly target saved! It is now locked for 7 days.");
-            openTargetBtn.textContent = "View Target";
-            
-            // Refresh modal logic to hide save button and trigger the new chart
-            openTargetBtn.click();
+            saveTargetBtn.textContent = "Saving...";
+            saveTargetBtn.disabled = true;
+
+            try {
+                await setDoc(doc(db, "targets", currentUserUid), { 
+                    weeklyTarget: newVal,
+                    lastUpdated: new Date().toISOString()
+                }, { merge: true });
+                
+                alert("Weekly target saved! It is now locked for 7 days.");
+                openTargetBtn.textContent = "View Target";
+                
+                // Close then instantly re-open to trigger lock state and redrawn chart
+                targetModal.style.display = 'none';
+                openTargetBtn.click();
+            } catch (err) {
+                console.error(err);
+                alert("Failed to save target. Check connection.");
+            } finally {
+                saveTargetBtn.textContent = "Save";
+                saveTargetBtn.disabled = false;
+            }
         });
 
         // Function to Draw Employee Chart
         function drawChart(completed, target) {
             const ctx = document.getElementById('targetChart').getContext('2d');
-            if (chartInstance) chartInstance.destroy(); // Prevent overlap error
+            if (chartInstance) chartInstance.destroy(); // Destroy previous chart so they don't overlap
 
-            targetStats.style.display = 'block';
-            chartContainer.style.display = 'block';
-
-            // Bug fix: Check if target is 0 or un-set to prevent crashed visual
+            // If Target is 0 or hasn't been set yet
             if (target === 0 || !target) {
-                targetStats.textContent = `Completed this week: ${completed} | No Target Set`;
+                document.getElementById('target-stats').textContent = `Completed this week: ${completed} | No Target Set`;
                 chartInstance = new Chart(ctx, {
                     type: 'pie',
                     data: {
@@ -391,7 +413,7 @@
             }
 
             const uncompleted = target > completed ? target - completed : 0;
-            targetStats.textContent = `Completed this week: ${completed} | Target: ${target}`;
+            document.getElementById('target-stats').textContent = `Completed this week: ${completed} | Target: ${target}`;
 
             chartInstance = new Chart(ctx, {
                 type: 'pie',
