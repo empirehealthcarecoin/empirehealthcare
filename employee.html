@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
@@ -75,7 +77,7 @@
         .target-input-group input { width: 100px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1.1rem; text-align: center;}
         .target-input-group input:disabled { background-color: #f0f0f0; color: #777; cursor: not-allowed; }
         .target-input-group button { background: var(--color-primary); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        #target-lock-msg { color: #d9534f; font-size: 0.85rem; font-weight: 500; display: none; margin-top: 10px; }
+        #target-lock-msg { color: #d9534f; font-size: 0.85rem; font-weight: 500; display: none; margin-top: 10px; margin-bottom: 15px; }
 
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; margin-top: auto; }
 
@@ -219,6 +221,11 @@
             </div>
             
             <p id="target-lock-msg">Your target is locked for 7 days.</p>
+
+            <h3 id="target-stats" style="margin-bottom:15px; color:#555; display:none;">Completed this week: 0 | Target: 0</h3>
+            <div id="chart-container" style="width: 100%; max-width: 250px; margin: 0 auto; display:none;">
+                <canvas id="targetChart"></canvas>
+            </div>
         </div>
     </div>
 
@@ -229,7 +236,8 @@
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        import { doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+        // Make sure to add query, where, getDocs for the chart math
+        import { doc, getDoc, setDoc, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
         const loader = document.getElementById('loader');
         const dashboard = document.getElementById('dashboard');
@@ -249,6 +257,7 @@
         const followUpFields = document.getElementById('follow-up-fields');
 
         let currentUserUid = null;
+        let chartInstance = null; // Added Chart instance back
 
         const dateInput = document.getElementById('report-date');
         const todayStr = new Date().toISOString().split('T')[0];
@@ -264,7 +273,6 @@
                     employeeNameSpan.textContent = userDoc.data().fullName;
                     dateInput.value = todayStr;
                     
-                    // --- Check Target Lock Status on Load ---
                     checkTargetLockStatus();
 
                     loader.style.display = 'none';
@@ -275,12 +283,14 @@
             }
         });
 
-        // --- NEW: TARGET LOCK LOGIC ---
+        // --- NEW: TARGET LOCK LOGIC WITH CHART ---
         const targetModal = document.getElementById('target-modal');
         const openTargetBtn = document.getElementById('open-target-btn');
         const saveTargetBtn = document.getElementById('save-target-btn');
         const targetInput = document.getElementById('weekly-target-input');
         const lockMsg = document.getElementById('target-lock-msg');
+        const targetStats = document.getElementById('target-stats');
+        const chartContainer = document.getElementById('chart-container');
 
         async function checkTargetLockStatus() {
             const targetDoc = await getDoc(doc(db, "targets", currentUserUid));
@@ -297,9 +307,12 @@
             targetModal.style.display = 'flex';
             const targetDoc = await getDoc(doc(db, "targets", currentUserUid));
             
+            let targetVal = 0;
+
             if (targetDoc.exists()) {
                 const data = targetDoc.data();
-                targetInput.value = data.weeklyTarget;
+                targetVal = data.weeklyTarget || 0;
+                targetInput.value = targetVal;
                 
                 if (data.lastUpdated) {
                     const diffTime = Math.abs(new Date() - new Date(data.lastUpdated));
@@ -308,16 +321,33 @@
                         targetInput.disabled = true;
                         saveTargetBtn.style.display = 'none';
                         lockMsg.style.display = 'block';
-                        return;
+                    } else {
+                        targetInput.disabled = false;
+                        saveTargetBtn.style.display = 'inline-block';
+                        lockMsg.style.display = 'none';
                     }
                 }
+            } else {
+                targetInput.value = '';
+                targetInput.disabled = false;
+                saveTargetBtn.style.display = 'inline-block';
+                lockMsg.style.display = 'none';
             }
+
+            // Fetch Reports for the past 7 days to draw chart
+            const q = query(collection(db, "reports"), where("employeeUid", "==", currentUserUid));
+            const snapshot = await getDocs(q);
             
-            // If no target, or > 7 days passed
-            targetInput.value = targetInput.value || '';
-            targetInput.disabled = false;
-            saveTargetBtn.style.display = 'inline-block';
-            lockMsg.style.display = 'none';
+            let completed = 0;
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            
+            snapshot.forEach(docSnap => {
+                if (new Date(docSnap.data().timestamp) >= sevenDaysAgo) completed++;
+            });
+
+            // Draw Chart
+            drawChart(completed, targetVal);
         });
 
         document.getElementById('close-target-modal').addEventListener('click', () => targetModal.style.display = 'none');
@@ -329,12 +359,53 @@
             await setDoc(doc(db, "targets", currentUserUid), { 
                 weeklyTarget: newVal,
                 lastUpdated: new Date().toISOString()
-            });
+            }, { merge: true });
             
             alert("Weekly target saved! It is now locked for 7 days.");
             openTargetBtn.textContent = "View Target";
-            targetModal.style.display = 'none';
+            
+            // Refresh modal logic to hide save button and trigger the new chart
+            openTargetBtn.click();
         });
+
+        // Function to Draw Employee Chart
+        function drawChart(completed, target) {
+            const ctx = document.getElementById('targetChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy(); // Prevent overlap error
+
+            targetStats.style.display = 'block';
+            chartContainer.style.display = 'block';
+
+            // Bug fix: Check if target is 0 or un-set to prevent crashed visual
+            if (target === 0 || !target) {
+                targetStats.textContent = `Completed this week: ${completed} | No Target Set`;
+                chartInstance = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['No Target Set'],
+                        datasets: [{ data: [1], backgroundColor: ['#e1e8ed'], borderWidth: 0 }]
+                    },
+                    options: { responsive: true, plugins: { tooltip: { enabled: false } } }
+                });
+                return;
+            }
+
+            const uncompleted = target > completed ? target - completed : 0;
+            targetStats.textContent = `Completed this week: ${completed} | Target: ${target}`;
+
+            chartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Completed', 'Remaining'],
+                    datasets: [{
+                        data: [completed, uncompleted],
+                        backgroundColor: ['#28a745', '#e1e8ed'], // Green and Grey
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true }
+            });
+        }
 
         // --- Dynamic Fields & Form Logic ---
         document.querySelectorAll('.add-btn').forEach(btn => {
