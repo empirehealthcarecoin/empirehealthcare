@@ -223,7 +223,7 @@
 
             <h3 id="target-stats" style="margin-bottom:15px; color:#555;">Completed this week: 0 | Target: 0</h3>
             
-            <div id="employee-chart-wrapper" style="width: 100%; max-width: 250px; margin: 0 auto;">
+            <div id="employee-chart-wrapper" style="width: 100%; max-width: 250px; margin: 0 auto; position: relative;">
                 <canvas id="targetChart"></canvas>
             </div>
         </div>
@@ -375,15 +375,20 @@
             }
         });
 
-        // BUG FIX: Completely hard-resetting the Canvas element to avoid overlapping instances
+        // FIXED: Track the chart instance globally so we can reset it properly
+        let employeePieChart = null;
+
         function drawChart(completed, target) {
-            const wrapper = document.getElementById('employee-chart-wrapper');
-            wrapper.innerHTML = '<canvas id="targetChart"></canvas>';
             const ctx = document.getElementById('targetChart').getContext('2d');
+
+            // Safely destroy the previous chart instance if it exists
+            if (employeePieChart !== null) {
+                employeePieChart.destroy();
+            }
 
             if (target === 0 || !target || isNaN(target)) {
                 targetStats.textContent = `Completed this week: ${completed} | No Target Set`;
-                new Chart(ctx, {
+                employeePieChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
                         labels: ['No Target Set'],
@@ -397,7 +402,7 @@
             const uncompleted = target > completed ? target - completed : 0;
             targetStats.textContent = `Completed this week: ${completed} | Target: ${target}`;
 
-            new Chart(ctx, {
+            employeePieChart = new Chart(ctx, {
                 type: 'pie',
                 data: {
                     labels: ['Completed', 'Remaining'],
