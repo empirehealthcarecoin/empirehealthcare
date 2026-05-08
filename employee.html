@@ -271,6 +271,7 @@
                     employeeNameSpan.textContent = userDoc.data().fullName;
                     dateInput.value = todayStr;
                     
+                    // Check Target Lock Status on Load
                     checkTargetLockStatus();
 
                     loader.style.display = 'none';
@@ -281,7 +282,7 @@
             }
         });
 
-        // --- NEW: TARGET LOCK LOGIC WITH CHART ---
+        // --- TARGET LOCK LOGIC WITH CHART ---
         const targetModal = document.getElementById('target-modal');
         const openTargetBtn = document.getElementById('open-target-btn');
         const saveTargetBtn = document.getElementById('save-target-btn');
