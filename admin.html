@@ -8,6 +8,7 @@
     <title>Admin Dashboard - EmpireHealthCare</title>
 
     <link rel="icon" href="images\Favicon.png" type="image/png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
@@ -40,6 +41,9 @@
         }
         h1, h2, h3, .logo, button { font-family: var(--font-heading); }
 
+        /* =========================================
+           2. HEADER & NAVIGATION
+           ========================================= */
         header {
             background-color: var(--color-primary);
             padding: 0 40px;
@@ -65,6 +69,9 @@
         }
         .logout-btn:hover { background-color: #c9302c; }
 
+        /* =========================================
+           3. DASHBOARD LAYOUT
+           ========================================= */
         .dashboard-wrapper {
             background: var(--bg-gradient-hero); 
             flex: 1;
@@ -125,12 +132,10 @@
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background-color: var(--color-primary); color: white; font-weight: 500; }
         
-        /* Make rows clickable for drill-down */
         .clickable-row { cursor: pointer; transition: background 0.2s; }
         .clickable-row:hover { background-color: #f1f7fd; }
         .clickable-row td { color: var(--color-primary); font-weight: 500; }
         
-        /* Standard Row Hover */
         tr:not(.clickable-row):hover { background-color: #f9f9f9; }
         
         .status-badge {
@@ -204,6 +209,11 @@
 
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; }
+
+        @media (max-width: 768px) {
+            table { display: block; overflow-x: auto; white-space: nowrap; }
+            .report-section li strong { width: 100%; display: block; margin-bottom: 4px; }
+        }
     </style>
 </head>
 <body>
@@ -255,19 +265,16 @@
         const adminNameSpan = document.getElementById('admin-name');
         const logoutBtn = document.getElementById('logout-btn');
         
-        // Dynamic Containers
         const tableContainer = document.getElementById('dynamic-table-container');
         const breadcrumbNav = document.getElementById('breadcrumb-nav');
         
-        // Modal Elements
         const modal = document.getElementById('report-modal');
         const closeModalBtn = document.getElementById('close-modal');
         const modalDetails = document.getElementById('modal-details');
 
-        // State Management for Drill-Down
         let allReports = [];
         let viewState = {
-            level: 1, // 1: Employees, 2: Dates, 3: Specific Reports
+            level: 1, 
             selectedUid: null,
             selectedName: null,
             selectedDate: null
@@ -291,7 +298,6 @@
             }
         });
 
-        // 2. Fetch ALL reports once, then group them locally for speed
         function fetchAndStoreReports() {
             const q = query(collection(db, "reports"), orderBy("timestamp", "desc"));
             
@@ -300,26 +306,20 @@
                 snapshot.forEach((doc) => {
                     allReports.push({ id: doc.id, ...doc.data() });
                 });
-                renderCurrentView(); // Refresh the UI whenever database changes
+                renderCurrentView(); 
             });
         }
 
-        // 3. View Manager Engine
         function renderCurrentView() {
-            if (viewState.level === 1) {
-                renderEmployeeList();
-            } else if (viewState.level === 2) {
-                renderDateList();
-            } else if (viewState.level === 3) {
-                renderReportsList();
-            }
+            if (viewState.level === 1) renderEmployeeList();
+            else if (viewState.level === 2) renderDateList();
+            else if (viewState.level === 3) renderReportsList();
         }
 
-        // LEVEL 1: Render List of Unique Employees
+        // LEVEL 1: Employee List
         function renderEmployeeList() {
             breadcrumbNav.innerHTML = `<span class="breadcrumb-active">All Employees</span>`;
             
-            // Extract unique employees and count their total reports
             const employeeMap = {};
             allReports.forEach(report => {
                 if (!employeeMap[report.employeeUid]) {
@@ -355,7 +355,6 @@
             html += `</tbody></table>`;
             tableContainer.innerHTML = html;
 
-            // Attach click listeners to rows
             document.querySelectorAll('.clickable-row').forEach(row => {
                 row.addEventListener('click', () => {
                     viewState.level = 2;
@@ -366,7 +365,7 @@
             });
         }
 
-        // LEVEL 2: Render List of Dates for a specific Employee
+        // LEVEL 2: Date List
         function renderDateList() {
             breadcrumbNav.innerHTML = `
                 <span class="breadcrumb-item" id="nav-home">All Employees</span>
@@ -374,12 +373,10 @@
                 <span class="breadcrumb-active">${viewState.selectedName}</span>
             `;
             
-            // Allow clicking "All Employees" to go back
             document.getElementById('nav-home').addEventListener('click', () => {
                 viewState.level = 1; renderCurrentView();
             });
 
-            // Filter reports by employee, then extract unique dates
             const empReports = allReports.filter(r => r.employeeUid === viewState.selectedUid);
             const dateMap = {};
             
@@ -420,7 +417,7 @@
             });
         }
 
-        // LEVEL 3: Render Specific Reports for an Employee on a specific Date
+        // LEVEL 3: Specific Reports
         function renderReportsList() {
             breadcrumbNav.innerHTML = `
                 <span class="breadcrumb-item" id="nav-home">All Employees</span>
@@ -433,7 +430,6 @@
             document.getElementById('nav-home').addEventListener('click', () => { viewState.level = 1; renderCurrentView(); });
             document.getElementById('nav-emp').addEventListener('click', () => { viewState.level = 2; renderCurrentView(); });
 
-            // Filter down to the exact reports
             const exactReports = allReports.filter(r => r.employeeUid === viewState.selectedUid && r.date === viewState.selectedDate);
 
             let html = `
@@ -450,7 +446,6 @@
             `;
 
             exactReports.forEach(report => {
-                // Parse timestamp for clean time display
                 const timeString = new Date(report.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                 const statusClass = report.status === 'Work' ? 'status-work' : 'status-leave';
 
@@ -467,7 +462,6 @@
             html += `</tbody></table>`;
             tableContainer.innerHTML = html;
 
-            // Attach modal click listeners
             document.querySelectorAll('.view-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const reportId = e.target.getAttribute('data-id');
@@ -477,13 +471,12 @@
             });
         }
 
-        // Helper: Convert camelCase to Title Case
         function formatKey(key) {
             const result = key.replace(/([A-Z])/g, " $1");
             return result.charAt(0).toUpperCase() + result.slice(1);
         }
 
-        // MODAL LOGIC (Untouched from previous version)
+        // --- NEW: DYNAMIC MODAL DISPLAY ---
         function openModal(report) {
             let html = `
                 <div class="report-section">
@@ -497,30 +490,42 @@
             `;
 
             if (report.status === 'Work') {
+                // Compile Hospital Details dynamically
+                let hospHTML = "";
+                if (report.inTime) hospHTML += `<li><strong>In-Time:</strong> ${report.inTime}</li>`;
+                if (report.outTime) hospHTML += `<li><strong>Out-Time:</strong> ${report.outTime}</li>`;
+                if (report.hospital?.name) hospHTML += `<li><strong>Hospital Name:</strong> ${report.hospital.name}</li>`;
+                if (report.hospital?.area) hospHTML += `<li><strong>Area:</strong> ${report.hospital.area}</li>`;
+                if (report.hospital?.doctor) hospHTML += `<li><strong>Doctor:</strong> ${report.hospital.doctor}</li>`;
+                if (report.hospital?.technician) hospHTML += `<li><strong>Technician:</strong> ${report.hospital.technician}</li>`;
+                if (report.hospital?.existingMachine) hospHTML += `<li><strong>Existing Machine:</strong> ${report.hospital.existingMachine}</li>`;
+                if (report.hospital?.endUser) hospHTML += `<li><strong>End User:</strong> ${report.hospital.endUser}</li>`;
+
+                // Only render the Time & Hospital section if there is actually data inside it
+                if (hospHTML !== "") {
+                    html += `
+                        <div class="report-section">
+                            <h3>Time & Hospital</h3>
+                            <ul>${hospHTML}</ul>
+                        </div>
+                    `;
+                }
+
+                // Compile Category Details dynamically
                 html += `
                     <div class="report-section">
-                        <h3>Time & Hospital</h3>
-                        <ul>
-                            <li><strong>In-Time:</strong> ${report.inTime || 'N/A'}</li>
-                            <li><strong>Out-Time:</strong> ${report.outTime || 'N/A'}</li>
-                            <li><strong>Hospital Name:</strong> ${report.hospital?.name || 'N/A'}</li>
-                            <li><strong>Area:</strong> ${report.hospital?.area || 'N/A'}</li>
-                            <li><strong>Doctor:</strong> ${report.hospital?.doctor || 'N/A'}</li>
-                            <li><strong>Technician:</strong> ${report.hospital?.technician || 'N/A'}</li>
-                            <li><strong>Existing Machine:</strong> ${report.hospital?.existingMachine || 'N/A'}</li>
-                            <li><strong>End User:</strong> ${report.hospital?.endUser || 'N/A'}</li>
-                        </ul>
-                    </div>
-                    <div class="report-section">
-                        <h3>Activity: ${report.category}</h3>
+                        <h3>Activity: ${report.category || 'Details'}</h3>
                         <ul>
                 `;
 
-                if (report.category === 'Sales') html += `<li><strong>Call Type:</strong> ${report.salesCallType || 'N/A'}</li>`;
+                if (report.category === 'Sales' && report.salesCallType) {
+                    html += `<li><strong>Call Type:</strong> ${report.salesCallType}</li>`;
+                }
 
+                // If specific details exist, loop through and print only the filled ones
                 if (report.details) {
                     for (const [key, value] of Object.entries(report.details)) {
-                        html += `<li><strong>${formatKey(key)}:</strong> ${value || 'N/A'}</li>`;
+                        html += `<li><strong>${formatKey(key)}:</strong> ${value}</li>`;
                     }
                 }
                 html += `</ul></div>`;
@@ -533,7 +538,6 @@
         closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
         window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
 
-        // Logout
         logoutBtn.addEventListener('click', () => {
             signOut(auth).then(() => window.location.href = "login.html");
         });
