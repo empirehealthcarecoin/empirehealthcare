@@ -135,7 +135,8 @@
             </div>
 
             <h3 id="target-stats" style="margin-bottom:15px; color:#555;">Completed this week: 0 | Target: 0</h3>
-            <div style="width: 100%; max-width: 250px; margin: 0 auto;">
+            
+            <div id="admin-chart-wrapper" style="width: 100%; max-width: 250px; margin: 0 auto;">
                 <canvas id="adminTargetChart"></canvas>
             </div>
         </div>
@@ -148,7 +149,6 @@
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        // ADDED setDoc HERE so the Admin can save data
         import { doc, getDoc, setDoc, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
         const loader = document.getElementById('loader');
@@ -167,7 +167,6 @@
         let viewState = { level: 1, selectedUid: null, selectedName: null, selectedDate: null };
         
         // Target Tracker Variables
-        let adminChartInstance = null;
         let currentTargetUid = null;
         let currentTargetName = null;
 
@@ -202,7 +201,6 @@
             else if (viewState.level === 3) renderReportsList();
         }
 
-        // LEVEL 1: Employee List (With Target Button)
         function renderEmployeeList() {
             breadcrumbNav.innerHTML = `<span class="breadcrumb-active">All Employees</span>`;
             const employeeMap = {};
@@ -213,26 +211,13 @@
                 employeeMap[report.employeeUid].count++;
             });
 
-            let html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Employee Name</th>
-                            <th>Total Submissions</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
+            let html = `<table><thead><tr><th>Employee Name</th><th>Total Submissions</th><th>Action</th></tr></thead><tbody>`;
             for (const [uid, data] of Object.entries(employeeMap)) {
-                html += `
-                    <tr>
-                        <td class="clickable-row" data-uid="${uid}" data-name="${data.name}" style="cursor:pointer; color:var(--color-primary); font-weight:bold;">${data.name}</td>
-                        <td>${data.count} Report(s)</td>
-                        <td><button class="target-btn open-admin-target" data-uid="${uid}" data-name="${data.name}">View Target</button></td>
-                    </tr>
-                `;
+                html += `<tr>
+                    <td class="clickable-row" data-uid="${uid}" data-name="${data.name}" style="cursor:pointer; color:var(--color-primary); font-weight:bold;">${data.name}</td>
+                    <td>${data.count} Report(s)</td>
+                    <td><button class="target-btn open-admin-target" data-uid="${uid}" data-name="${data.name}">View Target</button></td>
+                </tr>`;
             }
 
             if(Object.keys(employeeMap).length === 0) html += `<tr><td colspan="3" style="text-align:center;">No reports found.</td></tr>`;
@@ -329,14 +314,11 @@
             document.getElementById('target-modal-name').textContent = `${name}'s Target`;
             targetModal.style.display = 'flex';
             
-            // 1. Fetch Target Data
             const targetDoc = await getDoc(doc(db, "targets", uid));
             const targetVal = targetDoc.exists() ? targetDoc.data().weeklyTarget || 0 : 0;
 
-            // Fill input box for the admin
             document.getElementById('admin-target-input').value = targetVal || '';
 
-            // 2. Fetch Employee's Reports for last 7 Days
             const targetReports = allReports.filter(r => r.employeeUid === uid);
             let completed = 0;
             const sevenDaysAgo = new Date();
@@ -346,11 +328,9 @@
                 if (new Date(r.timestamp) >= sevenDaysAgo) completed++;
             });
 
-            // 3. Draw Chart
             drawAdminChart(completed, targetVal);
         }
 
-        // Admin Save Target Override Event
         document.getElementById('admin-save-target-btn').addEventListener('click', async () => {
             const newVal = parseInt(document.getElementById('admin-target-input').value) || 0;
             if (newVal <= 0) return alert("Please enter a valid target number greater than 0.");
@@ -359,14 +339,13 @@
             btn.textContent = "Saving...";
             
             try {
-                // We use merge: true so if the employee has a 'lastUpdated' timestamp, we don't accidentally delete it!
                 await setDoc(doc(db, "targets", currentTargetUid), {
                     weeklyTarget: newVal,
                     lastUpdated: new Date().toISOString()
                 }, { merge: true });
                 
                 alert("Target successfully updated!");
-                openAdminTargetModal(currentTargetUid, currentTargetName); // Refresh view automatically
+                openAdminTargetModal(currentTargetUid, currentTargetName); 
             } catch (error) {
                 console.error(error);
                 alert("Failed to update target. Ensure you published the updated Security Rules!");
@@ -375,34 +354,36 @@
             }
         });
 
+        // BUG FIX: Completely hard-resetting the Canvas element to avoid overlapping instances
         function drawAdminChart(completed, target) {
+            const wrapper = document.getElementById('admin-chart-wrapper');
+            wrapper.innerHTML = '<canvas id="adminTargetChart"></canvas>';
             const ctx = document.getElementById('adminTargetChart').getContext('2d');
-            if (adminChartInstance) adminChartInstance.destroy();
+            const targetStats = document.getElementById('target-stats');
 
-            // Bug fix: Check if target is 0 or un-set to prevent crashed visual
-            if (target === 0) {
-                document.getElementById('target-stats').textContent = `Completed this week: ${completed} | No Target Set`;
-                adminChartInstance = new Chart(ctx, {
+            if (target === 0 || !target || isNaN(target)) {
+                targetStats.textContent = `Completed this week: ${completed} | No Target Set`;
+                new Chart(ctx, {
                     type: 'pie',
                     data: {
                         labels: ['No Target Set'],
                         datasets: [{ data: [1], backgroundColor: ['#e1e8ed'], borderWidth: 0 }]
                     },
-                    options: { responsive: true, plugins: { tooltip: { enabled: false } } }
+                    options: { responsive: true, plugins: { tooltip: { enabled: false } }, animation: false }
                 });
                 return;
             }
 
             const uncompleted = target > completed ? target - completed : 0;
-            document.getElementById('target-stats').textContent = `Completed this week: ${completed} | Target: ${target}`;
+            targetStats.textContent = `Completed this week: ${completed} | Target: ${target}`;
 
-            adminChartInstance = new Chart(ctx, {
+            new Chart(ctx, {
                 type: 'pie',
                 data: {
                     labels: ['Completed', 'Remaining'],
                     datasets: [{ data: [completed, uncompleted], backgroundColor: ['#28a745', '#e1e8ed'], borderWidth: 1 }]
                 },
-                options: { responsive: true }
+                options: { responsive: true, animation: false }
             });
         }
 
