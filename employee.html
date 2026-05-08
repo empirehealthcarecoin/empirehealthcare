@@ -288,6 +288,7 @@
         const saveTargetBtn = document.getElementById('save-target-btn');
         const targetInput = document.getElementById('weekly-target-input');
         const lockMsg = document.getElementById('target-lock-msg');
+        const targetStats = document.getElementById('target-stats');
 
         async function checkTargetLockStatus() {
             const targetDoc = await getDoc(doc(db, "targets", currentUserUid));
@@ -379,7 +380,6 @@
             const wrapper = document.getElementById('employee-chart-wrapper');
             wrapper.innerHTML = '<canvas id="targetChart"></canvas>';
             const ctx = document.getElementById('targetChart').getContext('2d');
-            const targetStats = document.getElementById('target-stats');
 
             if (target === 0 || !target || isNaN(target)) {
                 targetStats.textContent = `Completed this week: ${completed} | No Target Set`;
