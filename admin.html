@@ -8,7 +8,6 @@
     <title>Admin Dashboard - EmpireHealthCare</title>
 
     <link rel="icon" href="images\Favicon.png" type="image/png">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
@@ -41,9 +40,6 @@
         }
         h1, h2, h3, .logo, button { font-family: var(--font-heading); }
 
-        /* =========================================
-           2. HEADER & NAVIGATION
-           ========================================= */
         header {
             background-color: var(--color-primary);
             padding: 0 40px;
@@ -69,9 +65,6 @@
         }
         .logout-btn:hover { background-color: #c9302c; }
 
-        /* =========================================
-           3. DASHBOARD LAYOUT
-           ========================================= */
         .dashboard-wrapper {
             background: var(--bg-gradient-hero); 
             flex: 1;
@@ -101,15 +94,44 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             width: 100%;
         }
-        .card h2 { color: var(--color-primary); margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+        
+        /* =========================================
+           2. BREADCRUMB NAVIGATION
+           ========================================= */
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            font-family: var(--font-heading);
+            font-weight: 500;
+            color: #555;
+        }
+        .breadcrumb-item {
+            cursor: pointer;
+            color: var(--color-primary);
+            transition: color 0.2s;
+        }
+        .breadcrumb-item:hover { text-decoration: underline; color: #062a52; }
+        .breadcrumb-separator { color: #ccc; }
+        .breadcrumb-active { color: #333; font-weight: bold; pointer-events: none; }
 
         /* =========================================
-           4. TABLE STYLES
+           3. DYNAMIC TABLE STYLES
            ========================================= */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background-color: var(--color-primary); color: white; font-weight: 500; }
-        tr:hover { background-color: #f9f9f9; }
+        
+        /* Make rows clickable for drill-down */
+        .clickable-row { cursor: pointer; transition: background 0.2s; }
+        .clickable-row:hover { background-color: #f1f7fd; }
+        .clickable-row td { color: var(--color-primary); font-weight: 500; }
+        
+        /* Standard Row Hover */
+        tr:not(.clickable-row):hover { background-color: #f9f9f9; }
         
         .status-badge {
             padding: 5px 12px;
@@ -131,9 +153,18 @@
             transition: 0.2s;
         }
         .view-btn:hover { background-color: #062a52; }
+        
+        .report-count {
+            background-color: #eee;
+            color: #555;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
 
         /* =========================================
-           5. MODAL (POP-UP) STYLES
+           4. MODAL (POP-UP) STYLES
            ========================================= */
         .modal-overlay {
             display: none;
@@ -173,11 +204,6 @@
 
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; }
-
-        @media (max-width: 768px) {
-            table { display: block; overflow-x: auto; white-space: nowrap; }
-            .report-section li strong { width: 100%; display: block; margin-bottom: 4px; }
-        }
     </style>
 </head>
 <body>
@@ -198,22 +224,12 @@
             </div>
 
             <div class="card">
-                <h2>Employee Daily Reports</h2>
-                <div style="overflow-x:auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Employee Name</th>
-                                <th>Status</th>
-                                <th>Category</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="report-table-body">
-                            </tbody>
-                    </table>
+                <div id="breadcrumb-nav" class="breadcrumb-nav">
+                    <span class="breadcrumb-active">All Employees</span>
                 </div>
+
+                <div style="overflow-x:auto;" id="dynamic-table-container">
+                    </div>
             </div>
         </div>
     </main>
@@ -221,8 +237,7 @@
     <div id="report-modal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" id="close-modal">&times;</button>
-            <div id="modal-details">
-                </div>
+            <div id="modal-details"></div>
         </div>
     </div>
 
@@ -239,12 +254,24 @@
         const dashboard = document.getElementById('dashboard');
         const adminNameSpan = document.getElementById('admin-name');
         const logoutBtn = document.getElementById('logout-btn');
-        const tableBody = document.getElementById('report-table-body');
+        
+        // Dynamic Containers
+        const tableContainer = document.getElementById('dynamic-table-container');
+        const breadcrumbNav = document.getElementById('breadcrumb-nav');
         
         // Modal Elements
         const modal = document.getElementById('report-modal');
         const closeModalBtn = document.getElementById('close-modal');
         const modalDetails = document.getElementById('modal-details');
+
+        // State Management for Drill-Down
+        let allReports = [];
+        let viewState = {
+            level: 1, // 1: Employees, 2: Dates, 3: Specific Reports
+            selectedUid: null,
+            selectedName: null,
+            selectedDate: null
+        };
 
         // 1. Authenticate & Route Protection
         onAuthStateChanged(auth, async (user) => {
@@ -257,54 +284,206 @@
                     loader.style.display = 'none';
                     dashboard.style.display = 'block';
                     
-                    loadReports();
+                    fetchAndStoreReports();
                 } else {
                     window.location.href = "employee.html"; 
                 }
             }
         });
 
-        // Helper: Convert camelCase keys to Title Case for nice reading
+        // 2. Fetch ALL reports once, then group them locally for speed
+        function fetchAndStoreReports() {
+            const q = query(collection(db, "reports"), orderBy("timestamp", "desc"));
+            
+            onSnapshot(q, (snapshot) => {
+                allReports = [];
+                snapshot.forEach((doc) => {
+                    allReports.push({ id: doc.id, ...doc.data() });
+                });
+                renderCurrentView(); // Refresh the UI whenever database changes
+            });
+        }
+
+        // 3. View Manager Engine
+        function renderCurrentView() {
+            if (viewState.level === 1) {
+                renderEmployeeList();
+            } else if (viewState.level === 2) {
+                renderDateList();
+            } else if (viewState.level === 3) {
+                renderReportsList();
+            }
+        }
+
+        // LEVEL 1: Render List of Unique Employees
+        function renderEmployeeList() {
+            breadcrumbNav.innerHTML = `<span class="breadcrumb-active">All Employees</span>`;
+            
+            // Extract unique employees and count their total reports
+            const employeeMap = {};
+            allReports.forEach(report => {
+                if (!employeeMap[report.employeeUid]) {
+                    employeeMap[report.employeeUid] = { name: report.employeeName, count: 0 };
+                }
+                employeeMap[report.employeeUid].count++;
+            });
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Total Lifetime Submissions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            for (const [uid, data] of Object.entries(employeeMap)) {
+                html += `
+                    <tr class="clickable-row" data-uid="${uid}" data-name="${data.name}">
+                        <td>${data.name}</td>
+                        <td>${data.count} Report(s) <span style="float:right;">View Dates &rarr;</span></td>
+                    </tr>
+                `;
+            }
+
+            if(Object.keys(employeeMap).length === 0) {
+                html += `<tr><td colspan="2" style="text-align:center;">No reports found in the system yet.</td></tr>`;
+            }
+
+            html += `</tbody></table>`;
+            tableContainer.innerHTML = html;
+
+            // Attach click listeners to rows
+            document.querySelectorAll('.clickable-row').forEach(row => {
+                row.addEventListener('click', () => {
+                    viewState.level = 2;
+                    viewState.selectedUid = row.getAttribute('data-uid');
+                    viewState.selectedName = row.getAttribute('data-name');
+                    renderCurrentView();
+                });
+            });
+        }
+
+        // LEVEL 2: Render List of Dates for a specific Employee
+        function renderDateList() {
+            breadcrumbNav.innerHTML = `
+                <span class="breadcrumb-item" id="nav-home">All Employees</span>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-active">${viewState.selectedName}</span>
+            `;
+            
+            // Allow clicking "All Employees" to go back
+            document.getElementById('nav-home').addEventListener('click', () => {
+                viewState.level = 1; renderCurrentView();
+            });
+
+            // Filter reports by employee, then extract unique dates
+            const empReports = allReports.filter(r => r.employeeUid === viewState.selectedUid);
+            const dateMap = {};
+            
+            empReports.forEach(report => {
+                if (!dateMap[report.date]) dateMap[report.date] = 0;
+                dateMap[report.date]++;
+            });
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Submission Date</th>
+                            <th>Reports on this Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            for (const [date, count] of Object.entries(dateMap)) {
+                html += `
+                    <tr class="clickable-row" data-date="${date}">
+                        <td>${date}</td>
+                        <td>${count} Report(s) <span style="float:right;">View Reports &rarr;</span></td>
+                    </tr>
+                `;
+            }
+
+            html += `</tbody></table>`;
+            tableContainer.innerHTML = html;
+
+            document.querySelectorAll('.clickable-row').forEach(row => {
+                row.addEventListener('click', () => {
+                    viewState.level = 3;
+                    viewState.selectedDate = row.getAttribute('data-date');
+                    renderCurrentView();
+                });
+            });
+        }
+
+        // LEVEL 3: Render Specific Reports for an Employee on a specific Date
+        function renderReportsList() {
+            breadcrumbNav.innerHTML = `
+                <span class="breadcrumb-item" id="nav-home">All Employees</span>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item" id="nav-emp">${viewState.selectedName}</span>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-active">${viewState.selectedDate}</span>
+            `;
+
+            document.getElementById('nav-home').addEventListener('click', () => { viewState.level = 1; renderCurrentView(); });
+            document.getElementById('nav-emp').addEventListener('click', () => { viewState.level = 2; renderCurrentView(); });
+
+            // Filter down to the exact reports
+            const exactReports = allReports.filter(r => r.employeeUid === viewState.selectedUid && r.date === viewState.selectedDate);
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time Logged</th>
+                            <th>Status</th>
+                            <th>Category</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            exactReports.forEach(report => {
+                // Parse timestamp for clean time display
+                const timeString = new Date(report.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const statusClass = report.status === 'Work' ? 'status-work' : 'status-leave';
+
+                html += `
+                    <tr>
+                        <td>${timeString}</td>
+                        <td><span class="status-badge ${statusClass}">${report.status}</span></td>
+                        <td>${report.category || '-'}</td>
+                        <td><button class="view-btn" data-id="${report.id}">View Details</button></td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            tableContainer.innerHTML = html;
+
+            // Attach modal click listeners
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const reportId = e.target.getAttribute('data-id');
+                    const targetReport = exactReports.find(r => r.id === reportId);
+                    openModal(targetReport);
+                });
+            });
+        }
+
+        // Helper: Convert camelCase to Title Case
         function formatKey(key) {
             const result = key.replace(/([A-Z])/g, " $1");
             return result.charAt(0).toUpperCase() + result.slice(1);
         }
 
-        // 2. Fetch and Display Reports
-        function loadReports() {
-            // Fetch reports ordered by timestamp descending (newest first)
-            const q = query(collection(db, "reports"), orderBy("timestamp", "desc"));
-            
-            onSnapshot(q, (snapshot) => {
-                tableBody.innerHTML = ""; 
-                
-                snapshot.forEach((docSnap) => {
-                    const report = docSnap.data();
-                    const tr = document.createElement('tr');
-                    
-                    const statusClass = report.status === 'Work' ? 'status-work' : 'status-leave';
-                    
-                    tr.innerHTML = `
-                        <td>${report.date}</td>
-                        <td><strong>${report.employeeName}</strong></td>
-                        <td><span class="status-badge ${statusClass}">${report.status}</span></td>
-                        <td>${report.category || '-'}</td>
-                        <td class="action-cell"></td>
-                    `;
-                    
-                    // Add View Button dynamically
-                    const viewBtn = document.createElement('button');
-                    viewBtn.className = 'view-btn';
-                    viewBtn.textContent = 'View Details';
-                    viewBtn.addEventListener('click', () => openModal(report));
-                    
-                    tr.querySelector('.action-cell').appendChild(viewBtn);
-                    tableBody.appendChild(tr);
-                });
-            });
-        }
-
-        // 3. Modal Logic
+        // MODAL LOGIC (Untouched from previous version)
         function openModal(report) {
             let html = `
                 <div class="report-section">
@@ -332,19 +511,13 @@
                             <li><strong>End User:</strong> ${report.hospital?.endUser || 'N/A'}</li>
                         </ul>
                     </div>
-                `;
-
-                html += `
                     <div class="report-section">
                         <h3>Activity: ${report.category}</h3>
                         <ul>
                 `;
 
-                if (report.category === 'Sales') {
-                    html += `<li><strong>Call Type:</strong> ${report.salesCallType || 'N/A'}</li>`;
-                }
+                if (report.category === 'Sales') html += `<li><strong>Call Type:</strong> ${report.salesCallType || 'N/A'}</li>`;
 
-                // Loop through all dynamic specific details and print them cleanly
                 if (report.details) {
                     for (const [key, value] of Object.entries(report.details)) {
                         html += `<li><strong>${formatKey(key)}:</strong> ${value || 'N/A'}</li>`;
@@ -357,13 +530,10 @@
             modal.style.display = 'flex';
         }
 
-        // Close Modal Handlers
         closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) modal.style.display = 'none';
-        });
+        window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
 
-        // 4. Logout
+        // Logout
         logoutBtn.addEventListener('click', () => {
             signOut(auth).then(() => window.location.href = "login.html");
         });
