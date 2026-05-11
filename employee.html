@@ -40,6 +40,8 @@
         .logout-btn:hover { background-color: #c9302c; }
         .target-btn { background-color: var(--color-accent); color: #222; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .target-btn:hover { background-color: #e0a800; }
+        .view-btn { background-color: #17a2b8; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .view-btn:hover { background-color: #138496; }
 
         .dashboard-wrapper { background: var(--bg-gradient-hero); flex: 1; padding: 40px 20px; display: none; }
         .dashboard-container { max-width: 800px; margin: 0 auto; width: 100%; }
@@ -89,7 +91,8 @@
     <header>
         <div class="logo">Empire HealthCare</div>
         <div class="header-btns">
-            <button id="open-target-btn" class="target-btn">Set Target</button>
+            <button id="set-target-btn" class="target-btn">Set Target</button>
+            <button id="view-target-btn" class="view-btn">View Target</button>
             <button id="logout-btn" class="logout-btn">Logout</button>
         </div>
     </header> 
@@ -165,12 +168,30 @@
                                 </div>
                                 <div id="follow-up-fields" style="display: none; margin-top: 15px;">
                                     <input type="text" id="fu-general" placeholder="General Visit">
-                                    <input type="text" id="fu-payment" placeholder="Payment Follow Up">
-                                    <input type="text" id="fu-prospect" placeholder="Prospect">
-                                    <input type="text" id="fu-hot" placeholder="Hot Prospect">
+                                    
+                                    <label style="margin-top: 10px;">Payment Follow Up</label>
+                                    <div class="multi-input-row">
+                                        <input type="date" id="fu-payment-date" title="Select Follow Up Date">
+                                        <input type="text" id="fu-payment-collected" placeholder="Amount Collected">
+                                    </div>
+                                    
+                                    <div class="multi-input-row">
+                                        <input type="text" id="fu-prospect" placeholder="Prospect">
+                                        <input type="date" id="fu-prospect-date" title="Select Prospect Date" style="flex: 0 0 150px;">
+                                    </div>
+                                    
+                                    <div class="multi-input-row">
+                                        <input type="text" id="fu-hot" placeholder="Hot Prospect">
+                                        <input type="date" id="fu-hot-date" title="Select Hot Prospect Date" style="flex: 0 0 150px;">
+                                    </div>
+                                    
                                     <input type="text" id="fu-order-col" placeholder="Order Collected">
                                     <input type="text" id="fu-order-loss" placeholder="Order Loss">
-                                    <input type="text" id="fu-jd" placeholder="JD Office">
+                                    
+                                    <div class="multi-input-row">
+                                        <input type="text" id="fu-jd" placeholder="JD Office">
+                                        <input type="date" id="fu-jd-date" title="Select JD Office Date" style="flex: 0 0 150px;">
+                                    </div>
                                 </div>
                             </div>
 
@@ -213,18 +234,21 @@
     <div id="target-modal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" id="close-target-modal">&times;</button>
-            <h2 style="color:var(--color-primary);">Weekly Target</h2>
+            <h2 id="modal-title" style="color:var(--color-primary);">Weekly Target</h2>
             
-            <div class="target-input-group">
-                <input type="number" id="weekly-target-input" placeholder="e.g. 10">
-                <button id="save-target-btn">Save</button>
+            <div id="set-target-ui">
+                <div class="target-input-group">
+                    <input type="number" id="weekly-target-input" placeholder="e.g. 10">
+                    <button id="save-target-btn">Save</button>
+                </div>
+                <p id="target-lock-msg">Your target is locked for 7 days.</p>
             </div>
-            <p id="target-lock-msg">Your target is locked for 7 days.</p>
 
-            <h3 id="target-stats" style="margin-bottom:15px; color:#555;">Completed this week: 0 | Target: 0</h3>
-            
-            <div id="employee-chart-wrapper" style="width: 100%; max-width: 250px; margin: 0 auto; position: relative;">
-                <canvas id="targetChart"></canvas>
+            <div id="view-target-ui" style="display: none;">
+                <h3 id="target-stats" style="margin-bottom:15px; color:#555;">Completed this week: 0 | Target: 0</h3>
+                <div id="employee-chart-wrapper" style="width: 100%; max-width: 250px; margin: 0 auto; position: relative;">
+                    <canvas id="targetChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -270,9 +294,6 @@
                     currentUserUid = user.uid;
                     employeeNameSpan.textContent = userDoc.data().fullName;
                     dateInput.value = todayStr;
-                    
-                    // Check Target Lock Status on Load
-                    checkTargetLockStatus();
 
                     loader.style.display = 'none';
                     dashboard.style.display = 'block';
@@ -282,29 +303,34 @@
             }
         });
 
-        // --- TARGET LOCK LOGIC WITH CHART ---
+        // --- TARGET LOGIC ---
         const targetModal = document.getElementById('target-modal');
-        const openTargetBtn = document.getElementById('open-target-btn');
+        const setTargetBtn = document.getElementById('set-target-btn');
+        const viewTargetBtn = document.getElementById('view-target-btn');
+        
+        const setTargetUi = document.getElementById('set-target-ui');
+        const viewTargetUi = document.getElementById('view-target-ui');
+        const modalTitle = document.getElementById('modal-title');
+
         const saveTargetBtn = document.getElementById('save-target-btn');
         const targetInput = document.getElementById('weekly-target-input');
         const lockMsg = document.getElementById('target-lock-msg');
         const targetStats = document.getElementById('target-stats');
 
-        async function checkTargetLockStatus() {
-            const targetDoc = await getDoc(doc(db, "targets", currentUserUid));
-            if (targetDoc.exists() && targetDoc.data().lastUpdated) {
-                const diffTime = Math.abs(new Date() - new Date(targetDoc.data().lastUpdated));
-                const diffDays = diffTime / (1000 * 60 * 60 * 24);
-                if (diffDays < 7) {
-                    openTargetBtn.textContent = "View Target";
-                }
-            }
-        }
-
-        openTargetBtn.addEventListener('click', async () => {
+        async function openTargetModal(mode) {
             targetModal.style.display = 'flex'; 
-            const targetDoc = await getDoc(doc(db, "targets", currentUserUid));
             
+            if (mode === 'set') {
+                modalTitle.textContent = "Set Weekly Target";
+                setTargetUi.style.display = 'block';
+                viewTargetUi.style.display = 'none';
+            } else {
+                modalTitle.textContent = "Target Progress";
+                setTargetUi.style.display = 'none';
+                viewTargetUi.style.display = 'block';
+            }
+
+            const targetDoc = await getDoc(doc(db, "targets", currentUserUid));
             let targetVal = 0;
 
             if (targetDoc.exists()) {
@@ -332,19 +358,24 @@
                 lockMsg.style.display = 'none';
             }
 
-            const q = query(collection(db, "reports"), where("employeeUid", "==", currentUserUid));
-            const snapshot = await getDocs(q);
-            
-            let completed = 0;
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-            
-            snapshot.forEach(docSnap => {
-                if (new Date(docSnap.data().timestamp) >= sevenDaysAgo) completed++;
-            });
+            if (mode === 'view') {
+                const q = query(collection(db, "reports"), where("employeeUid", "==", currentUserUid));
+                const snapshot = await getDocs(q);
+                
+                let completed = 0;
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                
+                snapshot.forEach(docSnap => {
+                    if (new Date(docSnap.data().timestamp) >= sevenDaysAgo) completed++;
+                });
 
-            drawChart(completed, targetVal);
-        });
+                drawChart(completed, targetVal);
+            }
+        }
+
+        setTargetBtn.addEventListener('click', () => openTargetModal('set'));
+        viewTargetBtn.addEventListener('click', () => openTargetModal('view'));
 
         document.getElementById('close-target-modal').addEventListener('click', () => targetModal.style.display = 'none');
         
@@ -362,10 +393,7 @@
                 }, { merge: true });
                 
                 alert("Weekly target saved! It is now locked for 7 days.");
-                openTargetBtn.textContent = "View Target";
-                
                 targetModal.style.display = 'none';
-                openTargetBtn.click();
             } catch (err) {
                 console.error(err);
                 alert("Failed to save target. Check connection.");
@@ -375,13 +403,11 @@
             }
         });
 
-        // FIXED: Track the chart instance globally so we can reset it properly
         let employeePieChart = null;
 
         function drawChart(completed, target) {
             const ctx = document.getElementById('targetChart').getContext('2d');
 
-            // Safely destroy the previous chart instance if it exists
             if (employeePieChart !== null) {
                 employeePieChart.destroy();
             }
@@ -394,7 +420,10 @@
                         labels: ['No Target Set'],
                         datasets: [{ data: [1], backgroundColor: ['#e1e8ed'], borderWidth: 0 }]
                     },
-                    options: { responsive: true, plugins: { tooltip: { enabled: false } }, animation: false }
+                    options: { 
+                        responsive: true, 
+                        plugins: { tooltip: { enabled: false }, legend: { position: 'bottom' } } 
+                    }
                 });
                 return;
             }
@@ -408,11 +437,11 @@
                     labels: ['Completed', 'Remaining'],
                     datasets: [{
                         data: [completed, uncompleted],
-                        backgroundColor: ['#28a745', '#e1e8ed'], // Green and Grey
+                        backgroundColor: ['#28a745', '#dc3545'], 
                         borderWidth: 1
                     }]
                 },
-                options: { responsive: true, animation: false }
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
             });
         }
 
@@ -489,7 +518,20 @@
                     if (callType === 'Cold Call') {
                         reportData.details = { requirementNo: document.getElementById('cc-req-no').value.trim(), requirement: document.getElementById('cc-req').value.trim() };
                     } else if (callType === 'Follow-up Call') {
-                        reportData.details = { generalVisit: document.getElementById('fu-general').value.trim(), paymentFollowUp: document.getElementById('fu-payment').value.trim(), prospect: document.getElementById('fu-prospect').value.trim(), hotProspect: document.getElementById('fu-hot').value.trim(), orderCollected: document.getElementById('fu-order-col').value.trim(), orderLoss: document.getElementById('fu-order-loss').value.trim(), jdOffice: document.getElementById('fu-jd').value.trim() };
+                        // UPDATED: Now captures the exact dates and collected amounts for Follow-up Calls
+                        reportData.details = { 
+                            generalVisit: document.getElementById('fu-general').value.trim(), 
+                            paymentFollowUpDate: document.getElementById('fu-payment-date').value,
+                            paymentCollected: document.getElementById('fu-payment-collected').value.trim(), 
+                            prospect: document.getElementById('fu-prospect').value.trim(), 
+                            prospectDate: document.getElementById('fu-prospect-date').value,
+                            hotProspect: document.getElementById('fu-hot').value.trim(), 
+                            hotProspectDate: document.getElementById('fu-hot-date').value,
+                            orderCollected: document.getElementById('fu-order-col').value.trim(), 
+                            orderLoss: document.getElementById('fu-order-loss').value.trim(), 
+                            jdOffice: document.getElementById('fu-jd').value.trim(),
+                            jdOfficeDate: document.getElementById('fu-jd-date').value
+                        };
                     }
                 } else if (category === 'Service') {
                     const othersList = Array.from(document.querySelectorAll('.srv-others')).map(i => i.value.trim()).filter(v => v !== '').join(', ');
