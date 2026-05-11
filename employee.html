@@ -169,13 +169,22 @@
                                 <div id="follow-up-fields" style="display: none; margin-top: 15px;">
                                     <input type="text" id="fu-general" placeholder="General Visit">
                                     
-                                    <label style="margin-top: 10px;">Payment Follow Up</label>
-                                    <div class="multi-input-row">
+                                    <label style="margin-top: 10px;">Payment Follow Up Action</label>
+                                    <select id="fu-payment-type" style="margin-bottom: 10px;">
+                                        <option value="" disabled selected>Select Date or Enter Amount...</option>
+                                        <option value="schedule_date">Schedule Follow-up Date</option>
+                                        <option value="collect_amount">Enter Collected Amount</option>
+                                    </select>
+                                    
+                                    <div id="fu-payment-date-container" style="display: none;">
                                         <input type="date" id="fu-payment-date" title="Select Follow Up Date">
+                                    </div>
+                                    
+                                    <div id="fu-payment-amount-container" style="display: none;">
                                         <input type="text" id="fu-payment-collected" placeholder="Amount Collected">
                                     </div>
                                     
-                                    <div class="multi-input-row">
+                                    <div class="multi-input-row" style="margin-top: 10px;">
                                         <input type="text" id="fu-prospect" placeholder="Prospect">
                                         <input type="date" id="fu-prospect-date" title="Select Prospect Date" style="flex: 0 0 150px;">
                                     </div>
@@ -278,6 +287,11 @@
         const salesCallType = document.getElementById('sales-call-type');
         const coldCallFields = document.getElementById('cold-call-fields');
         const followUpFields = document.getElementById('follow-up-fields');
+        
+        // New Payment toggle variables
+        const paymentTypeSelect = document.getElementById('fu-payment-type');
+        const paymentDateContainer = document.getElementById('fu-payment-date-container');
+        const paymentAmountContainer = document.getElementById('fu-payment-amount-container');
 
         let currentUserUid = null;
 
@@ -482,6 +496,18 @@
             else if (e.target.value === 'Follow-up Call') followUpFields.style.display = 'block';
         });
 
+        // Logic for Payment Follow Up Toggle
+        paymentTypeSelect.addEventListener('change', (e) => {
+            paymentDateContainer.style.display = 'none';
+            paymentAmountContainer.style.display = 'none';
+            
+            if (e.target.value === 'schedule_date') {
+                paymentDateContainer.style.display = 'block';
+            } else if (e.target.value === 'collect_amount') {
+                paymentAmountContainer.style.display = 'block';
+            }
+        });
+
         function cleanObject(obj) {
             for (let propName in obj) {
                 if (obj[propName] === null || obj[propName] === undefined || obj[propName] === '') {
@@ -518,11 +544,16 @@
                     if (callType === 'Cold Call') {
                         reportData.details = { requirementNo: document.getElementById('cc-req-no').value.trim(), requirement: document.getElementById('cc-req').value.trim() };
                     } else if (callType === 'Follow-up Call') {
-                        // UPDATED: Now captures the exact dates and collected amounts for Follow-up Calls
+                        
+                        const paymentAction = paymentTypeSelect.value;
+                        const pDate = paymentAction === 'schedule_date' ? document.getElementById('fu-payment-date').value : "";
+                        const pAmount = paymentAction === 'collect_amount' ? document.getElementById('fu-payment-collected').value.trim() : "";
+
                         reportData.details = { 
                             generalVisit: document.getElementById('fu-general').value.trim(), 
-                            paymentFollowUpDate: document.getElementById('fu-payment-date').value,
-                            paymentCollected: document.getElementById('fu-payment-collected').value.trim(), 
+                            paymentFollowUpAction: paymentAction,
+                            paymentFollowUpDate: pDate,
+                            paymentCollected: pAmount, 
                             prospect: document.getElementById('fu-prospect').value.trim(), 
                             prospectDate: document.getElementById('fu-prospect-date').value,
                             hotProspect: document.getElementById('fu-hot').value.trim(), 
@@ -546,7 +577,19 @@
             try {
                 await addDoc(collection(db, "reports"), finalCleanData);
                 successMessage.textContent = status === 'Leave' ? "Leave successfully entered!" : "Daily report successfully submitted!"; successMessage.style.display = 'block';
-                attendanceForm.reset(); dateInput.value = todayStr; workDetails.style.display = 'none'; salesSection.style.display = 'none'; serviceSection.style.display = 'none'; appSupportSection.style.display = 'none'; coldCallFields.style.display = 'none'; followUpFields.style.display = 'none';
+                
+                // Form Reset Logic
+                attendanceForm.reset(); 
+                dateInput.value = todayStr; 
+                workDetails.style.display = 'none'; 
+                salesSection.style.display = 'none'; 
+                serviceSection.style.display = 'none'; 
+                appSupportSection.style.display = 'none'; 
+                coldCallFields.style.display = 'none'; 
+                followUpFields.style.display = 'none';
+                paymentDateContainer.style.display = 'none';
+                paymentAmountContainer.style.display = 'none';
+                
                 document.querySelectorAll('.remove-btn').forEach(btn => btn.closest('.multi-input-row').remove());
                 setTimeout(() => { successMessage.style.display = 'none'; }, 4000);
             } catch (error) { console.error("Error: ", error); alert("Failed to submit report."); } 
