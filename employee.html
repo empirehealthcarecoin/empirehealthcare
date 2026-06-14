@@ -35,15 +35,31 @@
         header { background-color: var(--color-primary); padding: 0 40px; height: var(--header-height); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 24px; color: var(--color-text-light); font-weight: 700; text-decoration: none; }
         
-        .header-btns { display: flex; gap: 15px; }
+        .header-btns { display: flex; align-items: center; gap: 15px; }
         .logout-btn { background-color: #d9534f; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
         .logout-btn:hover { background-color: #c9302c; }
         .target-btn { background-color: var(--color-accent); color: #222; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .target-btn:hover { background-color: #e0a800; }
 
+        /* Notification UI */
+        .notif-wrapper { position: relative; display: flex; align-items: center; cursor: pointer; margin-right: 10px; }
+        .bell-icon { width: 24px; height: 24px; fill: white; transition: transform 0.2s; }
+        .notif-wrapper:hover .bell-icon { transform: scale(1.1); }
+        .notif-dot { display: none; position: absolute; top: -3px; right: -4px; width: 12px; height: 12px; background: #ff4757; border-radius: 50%; border: 2px solid var(--color-primary); }
+        
+        .notif-panel { display: none; position: absolute; top: 45px; right: -20px; width: 320px; background: white; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid #e1e8ed; z-index: 2000; overflow: hidden; cursor: default; }
+        .notif-panel.active { display: block; }
+        .notif-header { background: #f8fafc; padding: 15px; font-weight: bold; border-bottom: 1px solid #e1e8ed; color: var(--color-primary); display: flex; justify-content: space-between; }
+        .notif-list { max-height: 350px; overflow-y: auto; }
+        .notif-item { padding: 15px; border-bottom: 1px solid #f0f0f0; transition: background 0.2s; text-align: left; }
+        .notif-item:hover { background: #f1f7fd; }
+        .notif-title { font-weight: bold; font-size: 0.95rem; color: #333; margin-bottom: 5px; }
+        .notif-desc { font-size: 0.85rem; color: #666; margin-bottom: 8px; line-height: 1.3;}
+        .notif-date { font-size: 0.8rem; color: var(--color-primary); font-weight: bold; background: #eef2f5; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+        .notif-empty { padding: 30px 20px; text-align: center; color: #888; font-size: 0.95rem; font-weight: 500; }
+
         .dashboard-wrapper { background: var(--bg-gradient-hero); flex: 1; padding: 40px 20px; display: none; }
         .dashboard-container { max-width: 800px; margin: 0 auto; width: 100%; }
-        
         .welcome-banner { background-color: white; padding: 20px 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 30px; border-left: 6px solid var(--color-primary); }
         .welcome-banner h1 { color: var(--color-primary); font-size: 1.8rem; margin-bottom: 5px; }
 
@@ -51,15 +67,14 @@
         .card h2 { color: var(--color-primary); margin-bottom: 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; font-size: 1.5rem; }
 
         .dynamic-form label { font-weight: 600; display: block; margin-bottom: 6px; color: #444; font-size: 0.95rem;}
-        .dynamic-form input[type="text"], .dynamic-form input[type="date"], .dynamic-form input[type="time"], .dynamic-form select { width: 100%; padding: 12px 15px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 6px; font-family: var(--font-body); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; background-color: #fff; }
-        .dynamic-form input:focus, .dynamic-form select:focus { border-color: var(--color-primary); outline: none; box-shadow: 0 0 0 3px rgba(8, 61, 119, 0.1); }
+        .dynamic-form input[type="text"], .dynamic-form input[type="date"], .dynamic-form select, .dynamic-form textarea { width: 100%; padding: 12px 15px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 6px; font-family: var(--font-body); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; background-color: #fff; resize: vertical; }
+        .dynamic-form input:focus, .dynamic-form select:focus, .dynamic-form textarea:focus { border-color: var(--color-primary); outline: none; box-shadow: 0 0 0 3px rgba(8, 61, 119, 0.1); }
         
         .section-box { background-color: #f8fafc; padding: 25px; border-radius: 8px; border: 1px solid #e1e8ed; margin-bottom: 25px; }
         .section-box h3 { color: var(--color-primary); margin: 0 0 20px 0; font-size: 1.2rem; border-bottom: 2px solid #e1e8ed; padding-bottom: 8px; }
         
         .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
-        /* Modern Radio Button Styling */
         .radio-group-container { display: flex; gap: 15px; margin-bottom: 20px; background: #fff; padding: 12px 15px; border: 1px solid #ced4da; border-radius: 6px; flex-wrap: wrap; }
         .radio-group-container label { font-weight: normal; margin: 0; display: flex; align-items: center; gap: 5px; cursor: pointer; color: #333; }
         .radio-group-container input[type="radio"] { width: auto; margin: 0; transform: scale(1.2); cursor: pointer; }
@@ -76,12 +91,11 @@
 
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
         
-        /* Modal Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 35px; border-radius: 12px; width: 90%; max-width: 800px; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .modal-content { background: white; padding: 35px; border-radius: 12px; width: 90%; max-width: 800px; position: relative; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
         .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #777; transition: 0.2s; }
         .close-btn:hover { color: #d9534f; transform: scale(1.1); }
-        
+
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; margin-top: auto; }
 
         @media (max-width: 768px) { .grid-2-col { grid-template-columns: 1fr; gap: 0; } .card { padding: 25px; } .modal-content { padding: 20px; } }
@@ -92,6 +106,22 @@
     <header>
         <div class="logo">Empire HealthCare</div>
         <div class="header-btns">
+            
+            <div class="notif-wrapper" id="notif-wrapper">
+                <svg class="bell-icon" viewBox="0 0 24 24">
+                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                </svg>
+                <span class="notif-dot" id="notif-dot"></span>
+                <div class="notif-panel" id="notif-panel">
+                    <div class="notif-header">
+                        <span>Notifications</span>
+                        <span id="notif-count" style="font-size:0.85rem; font-weight:normal;">0 Tasks</span>
+                    </div>
+                    <div class="notif-list" id="notif-list">
+                        </div>
+                </div>
+            </div>
+
             <button id="open-target-btn" class="target-btn">My Targets</button>
             <button id="logout-btn" class="logout-btn">Logout</button>
         </div>
@@ -125,15 +155,18 @@
                         </div>
                     </div>
 
+                    <div id="leave-details" style="display: none;">
+                        <div class="section-box">
+                            <h3>Leave Request</h3>
+                            <label>Reason for Leave</label>
+                            <textarea id="leave-reason" rows="3" placeholder="Please provide a brief reason for your leave..."></textarea>
+                        </div>
+                    </div>
+
                     <div id="work-details" style="display: none;">
                         
                         <div class="section-box">
-                            <h3>Time & Hospital Details</h3>
-                            <div class="grid-2-col">
-                                <div><label>In-Time</label><input type="time" id="in-time"></div>
-                                <div><label>Out-Time</label><input type="time" id="out-time"></div>
-                            </div>
-                            
+                            <h3>Hospital Details</h3>
                             <div class="grid-2-col">
                                 <div><label>Hospital Name</label><input type="text" id="hosp-name" placeholder="e.g. City Hospital"></div>
                                 <div><label>Area</label><input type="text" id="hosp-area" placeholder="e.g. Downtown"></div>
@@ -319,6 +352,7 @@
 
         const statusSelect = document.getElementById('report-status');
         const workDetails = document.getElementById('work-details');
+        const leaveDetails = document.getElementById('leave-details');
         const categorySelect = document.getElementById('activity-category');
         const salesSection = document.getElementById('sales-section');
         const serviceSection = document.getElementById('service-section');
@@ -331,7 +365,8 @@
 
         const dateInput = document.getElementById('report-date');
         const todayStr = new Date().toISOString().split('T')[0];
-        dateInput.setAttribute('max', todayStr);
+        // Removed max attribute so users CAN select future dates to schedule tasks
+        dateInput.value = todayStr;
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -341,7 +376,8 @@
                 if (userDoc.exists() && userDoc.data().isAdmin === false) {
                     currentUserUid = user.uid;
                     employeeNameSpan.textContent = userDoc.data().fullName;
-                    dateInput.value = todayStr;
+                    
+                    fetchAndRenderNotifications(); // Scans DB for future tasks
 
                     loader.style.display = 'none';
                     dashboard.style.display = 'block';
@@ -351,7 +387,100 @@
             }
         });
 
-        // --- NEW MONTHLY & QUARTERLY TARGET LOGIC ---
+        // --- NEW NOTIFICATION ENGINE ---
+        const notifWrapper = document.getElementById('notif-wrapper');
+        const notifPanel = document.getElementById('notif-panel');
+        
+        notifWrapper.addEventListener('click', (e) => {
+            if (e.target.closest('#notif-panel')) return; 
+            notifPanel.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!notifWrapper.contains(e.target)) notifPanel.classList.remove('active');
+        });
+
+        async function fetchAndRenderNotifications() {
+            const q = query(collection(db, "reports"), where("employeeUid", "==", currentUserUid));
+            const snapshot = await getDocs(q);
+            
+            let notifications = [];
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                const rDate = new Date(data.date);
+                rDate.setHours(0,0,0,0);
+                const hospName = data.hospital?.name || 'Unknown Hospital';
+
+                // 1. Future Report Date on Calendar
+                if (rDate > today) {
+                    notifications.push({
+                        title: data.status === 'Leave' ? 'Upcoming Leave' : 'Scheduled Visit',
+                        desc: data.status === 'Work' ? `Visit to ${hospName}` : data.leaveReason,
+                        dateObj: rDate
+                    });
+                }
+
+                // 2. Expected Date (Cold Call)
+                if (data.details?.expectedDate) {
+                    const expDate = new Date(data.details.expectedDate);
+                    expDate.setHours(0,0,0,0);
+                    if (expDate >= today) {
+                        notifications.push({
+                            title: `Requirement: ${hospName}`,
+                            desc: 'Expected completion date',
+                            dateObj: expDate
+                        });
+                    }
+                }
+
+                // 3. 3-Month Timeline
+                if (data.details?.timeline === "In 3 Months") {
+                    const tDate = new Date(rDate);
+                    tDate.setMonth(tDate.getMonth() + 3);
+                    if (tDate >= today) {
+                        notifications.push({ title: `3-Month Check: ${hospName}`, desc: 'Timeline follow-up', dateObj: tDate });
+                    }
+                }
+
+                // 4. 6-Month Timeline
+                if (data.details?.timeline === "In 6 Months") {
+                    const tDate = new Date(rDate);
+                    tDate.setMonth(tDate.getMonth() + 6);
+                    if (tDate >= today) {
+                        notifications.push({ title: `6-Month Check: ${hospName}`, desc: 'Timeline follow-up', dateObj: tDate });
+                    }
+                }
+            });
+
+            notifications.sort((a,b) => a.dateObj - b.dateObj);
+            
+            const list = document.getElementById('notif-list');
+            const dot = document.getElementById('notif-dot');
+            
+            list.innerHTML = '';
+            if (notifications.length > 0) {
+                dot.style.display = 'block';
+                document.getElementById('notif-count').textContent = `${notifications.length} Tasks`;
+                notifications.forEach(n => {
+                    list.innerHTML += `
+                        <div class="notif-item">
+                            <div class="notif-title">${n.title}</div>
+                            <div class="notif-desc">${n.desc}</div>
+                            <div class="notif-date">📅 Due: ${n.dateObj.toLocaleDateString()}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                dot.style.display = 'none';
+                document.getElementById('notif-count').textContent = `0 Tasks`;
+                list.innerHTML = '<div class="notif-empty">You are all caught up!</div>';
+            }
+        }
+
+        // --- MONTHLY & QUARTERLY TARGET LOGIC ---
         const targetModal = document.getElementById('target-modal');
         const openTargetBtn = document.getElementById('open-target-btn');
 
@@ -363,12 +492,10 @@
             const currentYear = now.getFullYear();
             const currentQuarter = Math.floor(currentMonthIndex / 3) + 1;
 
-            // Generate clean names for UI
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             document.getElementById('month-title').textContent = monthNames[currentMonthIndex];
             document.getElementById('quarter-title').textContent = `Quarter ${currentQuarter}`;
 
-            // Fetch Assigned Targets
             const targetDoc = await getDoc(doc(db, "targets", currentUserUid));
             let monthlyTarget = 0, quarterlyTarget = 0;
             if (targetDoc.exists()) {
@@ -376,7 +503,6 @@
                 quarterlyTarget = targetDoc.data().quarterlyTarget || 0;
             }
 
-            // Calculate Completions
             const q = query(collection(db, "reports"), where("employeeUid", "==", currentUserUid));
             const snapshot = await getDocs(q);
             
@@ -391,14 +517,12 @@
                 }
             });
 
-            // Draw Charts
             drawChart('monthly-chart-wrapper', 'monthlyChart', 'monthly-stats', monthlyCompleted, monthlyTarget);
             drawChart('quarterly-chart-wrapper', 'quarterlyChart', 'quarterly-stats', quarterlyCompleted, quarterlyTarget);
         });
 
         document.getElementById('close-target-modal').addEventListener('click', () => targetModal.style.display = 'none');
 
-        // Dynamic Doughnut Chart Generator
         function drawChart(wrapperId, canvasId, statsId, completed, target) {
             const wrapper = document.getElementById(wrapperId);
             wrapper.innerHTML = `<canvas id="${canvasId}"></canvas>`;
@@ -432,19 +556,14 @@
             });
         }
 
-        // --- NEW: Cold Call Requirement Logic ---
         document.querySelectorAll('input[name="cc-req-status"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 const details = document.getElementById('cc-req-details');
-                if (e.target.value === 'Requirement') {
-                    details.style.display = 'block';
-                } else {
-                    details.style.display = 'none';
-                }
+                if (e.target.value === 'Requirement') details.style.display = 'block';
+                else details.style.display = 'none';
             });
         });
 
-        // --- Dynamic Fields Logic ---
         document.querySelectorAll('.add-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const targetId = e.currentTarget.getAttribute('data-target');
@@ -462,9 +581,18 @@
 
         statusSelect.addEventListener('change', (e) => {
             if (e.target.value === 'Work') {
-                workDetails.style.display = 'block'; document.getElementById('in-time').required = true; categorySelect.required = true;
+                workDetails.style.display = 'block'; 
+                leaveDetails.style.display = 'none';
+                categorySelect.required = true;
+                document.getElementById('leave-reason').required = false;
+            } else if (e.target.value === 'Leave') {
+                workDetails.style.display = 'none'; 
+                leaveDetails.style.display = 'block';
+                categorySelect.required = false;
+                document.getElementById('leave-reason').required = true;
             } else {
-                workDetails.style.display = 'none'; document.getElementById('in-time').required = false; categorySelect.required = false;
+                workDetails.style.display = 'none';
+                leaveDetails.style.display = 'none';
             }
         });
 
@@ -501,8 +629,9 @@
             const status = statusSelect.value;
             const reportData = { employeeUid: currentUserUid, employeeName: employeeNameSpan.textContent, date: document.getElementById('report-date').value, status: status, timestamp: new Date().toISOString() };
 
-            if (status === 'Work') {
-                reportData.inTime = document.getElementById('in-time').value.trim(); reportData.outTime = document.getElementById('out-time').value.trim();
+            if (status === 'Leave') {
+                reportData.leaveReason = document.getElementById('leave-reason').value.trim();
+            } else if (status === 'Work') {
                 const endUsers = Array.from(document.querySelectorAll('.hosp-enduser')).map(i => i.value.trim()).filter(v => v !== '').join(', ');
 
                 reportData.hospital = {
@@ -515,7 +644,6 @@
                 if (category === 'Sales') {
                     const callType = salesCallType.value; reportData.salesCallType = callType;
                     if (callType === 'Cold Call') {
-                        // Capture New Interactive Options
                         const reqStatus = document.querySelector('input[name="cc-req-status"]:checked')?.value;
                         if (reqStatus === 'Requirement') {
                             reportData.details = {
@@ -548,16 +676,20 @@
                 await addDoc(collection(db, "reports"), finalCleanData);
                 successMessage.textContent = status === 'Leave' ? "Leave successfully entered!" : "Daily report successfully submitted!"; successMessage.style.display = 'block';
                 
+                // Refresh Notifications Instantly
+                fetchAndRenderNotifications();
+
                 // Deep Reset
                 attendanceForm.reset(); 
                 dateInput.value = todayStr; 
                 workDetails.style.display = 'none'; 
+                leaveDetails.style.display = 'none';
                 salesSection.style.display = 'none'; 
                 serviceSection.style.display = 'none'; 
                 appSupportSection.style.display = 'none'; 
                 coldCallFields.style.display = 'none'; 
                 followUpFields.style.display = 'none';
-                document.getElementById('cc-req-details').style.display = 'none'; // reset cold call inner logic
+                document.getElementById('cc-req-details').style.display = 'none'; 
                 document.querySelectorAll('.remove-btn').forEach(btn => btn.closest('.multi-input-row').remove());
                 
                 setTimeout(() => { successMessage.style.display = 'none'; }, 4000);
