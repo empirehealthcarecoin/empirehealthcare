@@ -300,6 +300,9 @@
                 if (report.category === 'Sales' && report.salesCallType) html += `<li><strong>Call Type:</strong> ${report.salesCallType}</li>`;
                 if (report.details) { for (const [key, value] of Object.entries(report.details)) { html += `<li><strong>${formatKey(key)}:</strong> ${value}</li>`; } }
                 html += `</ul></div>`;
+            } else if (report.status === 'Leave' && report.leaveReason) {
+                // NEW SECTION: Append leave reason if status is Leave
+                html += `<div class="report-section"><h3>Leave Details</h3><ul><li><strong>Reason:</strong> ${report.leaveReason}</li></ul></div>`;
             }
             modalDetails.innerHTML = html; modal.style.display = 'flex';
         }
