@@ -91,6 +91,7 @@
 
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
         
+        /* Modal Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 35px; border-radius: 12px; width: 90%; max-width: 800px; position: relative; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
         .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #777; transition: 0.2s; }
@@ -98,7 +99,31 @@
 
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; margin-top: auto; }
 
-        @media (max-width: 768px) { .grid-2-col { grid-template-columns: 1fr; gap: 0; } .card { padding: 25px; } .modal-content { padding: 20px; } }
+        /* =========================================
+           MOBILE RESPONSIVENESS & NOTIF FIX
+           ========================================= */
+        @media (max-width: 768px) { 
+            .grid-2-col { grid-template-columns: 1fr; gap: 0; } 
+            .card { padding: 20px; } 
+            .modal-content { padding: 20px; } 
+            
+            header { padding: 0 15px; }
+            .logo { font-size: 1.2rem; }
+            .target-btn, .logout-btn { padding: 8px 12px; font-size: 0.85rem; }
+            .header-btns { gap: 10px; }
+
+            /* Perfectly centers the notification panel on mobile so it doesn't get clipped */
+            .notif-panel {
+                position: fixed;
+                top: 70px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                width: 92vw;
+                max-width: 380px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            }
+        }
     </style>
 </head>
 <body>
@@ -167,6 +192,7 @@
                         
                         <div class="section-box">
                             <h3>Hospital Details</h3>
+                            
                             <div class="grid-2-col">
                                 <div><label>Hospital Name</label><input type="text" id="hosp-name" placeholder="e.g. City Hospital"></div>
                                 <div><label>Area</label><input type="text" id="hosp-area" placeholder="e.g. Downtown"></div>
@@ -365,7 +391,6 @@
 
         const dateInput = document.getElementById('report-date');
         const todayStr = new Date().toISOString().split('T')[0];
-        // Removed max attribute so users CAN select future dates to schedule tasks
         dateInput.value = todayStr;
 
         onAuthStateChanged(auth, async (user) => {
@@ -387,7 +412,7 @@
             }
         });
 
-        // --- NEW NOTIFICATION ENGINE ---
+        // --- NOTIFICATION ENGINE ---
         const notifWrapper = document.getElementById('notif-wrapper');
         const notifPanel = document.getElementById('notif-panel');
         
@@ -559,8 +584,11 @@
         document.querySelectorAll('input[name="cc-req-status"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 const details = document.getElementById('cc-req-details');
-                if (e.target.value === 'Requirement') details.style.display = 'block';
-                else details.style.display = 'none';
+                if (e.target.value === 'Requirement') {
+                    details.style.display = 'block';
+                } else {
+                    details.style.display = 'none';
+                }
             });
         });
 
