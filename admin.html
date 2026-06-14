@@ -32,18 +32,39 @@
         body { font-family: var(--font-body); background-color: var(--color-bg-light); color: var(--color-text-dark); min-height: 100vh; display: flex; flex-direction: column; }
         h1, h2, h3, .logo, button { font-family: var(--font-heading); }
 
+        /* HEADER & NAVIGATION */
         header { background-color: var(--color-primary); padding: 0 40px; height: var(--header-height); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 24px; color: var(--color-text-light); font-weight: 700; text-decoration: none; }
+        
+        .header-btns { display: flex; align-items: center; gap: 15px; }
         .logout-btn { background-color: #d9534f; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
         .logout-btn:hover { background-color: #c9302c; }
 
+        /* GLOBAL NOTIFICATION UI */
+        .notif-wrapper { position: relative; display: flex; align-items: center; cursor: pointer; margin-right: 10px; }
+        .bell-icon { width: 24px; height: 24px; fill: white; transition: transform 0.2s; }
+        .notif-wrapper:hover .bell-icon { transform: scale(1.1); }
+        .notif-dot { display: none; position: absolute; top: -3px; right: -4px; width: 12px; height: 12px; background: #ffc107; border-radius: 50%; border: 2px solid var(--color-primary); }
+        
+        .notif-panel { display: none; position: absolute; top: 45px; right: -20px; width: 340px; background: white; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid #e1e8ed; z-index: 2000; overflow: hidden; cursor: default; }
+        .notif-panel.active { display: block; }
+        .notif-header { background: #f8fafc; padding: 15px; font-weight: bold; border-bottom: 1px solid #e1e8ed; color: var(--color-primary); display: flex; justify-content: space-between; }
+        .notif-list { max-height: 400px; overflow-y: auto; }
+        .notif-item { padding: 15px; border-bottom: 1px solid #f0f0f0; transition: background 0.2s; text-align: left; }
+        .notif-item:hover { background: #f1f7fd; }
+        .notif-title { font-weight: bold; font-size: 0.95rem; color: #333; margin-bottom: 5px; }
+        .notif-desc { font-size: 0.85rem; color: #666; margin-bottom: 8px; line-height: 1.3;}
+        .notif-date { font-size: 0.8rem; color: var(--color-primary); font-weight: bold; background: #eef2f5; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+        .notif-empty { padding: 30px 20px; text-align: center; color: #888; font-size: 0.95rem; font-weight: 500; }
+
+        /* DASHBOARD LAYOUT */
         .dashboard-wrapper { background: var(--bg-gradient-hero); flex: 1; padding: 40px 20px; display: none; }
         .dashboard-container { max-width: 1200px; margin: 0 auto; width: 100%; }
 
         .welcome-banner { background-color: white; padding: 20px 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 30px; border-left: 6px solid var(--color-primary); }
         .welcome-banner h1 { color: var(--color-primary); font-size: 1.8rem; margin-bottom: 5px; }
 
-        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; }
+        .card { background: white; padding: 35px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); width: 100%; }
         
         .breadcrumb-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; font-family: var(--font-heading); font-weight: 500; color: #555; }
         .breadcrumb-item { cursor: pointer; color: var(--color-primary); transition: color 0.2s; }
@@ -58,7 +79,6 @@
         .clickable-row { cursor: pointer; transition: background 0.2s; }
         .clickable-row:hover { background-color: #f1f7fd; }
         .clickable-row td { color: var(--color-primary); font-weight: 500; }
-        
         tr:not(.clickable-row):hover { background-color: #f9f9f9; }
         
         .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
@@ -70,7 +90,7 @@
         .target-btn { background-color: var(--color-accent); color: #222; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: 0.2s; font-weight: bold; }
         .target-btn:hover { background-color: #e0a800; }
 
-        /* Modals & Grids */
+        /* MODALS */
         .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .section-box { background-color: #f8fafc; padding: 25px; border-radius: 8px; border: 1px solid #e1e8ed; margin-bottom: 25px; }
 
@@ -100,7 +120,23 @@
 
     <header>
         <div class="logo">Empire HealthCare - Admin</div>
-        <button id="logout-btn" class="logout-btn">Logout</button>
+        <div class="header-btns">
+            <div class="notif-wrapper" id="notif-wrapper">
+                <svg class="bell-icon" viewBox="0 0 24 24">
+                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                </svg>
+                <span class="notif-dot" id="notif-dot"></span>
+                <div class="notif-panel" id="notif-panel">
+                    <div class="notif-header">
+                        <span>Pipeline & Events</span>
+                        <span id="notif-count" style="font-size:0.85rem; font-weight:normal;">0 Tasks</span>
+                    </div>
+                    <div class="notif-list" id="notif-list">
+                        </div>
+                </div>
+            </div>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
     </header> 
 
     <div id="loader">Verifying secure connection...</div>
@@ -139,7 +175,7 @@
             <div class="grid-2-col">
                 <div class="section-box" style="margin-bottom:0; text-align: center; padding: 20px 10px;">
                     <h3 id="admin-month-title" style="margin-bottom: 15px; border:none;">Current Month</h3>
-                    <div class="target-input-group">
+                    <div class="target-input-group" style="display:flex; justify-content:center;">
                         <input type="number" id="admin-monthly-input" placeholder="0">
                     </div>
                     <p id="admin-monthly-stats" style="font-size: 0.95rem; font-weight: bold; color: #555; margin-bottom: 15px;">Completed: 0 | Target: 0</p>
@@ -150,7 +186,7 @@
 
                 <div class="section-box" style="margin-bottom:0; text-align: center; padding: 20px 10px;">
                     <h3 id="admin-quarter-title" style="margin-bottom: 15px; border:none;">Current Quarter</h3>
-                    <div class="target-input-group">
+                    <div class="target-input-group" style="display:flex; justify-content:center;">
                         <input type="number" id="admin-quarterly-input" placeholder="0">
                     </div>
                     <p id="admin-quarterly-stats" style="font-size: 0.95rem; font-weight: bold; color: #555; margin-bottom: 15px;">Completed: 0 | Target: 0</p>
@@ -190,10 +226,101 @@
         let allReports = [];
         let viewState = { level: 1, selectedUid: null, selectedName: null, selectedDate: null };
         
-        // Target Tracker Variables
         let currentTargetUid = null;
         let currentTargetName = null;
 
+        // --- NOTIFICATION ENGINE ---
+        const notifWrapper = document.getElementById('notif-wrapper');
+        const notifPanel = document.getElementById('notif-panel');
+        
+        notifWrapper.addEventListener('click', (e) => {
+            if (e.target.closest('#notif-panel')) return; 
+            notifPanel.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!notifWrapper.contains(e.target)) notifPanel.classList.remove('active');
+        });
+
+        function renderAdminNotifications() {
+            let notifications = [];
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            allReports.forEach(report => {
+                const empName = report.employeeName || 'Unknown Employee';
+                const hospName = report.hospital?.name || 'Unknown Hospital';
+                
+                const rDate = new Date(report.date);
+                rDate.setHours(0,0,0,0);
+
+                // 1. Future Visit / Leave
+                if (rDate > today) {
+                    notifications.push({
+                        title: report.status === 'Leave' ? `Leave: ${empName}` : `Visit: ${empName}`,
+                        desc: report.status === 'Leave' ? report.leaveReason : `Scheduled visit to ${hospName}`,
+                        dateObj: rDate
+                    });
+                }
+
+                // 2. Expected Deal Date
+                if (report.details?.expectedDate) {
+                    const expDate = new Date(report.details.expectedDate);
+                    expDate.setHours(0,0,0,0);
+                    if (expDate >= today) {
+                        notifications.push({
+                            title: `Deal Alert: ${empName}`,
+                            desc: `Expected completion at ${hospName}`,
+                            dateObj: expDate
+                        });
+                    }
+                }
+
+                // 3. 3-Month Follow Up
+                if (report.details?.timeline === "In 3 Months") {
+                    const tDate = new Date(rDate);
+                    tDate.setMonth(tDate.getMonth() + 3);
+                    if (tDate >= today) {
+                        notifications.push({ title: `3-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate });
+                    }
+                }
+
+                // 4. 6-Month Follow Up
+                if (report.details?.timeline === "In 6 Months") {
+                    const tDate = new Date(rDate);
+                    tDate.setMonth(tDate.getMonth() + 6);
+                    if (tDate >= today) {
+                        notifications.push({ title: `6-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate });
+                    }
+                }
+            });
+
+            notifications.sort((a,b) => a.dateObj - b.dateObj);
+            
+            const list = document.getElementById('notif-list');
+            const dot = document.getElementById('notif-dot');
+            
+            list.innerHTML = '';
+            if (notifications.length > 0) {
+                dot.style.display = 'block';
+                document.getElementById('notif-count').textContent = `${notifications.length} Pipeline Tasks`;
+                notifications.forEach(n => {
+                    list.innerHTML += `
+                        <div class="notif-item">
+                            <div class="notif-title">${n.title}</div>
+                            <div class="notif-desc">${n.desc}</div>
+                            <div class="notif-date">📅 Due: ${n.dateObj.toLocaleDateString()}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                dot.style.display = 'none';
+                document.getElementById('notif-count').textContent = `0 Pipeline Tasks`;
+                list.innerHTML = '<div class="notif-empty">Pipeline is clear! No future tasks.</div>';
+            }
+        }
+
+        // --- AUTH & DATA FETCHING ---
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.href = "login.html"; 
@@ -216,6 +343,7 @@
                 allReports = [];
                 snapshot.forEach((doc) => { allReports.push({ id: doc.id, ...doc.data() }); });
                 renderCurrentView(); 
+                renderAdminNotifications(); // Update Global Bell
             });
         }
 
@@ -225,6 +353,7 @@
             else if (viewState.level === 3) renderReportsList();
         }
 
+        // --- DASHBOARD NAVIGATION VIEWS ---
         function renderEmployeeList() {
             breadcrumbNav.innerHTML = `<span class="breadcrumb-active">All Employees</span>`;
             const employeeMap = {};
@@ -307,10 +436,9 @@
 
         function openModal(report) {
             let html = `<div class="report-section"><h3>General Info</h3><ul><li><strong>Employee:</strong> ${report.employeeName}</li><li><strong>Date:</strong> ${report.date}</li><li><strong>Status:</strong> ${report.status}</li></ul></div>`;
+            
             if (report.status === 'Work') {
                 let hospHTML = "";
-                if (report.inTime) hospHTML += `<li><strong>In-Time:</strong> ${report.inTime}</li>`;
-                if (report.outTime) hospHTML += `<li><strong>Out-Time:</strong> ${report.outTime}</li>`;
                 if (report.hospital?.name) hospHTML += `<li><strong>Hospital Name:</strong> ${report.hospital.name}</li>`;
                 if (report.hospital?.area) hospHTML += `<li><strong>Area:</strong> ${report.hospital.area}</li>`;
                 if (report.hospital?.doctor) hospHTML += `<li><strong>Doctor:</strong> ${report.hospital.doctor}</li>`;
@@ -318,7 +446,7 @@
                 if (report.hospital?.existingMachine) hospHTML += `<li><strong>Existing Machine:</strong> ${report.hospital.existingMachine}</li>`;
                 if (report.hospital?.endUser) hospHTML += `<li><strong>End User:</strong> ${report.hospital.endUser}</li>`;
 
-                if (hospHTML !== "") html += `<div class="report-section"><h3>Time & Hospital</h3><ul>${hospHTML}</ul></div>`;
+                if (hospHTML !== "") html += `<div class="report-section"><h3>Hospital Details</h3><ul>${hospHTML}</ul></div>`;
 
                 html += `<div class="report-section"><h3>Activity: ${report.category || 'Details'}</h3><ul>`;
                 if (report.category === 'Sales' && report.salesCallType) html += `<li><strong>Call Type:</strong> ${report.salesCallType}</li>`;
@@ -335,7 +463,7 @@
             modalDetails.innerHTML = html; modal.style.display = 'flex';
         }
 
-        // --- NEW ADMIN DUAL-TARGET LOGIC ---
+        // --- ADMIN TARGET PIE CHART LOGIC ---
         const targetModal = document.getElementById('target-modal');
         
         async function openAdminTargetModal(uid, name) {
@@ -345,7 +473,6 @@
             document.getElementById('target-modal-name').textContent = `${name}'s Targets`;
             targetModal.style.display = 'flex';
             
-            // Calculate Current Timeline
             const now = new Date();
             const currentMonthIndex = now.getMonth(); 
             const currentYear = now.getFullYear();
@@ -355,7 +482,6 @@
             document.getElementById('admin-month-title').textContent = monthNames[currentMonthIndex];
             document.getElementById('admin-quarter-title').textContent = `Quarter ${currentQuarter}`;
 
-            // Fetch Firebase Data
             const targetDoc = await getDoc(doc(db, "targets", uid));
             let monthlyTarget = 0, quarterlyTarget = 0;
             if (targetDoc.exists()) {
@@ -363,11 +489,9 @@
                 quarterlyTarget = targetDoc.data().quarterlyTarget || 0;
             }
 
-            // Fill Admin Inputs
             document.getElementById('admin-monthly-input').value = monthlyTarget || '';
             document.getElementById('admin-quarterly-input').value = quarterlyTarget || '';
 
-            // Calculate Employee Completions
             const targetReports = allReports.filter(r => r.employeeUid === uid);
             let monthlyCompleted = 0;
             let quarterlyCompleted = 0;
@@ -380,12 +504,10 @@
                 }
             });
 
-            // Draw Both Doughnut Charts
             drawAdminChart('admin-monthly-chart-wrapper', 'adminMonthlyChart', 'admin-monthly-stats', monthlyCompleted, monthlyTarget);
             drawAdminChart('admin-quarterly-chart-wrapper', 'adminQuarterlyChart', 'admin-quarterly-stats', quarterlyCompleted, quarterlyTarget);
         }
 
-        // Save Dual Targets to Firebase
         document.getElementById('admin-save-target-btn').addEventListener('click', async () => {
             const monthlyVal = parseInt(document.getElementById('admin-monthly-input').value) || 0;
             const quarterlyVal = parseInt(document.getElementById('admin-quarterly-input').value) || 0;
@@ -404,20 +526,19 @@
                 }, { merge: true });
                 
                 alert("Targets successfully updated!");
-                openAdminTargetModal(currentTargetUid, currentTargetName); // Refresh View automatically
+                openAdminTargetModal(currentTargetUid, currentTargetName); 
             } catch (error) {
                 console.error(error);
-                alert("Failed to update target. Ensure you published the updated Security Rules!");
+                alert("Failed to update targets.");
             } finally {
                 btn.textContent = "Update Targets";
                 btn.disabled = false;
             }
         });
 
-        // Dynamic Chart.js Overwrite Engine
         function drawAdminChart(wrapperId, canvasId, statsId, completed, target) {
             const wrapper = document.getElementById(wrapperId);
-            wrapper.innerHTML = `<canvas id="${canvasId}"></canvas>`; // Reset DOM completely to prevent overlap
+            wrapper.innerHTML = `<canvas id="${canvasId}"></canvas>`; 
             const ctx = document.getElementById(canvasId).getContext('2d');
             const statsText = document.getElementById(statsId);
 
