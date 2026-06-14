@@ -70,24 +70,30 @@
         .target-btn { background-color: var(--color-accent); color: #222; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: 0.2s; font-weight: bold; }
         .target-btn:hover { background-color: #e0a800; }
 
-        /* Modals */
+        /* Modals & Grids */
+        .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .section-box { background-color: #f8fafc; padding: 25px; border-radius: 8px; border: 1px solid #e1e8ed; margin-bottom: 25px; }
+
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; position: relative; }
-        .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #777; }
-        .close-btn:hover { color: #d9534f; }
+        .modal-content { background: white; padding: 35px; border-radius: 12px; width: 90%; max-width: 800px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #777; transition: 0.2s; }
+        .close-btn:hover { color: #d9534f; transform: scale(1.1); }
         
-        .report-section { margin-bottom: 20px; }
-        .report-section h3 { border-bottom: 2px solid var(--color-primary); color: var(--color-primary); padding-bottom: 5px; margin-bottom: 10px; }
-        .report-section ul { list-style: none; padding: 0; }
-        .report-section li { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #eee; }
-        .report-section li strong { display: inline-block; width: 160px; color: #555; }
+        .report-section { margin-bottom: 20px; text-align: left; }
+        .report-section h3 { border-bottom: 2px solid var(--color-primary); color: var(--color-primary); padding-bottom: 5px; margin-bottom: 10px; font-size: 1.2rem; }
+        .report-section ul { list-style: none; padding: 0; margin: 0; }
+        .report-section li { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #eee; font-size: 0.95rem; }
+        .report-section li strong { display: inline-block; width: 180px; color: #555; }
         
-        .target-input-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; margin-top: 15px;}
-        .target-input-group input { width: 100px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1.1rem; text-align: center;}
-        .target-input-group button { background: var(--color-primary); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .target-input-group input { width: 100%; max-width: 150px; padding: 10px; border: 2px solid #e1e8ed; border-radius: 6px; font-size: 1.1rem; text-align: center; font-weight: bold; margin-bottom: 10px;}
+        
+        .submit-btn { background-color: var(--color-primary); color: white; padding: 12px 30px; border: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: background 0.3s, transform 0.2s; box-shadow: 0 4px 6px rgba(8,61,119,0.2); }
+        .submit-btn:hover { background-color: #062a52; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(8,61,119,0.3); }
 
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; }
+
+        @media (max-width: 768px) { .grid-2-col { grid-template-columns: 1fr; gap: 15px; } .modal-content { padding: 20px; } .report-section li strong { width: 100%; display: block; margin-bottom: 4px; } }
     </style>
 </head>
 <body>
@@ -125,19 +131,37 @@
     </div>
 
     <div id="target-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width:400px; text-align:center;">
+        <div class="modal-content">
             <button class="close-btn" id="close-target-modal">&times;</button>
-            <h2 style="color:var(--color-primary); margin-bottom:10px;" id="target-modal-name">Employee Target</h2>
-            
-            <div class="target-input-group">
-                <input type="number" id="admin-target-input" placeholder="0">
-                <button id="admin-save-target-btn">Update</button>
+            <h2 style="color:var(--color-primary); margin-bottom:10px; margin-top:0;" id="target-modal-name">Employee Targets</h2>
+            <p style="color:#777; margin-bottom: 25px; font-size: 0.95rem;">Set and monitor performance targets for this employee.</p>
+
+            <div class="grid-2-col">
+                <div class="section-box" style="margin-bottom:0; text-align: center; padding: 20px 10px;">
+                    <h3 id="admin-month-title" style="margin-bottom: 15px; border:none;">Current Month</h3>
+                    <div class="target-input-group">
+                        <input type="number" id="admin-monthly-input" placeholder="0">
+                    </div>
+                    <p id="admin-monthly-stats" style="font-size: 0.95rem; font-weight: bold; color: #555; margin-bottom: 15px;">Completed: 0 | Target: 0</p>
+                    <div id="admin-monthly-chart-wrapper" style="width: 100%; max-width: 200px; margin: 0 auto;">
+                        <canvas id="adminMonthlyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="section-box" style="margin-bottom:0; text-align: center; padding: 20px 10px;">
+                    <h3 id="admin-quarter-title" style="margin-bottom: 15px; border:none;">Current Quarter</h3>
+                    <div class="target-input-group">
+                        <input type="number" id="admin-quarterly-input" placeholder="0">
+                    </div>
+                    <p id="admin-quarterly-stats" style="font-size: 0.95rem; font-weight: bold; color: #555; margin-bottom: 15px;">Completed: 0 | Target: 0</p>
+                    <div id="admin-quarterly-chart-wrapper" style="width: 100%; max-width: 200px; margin: 0 auto;">
+                        <canvas id="adminQuarterlyChart"></canvas>
+                    </div>
+                </div>
             </div>
 
-            <h3 id="target-stats" style="margin-bottom:15px; color:#555;">Completed this week: 0 | Target: 0</h3>
-            
-            <div id="admin-chart-wrapper" style="width: 100%; max-width: 250px; margin: 0 auto;">
-                <canvas id="adminTargetChart"></canvas>
+            <div style="margin-top: 25px; text-align: center;">
+                <button id="admin-save-target-btn" class="submit-btn">Update Targets</button>
             </div>
         </div>
     </div>
@@ -216,7 +240,7 @@
                 html += `<tr>
                     <td class="clickable-row" data-uid="${uid}" data-name="${data.name}" style="cursor:pointer; color:var(--color-primary); font-weight:bold;">${data.name}</td>
                     <td>${data.count} Report(s)</td>
-                    <td><button class="target-btn open-admin-target" data-uid="${uid}" data-name="${data.name}">View Target</button></td>
+                    <td><button class="target-btn open-admin-target" data-uid="${uid}" data-name="${data.name}">View Targets</button></td>
                 </tr>`;
             }
 
@@ -298,94 +322,125 @@
 
                 html += `<div class="report-section"><h3>Activity: ${report.category || 'Details'}</h3><ul>`;
                 if (report.category === 'Sales' && report.salesCallType) html += `<li><strong>Call Type:</strong> ${report.salesCallType}</li>`;
-                if (report.details) { for (const [key, value] of Object.entries(report.details)) { html += `<li><strong>${formatKey(key)}:</strong> ${value}</li>`; } }
+                
+                if (report.details) { 
+                    for (const [key, value] of Object.entries(report.details)) { 
+                        html += `<li><strong>${formatKey(key)}:</strong> ${value}</li>`; 
+                    } 
+                }
                 html += `</ul></div>`;
             } else if (report.status === 'Leave' && report.leaveReason) {
-                // NEW SECTION: Append leave reason if status is Leave
                 html += `<div class="report-section"><h3>Leave Details</h3><ul><li><strong>Reason:</strong> ${report.leaveReason}</li></ul></div>`;
             }
             modalDetails.innerHTML = html; modal.style.display = 'flex';
         }
 
-        // --- ADMIN TARGET PIE CHART LOGIC ---
+        // --- NEW ADMIN DUAL-TARGET LOGIC ---
         const targetModal = document.getElementById('target-modal');
         
         async function openAdminTargetModal(uid, name) {
             currentTargetUid = uid;
             currentTargetName = name;
             
-            document.getElementById('target-modal-name').textContent = `${name}'s Target`;
+            document.getElementById('target-modal-name').textContent = `${name}'s Targets`;
             targetModal.style.display = 'flex';
             
+            // Calculate Current Timeline
+            const now = new Date();
+            const currentMonthIndex = now.getMonth(); 
+            const currentYear = now.getFullYear();
+            const currentQuarter = Math.floor(currentMonthIndex / 3) + 1;
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('admin-month-title').textContent = monthNames[currentMonthIndex];
+            document.getElementById('admin-quarter-title').textContent = `Quarter ${currentQuarter}`;
+
+            // Fetch Firebase Data
             const targetDoc = await getDoc(doc(db, "targets", uid));
-            const targetVal = targetDoc.exists() ? targetDoc.data().weeklyTarget || 0 : 0;
+            let monthlyTarget = 0, quarterlyTarget = 0;
+            if (targetDoc.exists()) {
+                monthlyTarget = targetDoc.data().monthlyTarget || 0;
+                quarterlyTarget = targetDoc.data().quarterlyTarget || 0;
+            }
 
-            document.getElementById('admin-target-input').value = targetVal || '';
+            // Fill Admin Inputs
+            document.getElementById('admin-monthly-input').value = monthlyTarget || '';
+            document.getElementById('admin-quarterly-input').value = quarterlyTarget || '';
 
+            // Calculate Employee Completions
             const targetReports = allReports.filter(r => r.employeeUid === uid);
-            let completed = 0;
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            let monthlyCompleted = 0;
+            let quarterlyCompleted = 0;
             
             targetReports.forEach(r => {
-                if (new Date(r.timestamp) >= sevenDaysAgo) completed++;
+                const reportDate = new Date(r.timestamp);
+                if (reportDate.getFullYear() === currentYear) {
+                    if (reportDate.getMonth() === currentMonthIndex) monthlyCompleted++;
+                    if (Math.floor(reportDate.getMonth() / 3) + 1 === currentQuarter) quarterlyCompleted++;
+                }
             });
 
-            drawAdminChart(completed, targetVal);
+            // Draw Both Doughnut Charts
+            drawAdminChart('admin-monthly-chart-wrapper', 'adminMonthlyChart', 'admin-monthly-stats', monthlyCompleted, monthlyTarget);
+            drawAdminChart('admin-quarterly-chart-wrapper', 'adminQuarterlyChart', 'admin-quarterly-stats', quarterlyCompleted, quarterlyTarget);
         }
 
+        // Save Dual Targets to Firebase
         document.getElementById('admin-save-target-btn').addEventListener('click', async () => {
-            const newVal = parseInt(document.getElementById('admin-target-input').value) || 0;
-            if (newVal <= 0) return alert("Please enter a valid target number greater than 0.");
+            const monthlyVal = parseInt(document.getElementById('admin-monthly-input').value) || 0;
+            const quarterlyVal = parseInt(document.getElementById('admin-quarterly-input').value) || 0;
+            
+            if (monthlyVal < 0 || quarterlyVal < 0) return alert("Target numbers cannot be negative.");
             
             const btn = document.getElementById('admin-save-target-btn');
             btn.textContent = "Saving...";
+            btn.disabled = true;
             
             try {
                 await setDoc(doc(db, "targets", currentTargetUid), {
-                    weeklyTarget: newVal,
+                    monthlyTarget: monthlyVal,
+                    quarterlyTarget: quarterlyVal,
                     lastUpdated: new Date().toISOString()
                 }, { merge: true });
                 
-                alert("Target successfully updated!");
-                openAdminTargetModal(currentTargetUid, currentTargetName); 
+                alert("Targets successfully updated!");
+                openAdminTargetModal(currentTargetUid, currentTargetName); // Refresh View automatically
             } catch (error) {
                 console.error(error);
                 alert("Failed to update target. Ensure you published the updated Security Rules!");
             } finally {
-                btn.textContent = "Update";
+                btn.textContent = "Update Targets";
+                btn.disabled = false;
             }
         });
 
-        function drawAdminChart(completed, target) {
-            const wrapper = document.getElementById('admin-chart-wrapper');
-            wrapper.innerHTML = '<canvas id="adminTargetChart"></canvas>';
-            const ctx = document.getElementById('adminTargetChart').getContext('2d');
-            const targetStats = document.getElementById('target-stats');
+        // Dynamic Chart.js Overwrite Engine
+        function drawAdminChart(wrapperId, canvasId, statsId, completed, target) {
+            const wrapper = document.getElementById(wrapperId);
+            wrapper.innerHTML = `<canvas id="${canvasId}"></canvas>`; // Reset DOM completely to prevent overlap
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            const statsText = document.getElementById(statsId);
 
             if (target === 0 || !target || isNaN(target)) {
-                targetStats.textContent = `Completed this week: ${completed} | No Target Set`;
+                statsText.textContent = `Completed: ${completed} | No Target Set`;
                 new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: ['No Target Set'],
-                        datasets: [{ data: [1], backgroundColor: ['#e1e8ed'], borderWidth: 0 }]
-                    },
-                    options: { responsive: true, plugins: { tooltip: { enabled: false } }, animation: false }
+                    type: 'doughnut',
+                    data: { labels: ['No Target Set'], datasets: [{ data: [1], backgroundColor: ['#e1e8ed'], borderWidth: 0 }] },
+                    options: { responsive: true, plugins: { tooltip: { enabled: false } }, animation: false, cutout: '75%' }
                 });
                 return;
             }
 
             const uncompleted = target > completed ? target - completed : 0;
-            targetStats.textContent = `Completed this week: ${completed} | Target: ${target}`;
+            statsText.textContent = `Completed: ${completed} | Target: ${target}`;
 
             new Chart(ctx, {
-                type: 'pie',
+                type: 'doughnut',
                 data: {
                     labels: ['Completed', 'Remaining'],
                     datasets: [{ data: [completed, uncompleted], backgroundColor: ['#28a745', '#e1e8ed'], borderWidth: 1 }]
                 },
-                options: { responsive: true, animation: false }
+                options: { responsive: true, animation: false, cutout: '75%' }
             });
         }
 
