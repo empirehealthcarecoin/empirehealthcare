@@ -55,7 +55,7 @@
         .notif-item:hover { background: #f1f7fd; }
         .notif-title { font-weight: bold; font-size: 0.95rem; color: #333; margin-bottom: 5px; }
         .notif-desc { font-size: 0.85rem; color: #666; margin-bottom: 8px; line-height: 1.3;}
-        .notif-date { font-size: 0.8rem; color: var(--color-primary); font-weight: bold; background: #eef2f5; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+        .notif-date { font-size: 0.8rem; color: #fff; font-weight: bold; background: var(--color-primary); padding: 4px 8px; border-radius: 4px; display: inline-block; }
         .notif-empty { padding: 30px 20px; text-align: center; color: #888; font-size: 0.95rem; font-weight: 500; }
 
         .dashboard-wrapper { background: var(--bg-gradient-hero); flex: 1; padding: 40px 20px; display: none; }
@@ -75,9 +75,10 @@
         
         .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
-        .radio-group-container { display: flex; gap: 15px; margin-bottom: 20px; background: #fff; padding: 12px 15px; border: 1px solid #ced4da; border-radius: 6px; flex-wrap: wrap; }
-        .radio-group-container label { font-weight: normal; margin: 0; display: flex; align-items: center; gap: 5px; cursor: pointer; color: #333; }
-        .radio-group-container input[type="radio"] { width: auto; margin: 0; transform: scale(1.2); cursor: pointer; }
+        /* Modern Checkbox/Radio Styling */
+        .radio-group-container { display: flex; gap: 15px; margin-bottom: 20px; background: #fff; padding: 12px 15px; border: 1px solid #ced4da; border-radius: 6px; flex-wrap: wrap; align-items: center;}
+        .radio-group-container label { font-weight: normal; margin: 0; display: flex; align-items: center; gap: 6px; cursor: pointer; color: #333; }
+        .radio-group-container input[type="radio"], .radio-group-container input[type="checkbox"] { width: auto; margin: 0; transform: scale(1.2); cursor: pointer; }
 
         .multi-input-row { display: flex; gap: 10px; margin-bottom: 15px; }
         .multi-input-row input { margin-bottom: 0 !important; flex: 1; }
@@ -99,9 +100,6 @@
 
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; margin-top: auto; }
 
-        /* =========================================
-           MOBILE RESPONSIVENESS & NOTIF FIX
-           ========================================= */
         @media (max-width: 768px) { 
             .grid-2-col { grid-template-columns: 1fr; gap: 0; } 
             .card { padding: 20px; } 
@@ -112,17 +110,7 @@
             .target-btn, .logout-btn { padding: 8px 12px; font-size: 0.85rem; }
             .header-btns { gap: 10px; }
 
-            /* Perfectly centers the notification panel on mobile so it doesn't get clipped */
-            .notif-panel {
-                position: fixed;
-                top: 70px;
-                left: 50%;
-                right: auto;
-                transform: translateX(-50%);
-                width: 92vw;
-                max-width: 380px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            }
+            .notif-panel { position: fixed; top: 70px; left: 50%; right: auto; transform: translateX(-50%); width: 92vw; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
         }
     </style>
 </head>
@@ -139,7 +127,7 @@
                 <span class="notif-dot" id="notif-dot"></span>
                 <div class="notif-panel" id="notif-panel">
                     <div class="notif-header">
-                        <span>Notifications</span>
+                        <span>Upcoming Tasks</span>
                         <span id="notif-count" style="font-size:0.85rem; font-weight:normal;">0 Tasks</span>
                     </div>
                     <div class="notif-list" id="notif-list">
@@ -239,18 +227,61 @@
                                         <label><input type="radio" name="cc-req-status" value="No Requirement"> No Requirement</label>
                                     </div>
                                     
+                                    <div id="cc-no-req-details" style="display: none; background: #fff; padding: 20px; border: 1px solid #ced4da; border-radius: 6px; margin-bottom: 20px;">
+                                        <div class="grid-2-col">
+                                            <div>
+                                                <label>Follow-up On</label>
+                                                <input type="date" id="cc-no-req-date">
+                                            </div>
+                                            <div>
+                                                <label>Reason</label>
+                                                <input type="text" id="cc-no-req-reason" placeholder="Enter reason...">
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div id="cc-req-details" style="display: none; background: #fff; padding: 20px; border: 1px solid #ced4da; border-radius: 6px; margin-bottom: 20px;">
+                                        <div class="grid-2-col">
+                                            <div>
+                                                <label>Machine Condition</label>
+                                                <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
+                                                    <label><input type="radio" name="cc-condition" value="New"> New</label>
+                                                    <label><input type="radio" name="cc-condition" value="Refurbished"> Refurbished</label>
+                                                    <label><input type="radio" name="cc-condition" value="Both"> Both</label>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label>Machine Type</label>
+                                                <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
+                                                    <label><input type="radio" name="cc-type" value="Standalone"> Standalone</label>
+                                                    <label><input type="radio" name="cc-type" value="Portable"> Portable</label>
+                                                    <label><input type="radio" name="cc-type" value="Both"> Both</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid-2-col">
+                                            <div>
+                                                <label>Quantity</label>
+                                                <select id="cc-qty">
+                                                    <option value="">Select Quantity...</option>
+                                                    <option value="1">1</option><option value="2">2</option>
+                                                    <option value="3">3</option><option value="4">4</option>
+                                                    <option value="5">5</option><option value="6">6</option>
+                                                    <option value="7+">7+</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label>Budget</label>
+                                                <input type="text" id="cc-budget" placeholder="e.g. 5,000,000">
+                                            </div>
+                                        </div>
+
                                         <label>Timeline</label>
                                         <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
                                             <label><input type="radio" name="cc-timeline" value="Immediate"> Immediate</label>
                                             <label><input type="radio" name="cc-timeline" value="In 3 Months"> In 3 Months</label>
                                             <label><input type="radio" name="cc-timeline" value="In 6 Months"> In 6 Months</label>
-                                        </div>
-                            
-                                        <label>Machine Condition</label>
-                                        <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
-                                            <label><input type="radio" name="cc-condition" value="New"> New</label>
-                                            <label><input type="radio" name="cc-condition" value="Refurbished"> Refurbished</label>
                                         </div>
                             
                                         <div class="grid-2-col">
@@ -259,52 +290,96 @@
                                                 <input type="date" id="cc-expected-date">
                                             </div>
                                             <div>
-                                                <label>Budget</label>
-                                                <input type="text" id="cc-budget" placeholder="e.g. 5,000,000">
+                                                <label>Probe Configuration</label>
+                                                <input type="text" id="cc-probe" placeholder="Configuration details...">
                                             </div>
                                         </div>
                             
-                                        <label>Probe Configuration</label>
-                                        <input type="text" id="cc-probe" placeholder="Enter configuration details...">
-                            
+                                        <label>Demo Status</label>
+                                        <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
+                                            <label><input type="checkbox" id="chk-demo-seen" value="Yes"> Demo Seen</label>
+                                            <label><input type="checkbox" id="chk-demo-fixed" value="Yes"> Demo Fixed</label>
+                                        </div>
+                                        
                                         <div class="grid-2-col">
-                                            <div>
-                                                <label>Demo Seen</label>
-                                                <input type="text" id="cc-demo-seen" placeholder="Type here...">
-                                            </div>
-                                            <div>
-                                                <label>Demo Fixed</label>
-                                                <input type="text" id="cc-demo-fixed" placeholder="Type here...">
-                                            </div>
+                                            <input type="text" id="cc-demo-seen" placeholder="Demo Seen Details" style="display:none;">
+                                            <input type="text" id="cc-demo-fixed" placeholder="Demo Fixed Details" style="display:none;">
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div id="follow-up-fields" style="display: none; margin-top: 15px;">
-                                    <label>Follow-up Details</label>
-                                    <input type="text" id="fu-general" placeholder="General Visit (G.V)">
-                                    <input type="text" id="fu-payment" placeholder="Payment Follow Up (P.F)">
-                                    <input type="text" id="fu-prospect" placeholder="Prospect (Pros)">
-                                    <input type="text" id="fu-hot" placeholder="Hot Prospect (H.P)">
-                                    <input type="text" id="fu-order-col" placeholder="Order Collected (O.C)">
-                                    <input type="text" id="fu-order-loss" placeholder="Order Loss (O.L)">
-                                    <input type="text" id="fu-jd" placeholder="JD Office">
+                                    <label>Follow-up Type</label>
+                                    <div class="radio-group-container">
+                                        <label><input type="radio" name="fu-type" value="General Visit (G.V)"> G.V</label>
+                                        <label><input type="radio" name="fu-type" value="Payment Follow Up (P.F)"> P.F</label>
+                                        <label><input type="radio" name="fu-type" value="Prospect (Pros)"> Pros</label>
+                                        <label><input type="radio" name="fu-type" value="Hot Prospect (H.P)"> H.P</label>
+                                        <label><input type="radio" name="fu-type" value="Order Collected (O.C)"> O.C</label>
+                                        <label><input type="radio" name="fu-type" value="Order Loss (O.L)"> O.L</label>
+                                        <label><input type="radio" name="fu-type" value="JD Office"> JD</label>
+                                    </div>
+
+                                    <div id="fu-date-container" style="display:none;">
+                                        <label>Scheduled Date</label>
+                                        <input type="date" id="fu-date">
+                                    </div>
+
+                                    <div id="fu-payment-container" style="display:none; background: #fff; padding: 20px; border: 1px solid #ced4da; border-radius: 6px; margin-bottom: 20px;">
+                                        <label>Payment Status</label>
+                                        <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
+                                            <label><input type="radio" name="fu-payment-status" value="Received"> Received</label>
+                                            <label><input type="radio" name="fu-payment-status" value="Not Received"> Not Received</label>
+                                        </div>
+                                        <div id="fu-payment-date-container" style="display:none;">
+                                            <label>Next Follow-up Date</label>
+                                            <input type="date" id="fu-payment-date">
+                                        </div>
+                                    </div>
+
+                                    <label>Comments</label>
+                                    <textarea id="fu-comments" rows="2" placeholder="Add comments here..."></textarea>
                                 </div>
                             </div>
 
                             <div id="service-section" style="display: none; margin-top: 15px;">
-                                <label>Service Details</label>
-                                <input type="text" id="srv-pms" placeholder="Preventive Maintenance Service (PMS)">
-                                <input type="text" id="srv-inst" placeholder="Installation (Inst)">
+                                <label>Machine Model</label>
+                                <input type="text" id="srv-machine-model" placeholder="Enter Machine Model">
                                 
-                                <label>Breakdown (BD)</label>
-                                <select id="srv-breakdown">
-                                    <option value="" disabled selected>Select Breakdown Status...</option>
-                                    <option value="Updated in FSM">Updated in FSM</option>
-                                    <option value="Not Updated">Not Updated</option>
-                                </select>
-                                
-                                <input type="text" id="srv-amc" placeholder="AMC / CMC">
+                                <label>Service Action(s)</label>
+                                <div class="radio-group-container">
+                                    <label><input type="checkbox" id="chk-srv-pms" value="PMS"> PMS</label>
+                                    <label><input type="checkbox" id="chk-srv-inst" value="Installation"> Installation</label>
+                                    <label><input type="checkbox" id="chk-srv-bd" value="Breakdown"> Breakdown (BD)</label>
+                                    <label><input type="checkbox" id="chk-srv-amc" value="AMC/CMC"> AMC/CMC</label>
+                                </div>
+
+                                <div id="srv-pms-details" style="display:none;" class="section-box">
+                                    <label>PMS Status</label>
+                                    <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
+                                        <label><input type="radio" name="pms-status" value="Updated"> Updated</label>
+                                        <label><input type="radio" name="pms-status" value="Not Updated"> Not Updated</label>
+                                    </div>
+                                    <input type="text" id="pms-fsm" style="display:none;" placeholder="FSM Order ID">
+                                </div>
+
+                                <div id="srv-inst-details" style="display:none;" class="section-box">
+                                    <label>Installation Status</label>
+                                    <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
+                                        <label><input type="radio" name="inst-status" value="Updated"> Updated</label>
+                                        <label><input type="radio" name="inst-status" value="Not Updated"> Not Updated</label>
+                                    </div>
+                                    <input type="text" id="inst-fsm" style="display:none;" placeholder="FSM Order ID">
+                                </div>
+
+                                <div id="srv-bd-details" style="display:none;" class="section-box">
+                                    <label>Breakdown Status</label>
+                                    <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
+                                        <label><input type="radio" name="bd-status" value="Updated"> Updated</label>
+                                        <label><input type="radio" name="bd-status" value="Not Updated"> Not Updated</label>
+                                    </div>
+                                    <input type="text" id="bd-fsm" style="display:none;" placeholder="FSM Order ID">
+                                </div>
                                 
                                 <label>Others</label>
                                 <div id="others-container">
@@ -316,13 +391,30 @@
                             </div>
 
                             <div id="app-support-section" style="display: none; margin-top: 15px;">
-                                <label>Application Support Details</label>
-                                <input type="text" id="app-pre-demo" placeholder="Pre Sale Demo (Pre SD)">
-                                <input type="text" id="app-inst" placeholder="Installation (Inst)">
-                                <input type="text" id="app-post-demo" placeholder="Post Sale Demo (Post SD)">
-                                <input type="text" id="app-post-support" placeholder="Post Sale Support (Post SS)">
-                                <input type="text" id="app-call" placeholder="Support Call (Sup.call)">
-                                <input type="text" id="app-follow" placeholder="Follow Up On">
+                                <div class="grid-2-col">
+                                    <div>
+                                        <label>Pre Sale Demo (Pre SD)</label>
+                                        <select id="app-pre-demo">
+                                            <option value="">Select Day...</option>
+                                            <option value="Day 1">Day 1</option><option value="Day 2">Day 2</option>
+                                            <option value="Day 3">Day 3</option><option value="Day 4">Day 4</option>
+                                            <option value="Day 5">Day 5</option><option value="Day 6">Day 6</option>
+                                            <option value="Day 7">Day 7</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Installation (Inst)</label>
+                                        <input type="text" id="app-inst" placeholder="Installation details...">
+                                    </div>
+                                </div>
+
+                                <div class="grid-2-col">
+                                    <div><label>Post Sale Demo (Post SD)</label><input type="date" id="app-post-demo"></div>
+                                    <div><label>Post Sale Support (Post SS)</label><input type="date" id="app-post-support"></div>
+                                </div>
+
+                                <label>Support Call (Sup.call)</label>
+                                <input type="date" id="app-call">
                             </div>
                         </div>
                     </div>
@@ -380,17 +472,21 @@
         const workDetails = document.getElementById('work-details');
         const leaveDetails = document.getElementById('leave-details');
         const categorySelect = document.getElementById('activity-category');
+        
         const salesSection = document.getElementById('sales-section');
         const serviceSection = document.getElementById('service-section');
         const appSupportSection = document.getElementById('app-support-section');
+        
         const salesCallType = document.getElementById('sales-call-type');
         const coldCallFields = document.getElementById('cold-call-fields');
         const followUpFields = document.getElementById('follow-up-fields');
 
         let currentUserUid = null;
 
+        // --- Restrict Main Date Picker to Past & Present ---
         const dateInput = document.getElementById('report-date');
         const todayStr = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('max', todayStr);
         dateInput.value = todayStr;
 
         onAuthStateChanged(auth, async (user) => {
@@ -402,7 +498,7 @@
                     currentUserUid = user.uid;
                     employeeNameSpan.textContent = userDoc.data().fullName;
                     
-                    fetchAndRenderNotifications(); // Scans DB for future tasks
+                    fetchAndRenderNotifications(); // Scan DB for tasks
 
                     loader.style.display = 'none';
                     dashboard.style.display = 'block';
@@ -412,7 +508,7 @@
             }
         });
 
-        // --- NOTIFICATION ENGINE ---
+        // --- SMART NOTIFICATION ENGINE ---
         const notifWrapper = document.getElementById('notif-wrapper');
         const notifPanel = document.getElementById('notif-panel');
         
@@ -435,48 +531,58 @@
 
             snapshot.forEach(docSnap => {
                 const data = docSnap.data();
-                const rDate = new Date(data.date);
-                rDate.setHours(0,0,0,0);
+                const dtl = data.details || {};
                 const hospName = data.hospital?.name || 'Unknown Hospital';
+                const rDate = new Date(data.date);
 
-                // 1. Future Report Date on Calendar
-                if (rDate > today) {
-                    notifications.push({
-                        title: data.status === 'Leave' ? 'Upcoming Leave' : 'Scheduled Visit',
-                        desc: data.status === 'Work' ? `Visit to ${hospName}` : data.leaveReason,
-                        dateObj: rDate
-                    });
+                // 1. Cold Call - No Req Follow Up
+                if (dtl.noReqFollowUpDate) {
+                    const noReqDate = new Date(dtl.noReqFollowUpDate); noReqDate.setHours(0,0,0,0);
+                    if (noReqDate >= today) notifications.push({ title: `Follow-Up: ${hospName}`, desc: dtl.reason || 'No Requirement Follow-up', dateObj: noReqDate });
                 }
 
                 // 2. Expected Date (Cold Call)
-                if (data.details?.expectedDate) {
-                    const expDate = new Date(data.details.expectedDate);
-                    expDate.setHours(0,0,0,0);
-                    if (expDate >= today) {
-                        notifications.push({
-                            title: `Requirement: ${hospName}`,
-                            desc: 'Expected completion date',
-                            dateObj: expDate
-                        });
-                    }
+                if (dtl.expectedDate) {
+                    const expDate = new Date(dtl.expectedDate); expDate.setHours(0,0,0,0);
+                    if (expDate >= today) notifications.push({ title: `Requirement: ${hospName}`, desc: 'Expected completion date', dateObj: expDate });
                 }
 
                 // 3. 3-Month Timeline
-                if (data.details?.timeline === "In 3 Months") {
-                    const tDate = new Date(rDate);
-                    tDate.setMonth(tDate.getMonth() + 3);
-                    if (tDate >= today) {
-                        notifications.push({ title: `3-Month Check: ${hospName}`, desc: 'Timeline follow-up', dateObj: tDate });
-                    }
+                if (dtl.timeline === "In 3 Months") {
+                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 3); tDate.setHours(0,0,0,0);
+                    if (tDate >= today) notifications.push({ title: `3-Month Check: ${hospName}`, desc: 'Timeline follow-up', dateObj: tDate });
                 }
 
                 // 4. 6-Month Timeline
-                if (data.details?.timeline === "In 6 Months") {
-                    const tDate = new Date(rDate);
-                    tDate.setMonth(tDate.getMonth() + 6);
-                    if (tDate >= today) {
-                        notifications.push({ title: `6-Month Check: ${hospName}`, desc: 'Timeline follow-up', dateObj: tDate });
-                    }
+                if (dtl.timeline === "In 6 Months") {
+                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 6); tDate.setHours(0,0,0,0);
+                    if (tDate >= today) notifications.push({ title: `6-Month Check: ${hospName}`, desc: 'Timeline follow-up', dateObj: tDate });
+                }
+
+                // 5. Follow-Up Scheduled Date (GV, Pros, HP)
+                if (dtl.scheduledDate) {
+                    const sDate = new Date(dtl.scheduledDate); sDate.setHours(0,0,0,0);
+                    if (sDate >= today) notifications.push({ title: `${dtl.type}: ${hospName}`, desc: 'Scheduled follow-up visit', dateObj: sDate });
+                }
+
+                // 6. Payment Not Received Date
+                if (dtl.paymentFollowUpDate) {
+                    const pDate = new Date(dtl.paymentFollowUpDate); pDate.setHours(0,0,0,0);
+                    if (pDate >= today) notifications.push({ title: `Payment Check: ${hospName}`, desc: 'Payment not received previously', dateObj: pDate });
+                }
+
+                // 7. App Support Dates
+                if (dtl.postSaleDemoDate) {
+                    const pDemo = new Date(dtl.postSaleDemoDate); pDemo.setHours(0,0,0,0);
+                    if (pDemo >= today) notifications.push({ title: `Post Sale Demo: ${hospName}`, desc: 'App Support scheduled', dateObj: pDemo });
+                }
+                if (dtl.postSaleSupportDate) {
+                    const pSup = new Date(dtl.postSaleSupportDate); pSup.setHours(0,0,0,0);
+                    if (pSup >= today) notifications.push({ title: `Post Sale Support: ${hospName}`, desc: 'App Support scheduled', dateObj: pSup });
+                }
+                if (dtl.supportCallDate) {
+                    const sCall = new Date(dtl.supportCallDate); sCall.setHours(0,0,0,0);
+                    if (sCall >= today) notifications.push({ title: `Support Call: ${hospName}`, desc: 'Scheduled support call', dateObj: sCall });
                 }
             });
 
@@ -581,17 +687,64 @@
             });
         }
 
+        // --- NEW: INTERACTIVE CONDITIONAL UI LOGIC ---
+
+        // 1. Cold Call Options
         document.querySelectorAll('input[name="cc-req-status"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
-                const details = document.getElementById('cc-req-details');
-                if (e.target.value === 'Requirement') {
-                    details.style.display = 'block';
-                } else {
-                    details.style.display = 'none';
-                }
+                document.getElementById('cc-no-req-details').style.display = e.target.value === 'No Requirement' ? 'block' : 'none';
+                document.getElementById('cc-req-details').style.display = e.target.value === 'Requirement' ? 'block' : 'none';
+            });
+        });
+        
+        document.getElementById('chk-demo-seen').addEventListener('change', (e) => {
+            document.getElementById('cc-demo-seen').style.display = e.target.checked ? 'block' : 'none';
+        });
+        document.getElementById('chk-demo-fixed').addEventListener('change', (e) => {
+            document.getElementById('cc-demo-fixed').style.display = e.target.checked ? 'block' : 'none';
+        });
+
+        // 2. Follow-Up Options
+        document.querySelectorAll('input[name="fu-type"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const val = e.target.value;
+                const calContainer = document.getElementById('fu-date-container');
+                const pfContainer = document.getElementById('fu-payment-container');
+                
+                calContainer.style.display = ['General Visit (G.V)', 'Prospect (Pros)', 'Hot Prospect (H.P)'].includes(val) ? 'block' : 'none';
+                pfContainer.style.display = val === 'Payment Follow Up (P.F)' ? 'block' : 'none';
             });
         });
 
+        document.querySelectorAll('input[name="fu-payment-status"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                document.getElementById('fu-payment-date-container').style.display = e.target.value === 'Not Received' ? 'block' : 'none';
+            });
+        });
+
+        // 3. Service Options
+        document.getElementById('chk-srv-pms').addEventListener('change', (e) => {
+            document.getElementById('srv-pms-details').style.display = e.target.checked ? 'block' : 'none';
+        });
+        document.querySelectorAll('input[name="pms-status"]').forEach(radio => {
+            radio.addEventListener('change', (e) => document.getElementById('pms-fsm').style.display = e.target.value === 'Updated' ? 'block' : 'none');
+        });
+
+        document.getElementById('chk-srv-inst').addEventListener('change', (e) => {
+            document.getElementById('srv-inst-details').style.display = e.target.checked ? 'block' : 'none';
+        });
+        document.querySelectorAll('input[name="inst-status"]').forEach(radio => {
+            radio.addEventListener('change', (e) => document.getElementById('inst-fsm').style.display = e.target.value === 'Updated' ? 'block' : 'none');
+        });
+
+        document.getElementById('chk-srv-bd').addEventListener('change', (e) => {
+            document.getElementById('srv-bd-details').style.display = e.target.checked ? 'block' : 'none';
+        });
+        document.querySelectorAll('input[name="bd-status"]').forEach(radio => {
+            radio.addEventListener('change', (e) => document.getElementById('bd-fsm').style.display = e.target.value === 'Updated' ? 'block' : 'none');
+        });
+
+        // --- Helper: Dynamic Plural End User Rows ---
         document.querySelectorAll('.add-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const targetId = e.currentTarget.getAttribute('data-target');
@@ -607,6 +760,7 @@
             });
         });
 
+        // --- Main Category Display Logic ---
         statusSelect.addEventListener('change', (e) => {
             if (e.target.value === 'Work') {
                 workDetails.style.display = 'block'; 
@@ -671,30 +825,83 @@
 
                 if (category === 'Sales') {
                     const callType = salesCallType.value; reportData.salesCallType = callType;
+                    
                     if (callType === 'Cold Call') {
                         const reqStatus = document.querySelector('input[name="cc-req-status"]:checked')?.value;
-                        if (reqStatus === 'Requirement') {
+                        
+                        if (reqStatus === 'No Requirement') {
                             reportData.details = {
                                 requirementStatus: reqStatus,
-                                timeline: document.querySelector('input[name="cc-timeline"]:checked')?.value,
-                                condition: document.querySelector('input[name="cc-condition"]:checked')?.value,
-                                expectedDate: document.getElementById('cc-expected-date').value,
-                                budget: document.getElementById('cc-budget').value.trim(),
-                                probeConfiguration: document.getElementById('cc-probe').value.trim(),
-                                demoSeen: document.getElementById('cc-demo-seen').value.trim(),
-                                demoFixed: document.getElementById('cc-demo-fixed').value.trim()
+                                noReqFollowUpDate: document.getElementById('cc-no-req-date').value,
+                                reason: document.getElementById('cc-no-req-reason').value.trim()
                             };
-                        } else {
-                            reportData.details = { requirementStatus: reqStatus || 'Not Specified' };
+                        } else if (reqStatus === 'Requirement') {
+                            reportData.details = {
+                                requirementStatus: reqStatus,
+                                condition: document.querySelector('input[name="cc-condition"]:checked')?.value,
+                                machineType: document.querySelector('input[name="cc-type"]:checked')?.value,
+                                quantity: document.getElementById('cc-qty').value,
+                                budget: document.getElementById('cc-budget').value.trim(),
+                                timeline: document.querySelector('input[name="cc-timeline"]:checked')?.value,
+                                expectedDate: document.getElementById('cc-expected-date').value,
+                                probeConfiguration: document.getElementById('cc-probe').value.trim()
+                            };
+                            if (document.getElementById('chk-demo-seen').checked) reportData.details.demoSeen = document.getElementById('cc-demo-seen').value.trim() || 'Yes';
+                            if (document.getElementById('chk-demo-fixed').checked) reportData.details.demoFixed = document.getElementById('cc-demo-fixed').value.trim() || 'Yes';
                         }
                     } else if (callType === 'Follow-up Call') {
-                        reportData.details = { generalVisit: document.getElementById('fu-general').value.trim(), paymentFollowUp: document.getElementById('fu-payment').value.trim(), prospect: document.getElementById('fu-prospect').value.trim(), hotProspect: document.getElementById('fu-hot').value.trim(), orderCollected: document.getElementById('fu-order-col').value.trim(), orderLoss: document.getElementById('fu-order-loss').value.trim(), jdOffice: document.getElementById('fu-jd').value.trim() };
+                        const fuType = document.querySelector('input[name="fu-type"]:checked')?.value;
+                        const fuData = { type: fuType, comments: document.getElementById('fu-comments').value.trim() };
+                        
+                        if (['General Visit (G.V)', 'Prospect (Pros)', 'Hot Prospect (H.P)'].includes(fuType)) {
+                            fuData.scheduledDate = document.getElementById('fu-date').value;
+                        } else if (fuType === 'Payment Follow Up (P.F)') {
+                            fuData.paymentStatus = document.querySelector('input[name="fu-payment-status"]:checked')?.value;
+                            if (fuData.paymentStatus === 'Not Received') {
+                                fuData.paymentFollowUpDate = document.getElementById('fu-payment-date').value;
+                            }
+                        }
+                        reportData.details = fuData;
                     }
                 } else if (category === 'Service') {
                     const othersList = Array.from(document.querySelectorAll('.srv-others')).map(i => i.value.trim()).filter(v => v !== '').join(', ');
-                    reportData.details = { preventiveMaintenance: document.getElementById('srv-pms').value.trim(), installation: document.getElementById('srv-inst').value.trim(), breakdownStatus: document.getElementById('srv-breakdown').value, amc: document.getElementById('srv-amc').value.trim(), others: othersList };
+                    
+                    const srvData = {
+                        machineModel: document.getElementById('srv-machine-model').value.trim(),
+                        serviceActions: [],
+                        others: othersList
+                    };
+
+                    if (document.getElementById('chk-srv-pms').checked) {
+                        srvData.serviceActions.push('PMS');
+                        srvData.pmsStatus = document.querySelector('input[name="pms-status"]:checked')?.value;
+                        if (srvData.pmsStatus === 'Updated') srvData.pmsFsm = document.getElementById('pms-fsm').value.trim();
+                    }
+                    if (document.getElementById('chk-srv-inst').checked) {
+                        srvData.serviceActions.push('Installation');
+                        srvData.instStatus = document.querySelector('input[name="inst-status"]:checked')?.value;
+                        if (srvData.instStatus === 'Updated') srvData.instFsm = document.getElementById('inst-fsm').value.trim();
+                    }
+                    if (document.getElementById('chk-srv-bd').checked) {
+                        srvData.serviceActions.push('Breakdown');
+                        srvData.bdStatus = document.querySelector('input[name="bd-status"]:checked')?.value;
+                        if (srvData.bdStatus === 'Updated') srvData.bdFsm = document.getElementById('bd-fsm').value.trim();
+                    }
+                    if (document.getElementById('chk-srv-amc').checked) {
+                        srvData.serviceActions.push('AMC/CMC');
+                    }
+                    
+                    srvData.serviceActions = srvData.serviceActions.join(', ');
+                    reportData.details = srvData;
+                    
                 } else if (category === 'Application Support') {
-                    reportData.details = { preSaleDemo: document.getElementById('app-pre-demo').value.trim(), installation: document.getElementById('app-inst').value.trim(), postSaleDemo: document.getElementById('app-post-demo').value.trim(), postSaleSupport: document.getElementById('app-post-support').value.trim(), supportCall: document.getElementById('app-call').value.trim(), followUpOn: document.getElementById('app-follow').value.trim() };
+                    reportData.details = { 
+                        preSaleDemoDay: document.getElementById('app-pre-demo').value, 
+                        installation: document.getElementById('app-inst').value.trim(), 
+                        postSaleDemoDate: document.getElementById('app-post-demo').value, 
+                        postSaleSupportDate: document.getElementById('app-post-support').value, 
+                        supportCallDate: document.getElementById('app-call').value
+                    };
                 }
             }
 
@@ -717,7 +924,14 @@
                 appSupportSection.style.display = 'none'; 
                 coldCallFields.style.display = 'none'; 
                 followUpFields.style.display = 'none';
+                document.getElementById('cc-no-req-details').style.display = 'none';
                 document.getElementById('cc-req-details').style.display = 'none'; 
+                document.getElementById('fu-date-container').style.display = 'none'; 
+                document.getElementById('fu-payment-container').style.display = 'none'; 
+                document.getElementById('fu-payment-date-container').style.display = 'none'; 
+                document.getElementById('srv-pms-details').style.display = 'none'; 
+                document.getElementById('srv-inst-details').style.display = 'none'; 
+                document.getElementById('srv-bd-details').style.display = 'none'; 
                 document.querySelectorAll('.remove-btn').forEach(btn => btn.closest('.multi-input-row').remove());
                 
                 setTimeout(() => { successMessage.style.display = 'none'; }, 4000);
