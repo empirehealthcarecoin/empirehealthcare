@@ -75,7 +75,6 @@
         
         .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
-        /* Modern Checkbox/Radio Styling */
         .radio-group-container { display: flex; gap: 15px; margin-bottom: 20px; background: #fff; padding: 12px 15px; border: 1px solid #ced4da; border-radius: 6px; flex-wrap: wrap; align-items: center;}
         .radio-group-container label { font-weight: normal; margin: 0; display: flex; align-items: center; gap: 6px; cursor: pointer; color: #333; }
         .radio-group-container input[type="radio"], .radio-group-container input[type="checkbox"] { width: auto; margin: 0; transform: scale(1.2); cursor: pointer; }
@@ -172,7 +171,7 @@
                         <div class="section-box">
                             <h3>Leave Request</h3>
                             <label>Reason for Leave</label>
-                            <textarea id="leave-reason" rows="3" placeholder="Please provide a brief reason for your leave..."></textarea>
+                            <textarea id="leave-reason" rows="3" placeholder="Enter reason for leave"></textarea>
                         </div>
                     </div>
 
@@ -182,13 +181,13 @@
                             <h3>Hospital Details</h3>
                             
                             <div class="grid-2-col">
-                                <div><label>Hospital Name</label><input type="text" id="hosp-name" placeholder="e.g. City Hospital"></div>
-                                <div><label>Area</label><input type="text" id="hosp-area" placeholder="e.g. Downtown"></div>
+                                <div><label>Hospital Name</label><input type="text" id="hosp-name" placeholder="Ganga Hospital"></div>
+                                <div><label>Area</label><input type="text" id="hosp-area" placeholder="Enter area"></div>
                             </div>
 
                             <div class="grid-2-col">
-                                <div><label>Doctor Name</label><input type="text" id="hosp-doctor" placeholder="e.g. Dr. Smith"></div>
-                                <div><label>Technician Name</label><input type="text" id="hosp-tech" placeholder="e.g. John Doe"></div>
+                                <div><label>Doctor Name</label><input type="text" id="hosp-doctor" placeholder="Enter doctor name"></div>
+                                <div><label>Technician Name</label><input type="text" id="hosp-tech" placeholder="Enter technician name"></div>
                             </div>
 
                             <label>Existing Machine</label>
@@ -197,8 +196,8 @@
                             <label>End User(s)</label>
                             <div id="enduser-container">
                                 <div class="multi-input-row">
-                                    <input type="text" class="hosp-enduser" placeholder="End User Name">
-                                    <button type="button" class="add-btn" data-target="enduser-container" data-class="hosp-enduser" data-placeholder="End User Name">+</button>
+                                    <input type="text" class="hosp-enduser" placeholder="Enter end user name">
+                                    <button type="button" class="add-btn" data-target="enduser-container" data-class="hosp-enduser" data-placeholder="Enter end user name">+</button>
                                 </div>
                             </div>
                         </div>
@@ -235,7 +234,7 @@
                                             </div>
                                             <div>
                                                 <label>Reason</label>
-                                                <input type="text" id="cc-no-req-reason" placeholder="Enter reason...">
+                                                <input type="text" id="cc-no-req-reason" placeholder="Enter reason">
                                             </div>
                                         </div>
                                     </div>
@@ -273,7 +272,7 @@
                                             </div>
                                             <div>
                                                 <label>Budget</label>
-                                                <input type="text" id="cc-budget" placeholder="e.g. 5,000,000">
+                                                <input type="text" id="cc-budget" placeholder="Enter budget">
                                             </div>
                                         </div>
 
@@ -291,7 +290,7 @@
                                             </div>
                                             <div>
                                                 <label>Probe Configuration</label>
-                                                <input type="text" id="cc-probe" placeholder="Configuration details...">
+                                                <input type="text" id="cc-probe" placeholder="Enter probe configuration">
                                             </div>
                                         </div>
                             
@@ -302,8 +301,8 @@
                                         </div>
                                         
                                         <div class="grid-2-col">
-                                            <input type="text" id="cc-demo-seen" placeholder="Demo Seen Details" style="display:none;">
-                                            <input type="text" id="cc-demo-fixed" placeholder="Demo Fixed Details" style="display:none;">
+                                            <input type="text" id="cc-demo-seen" placeholder="Enter demo seen details" style="display:none;">
+                                            <input type="text" id="cc-demo-fixed" placeholder="Enter demo fixed details" style="display:none;">
                                         </div>
                                     </div>
                                 </div>
@@ -311,13 +310,13 @@
                                 <div id="follow-up-fields" style="display: none; margin-top: 15px;">
                                     <label>Follow-up Type</label>
                                     <div class="radio-group-container">
-                                        <label><input type="radio" name="fu-type" value="General Visit (G.V)"> G.V</label>
-                                        <label><input type="radio" name="fu-type" value="Payment Follow Up (P.F)"> P.F</label>
-                                        <label><input type="radio" name="fu-type" value="Prospect (Pros)"> Pros</label>
-                                        <label><input type="radio" name="fu-type" value="Hot Prospect (H.P)"> H.P</label>
-                                        <label><input type="radio" name="fu-type" value="Order Collected (O.C)"> O.C</label>
-                                        <label><input type="radio" name="fu-type" value="Order Loss (O.L)"> O.L</label>
-                                        <label><input type="radio" name="fu-type" value="JD Office"> JD</label>
+                                        <label><input type="radio" name="fu-type" value="General Visit"> General Visit</label>
+                                        <label><input type="radio" name="fu-type" value="Payment Follow Up"> Payment Follow Up</label>
+                                        <label><input type="radio" name="fu-type" value="Prospect"> Prospect</label>
+                                        <label><input type="radio" name="fu-type" value="Hot Prospect"> Hot Prospect</label>
+                                        <label><input type="radio" name="fu-type" value="Order Collected"> Order Collected</label>
+                                        <label><input type="radio" name="fu-type" value="Order Loss"> Order Loss</label>
+                                        <label><input type="radio" name="fu-type" value="JD Office"> JD Office</label>
                                     </div>
 
                                     <div id="fu-date-container" style="display:none;">
@@ -338,29 +337,29 @@
                                     </div>
 
                                     <label>Comments</label>
-                                    <textarea id="fu-comments" rows="2" placeholder="Add comments here..."></textarea>
+                                    <textarea id="fu-comments" rows="2" placeholder="Enter comments"></textarea>
                                 </div>
                             </div>
 
                             <div id="service-section" style="display: none; margin-top: 15px;">
                                 <label>Machine Model</label>
-                                <input type="text" id="srv-machine-model" placeholder="Enter Machine Model">
+                                <input type="text" id="srv-machine-model" placeholder="Enter machine model">
                                 
                                 <label>Service Action(s)</label>
                                 <div class="radio-group-container">
-                                    <label><input type="checkbox" id="chk-srv-pms" value="PMS"> PMS</label>
+                                    <label><input type="checkbox" id="chk-srv-pms" value="Preventive Maintenance Service"> Preventive Maintenance Service</label>
                                     <label><input type="checkbox" id="chk-srv-inst" value="Installation"> Installation</label>
-                                    <label><input type="checkbox" id="chk-srv-bd" value="Breakdown"> Breakdown (BD)</label>
-                                    <label><input type="checkbox" id="chk-srv-amc" value="AMC/CMC"> AMC/CMC</label>
+                                    <label><input type="checkbox" id="chk-srv-bd" value="Breakdown"> Breakdown</label>
+                                    <label><input type="checkbox" id="chk-srv-amc" value="AMC / CMC"> AMC / CMC</label>
                                 </div>
 
                                 <div id="srv-pms-details" style="display:none;" class="section-box">
-                                    <label>PMS Status</label>
+                                    <label>Preventive Maintenance Service Status</label>
                                     <div class="radio-group-container" style="background: transparent; border: none; padding: 0;">
                                         <label><input type="radio" name="pms-status" value="Updated"> Updated</label>
                                         <label><input type="radio" name="pms-status" value="Not Updated"> Not Updated</label>
                                     </div>
-                                    <input type="text" id="pms-fsm" style="display:none;" placeholder="FSM Order ID">
+                                    <input type="text" id="pms-fsm" style="display:none;" placeholder="Enter FSM order ID">
                                 </div>
 
                                 <div id="srv-inst-details" style="display:none;" class="section-box">
@@ -369,7 +368,7 @@
                                         <label><input type="radio" name="inst-status" value="Updated"> Updated</label>
                                         <label><input type="radio" name="inst-status" value="Not Updated"> Not Updated</label>
                                     </div>
-                                    <input type="text" id="inst-fsm" style="display:none;" placeholder="FSM Order ID">
+                                    <input type="text" id="inst-fsm" style="display:none;" placeholder="Enter FSM order ID">
                                 </div>
 
                                 <div id="srv-bd-details" style="display:none;" class="section-box">
@@ -378,14 +377,14 @@
                                         <label><input type="radio" name="bd-status" value="Updated"> Updated</label>
                                         <label><input type="radio" name="bd-status" value="Not Updated"> Not Updated</label>
                                     </div>
-                                    <input type="text" id="bd-fsm" style="display:none;" placeholder="FSM Order ID">
+                                    <input type="text" id="bd-fsm" style="display:none;" placeholder="Enter FSM order ID">
                                 </div>
                                 
                                 <label>Others</label>
                                 <div id="others-container">
                                     <div class="multi-input-row">
-                                        <input type="text" class="srv-others" placeholder="Other details">
-                                        <button type="button" class="add-btn" data-target="others-container" data-class="srv-others" data-placeholder="Other details">+</button>
+                                        <input type="text" class="srv-others" placeholder="Enter other details">
+                                        <button type="button" class="add-btn" data-target="others-container" data-class="srv-others" data-placeholder="Enter other details">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -393,7 +392,7 @@
                             <div id="app-support-section" style="display: none; margin-top: 15px;">
                                 <div class="grid-2-col">
                                     <div>
-                                        <label>Pre Sale Demo (Pre SD)</label>
+                                        <label>Pre Sale Demo</label>
                                         <select id="app-pre-demo">
                                             <option value="">Select Day...</option>
                                             <option value="Day 1">Day 1</option><option value="Day 2">Day 2</option>
@@ -403,17 +402,17 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label>Installation (Inst)</label>
-                                        <input type="text" id="app-inst" placeholder="Installation details...">
+                                        <label>Installation</label>
+                                        <input type="text" id="app-inst" placeholder="Enter installation details">
                                     </div>
                                 </div>
 
                                 <div class="grid-2-col">
-                                    <div><label>Post Sale Demo (Post SD)</label><input type="date" id="app-post-demo"></div>
-                                    <div><label>Post Sale Support (Post SS)</label><input type="date" id="app-post-support"></div>
+                                    <div><label>Post Sale Demo</label><input type="date" id="app-post-demo"></div>
+                                    <div><label>Post Sale Support</label><input type="date" id="app-post-support"></div>
                                 </div>
 
-                                <label>Support Call (Sup.call)</label>
+                                <label>Support Call</label>
                                 <input type="date" id="app-call">
                             </div>
                         </div>
@@ -711,8 +710,8 @@
                 const calContainer = document.getElementById('fu-date-container');
                 const pfContainer = document.getElementById('fu-payment-container');
                 
-                calContainer.style.display = ['General Visit (G.V)', 'Prospect (Pros)', 'Hot Prospect (H.P)'].includes(val) ? 'block' : 'none';
-                pfContainer.style.display = val === 'Payment Follow Up (P.F)' ? 'block' : 'none';
+                calContainer.style.display = ['General Visit', 'Prospect', 'Hot Prospect'].includes(val) ? 'block' : 'none';
+                pfContainer.style.display = val === 'Payment Follow Up' ? 'block' : 'none';
             });
         });
 
@@ -853,9 +852,9 @@
                         const fuType = document.querySelector('input[name="fu-type"]:checked')?.value;
                         const fuData = { type: fuType, comments: document.getElementById('fu-comments').value.trim() };
                         
-                        if (['General Visit (G.V)', 'Prospect (Pros)', 'Hot Prospect (H.P)'].includes(fuType)) {
+                        if (['General Visit', 'Prospect', 'Hot Prospect'].includes(fuType)) {
                             fuData.scheduledDate = document.getElementById('fu-date').value;
-                        } else if (fuType === 'Payment Follow Up (P.F)') {
+                        } else if (fuType === 'Payment Follow Up') {
                             fuData.paymentStatus = document.querySelector('input[name="fu-payment-status"]:checked')?.value;
                             if (fuData.paymentStatus === 'Not Received') {
                                 fuData.paymentFollowUpDate = document.getElementById('fu-payment-date').value;
@@ -873,7 +872,7 @@
                     };
 
                     if (document.getElementById('chk-srv-pms').checked) {
-                        srvData.serviceActions.push('PMS');
+                        srvData.serviceActions.push('Preventive Maintenance Service');
                         srvData.pmsStatus = document.querySelector('input[name="pms-status"]:checked')?.value;
                         if (srvData.pmsStatus === 'Updated') srvData.pmsFsm = document.getElementById('pms-fsm').value.trim();
                     }
