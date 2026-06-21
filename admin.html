@@ -110,12 +110,14 @@
         .submit-btn { background-color: var(--color-primary); color: white; padding: 12px 30px; border: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: background 0.3s, transform 0.2s; box-shadow: 0 4px 6px rgba(8,61,119,0.2); }
         .submit-btn:hover { background-color: #062a52; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(8,61,119,0.3); }
 
+        /* Excel Export Button Specific Style */
+        .export-btn { background-color: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 20px; width: 100%; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2); }
+        .export-btn:hover { background-color: #218838; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3); }
+
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; margin-top: auto; }
 
-        /* =========================================
-           MOBILE RESPONSIVENESS & NOTIF FIX
-           ========================================= */
+        /* MOBILE RESPONSIVENESS */
         @media (max-width: 768px) { 
             .grid-2-col { grid-template-columns: 1fr; gap: 15px; } 
             .modal-content { padding: 20px; } 
@@ -186,6 +188,7 @@
         <div class="modal-content">
             <button class="close-btn" id="close-modal">&times;</button>
             <div id="modal-details"></div>
+            <button id="export-excel-btn" class="export-btn">Export Report to Excel</button>
         </div>
     </div>
 
@@ -220,7 +223,7 @@
             </div>
 
             <div style="margin-top: 25px; text-align: center;">
-                <button id="admin-save-target-btn" class="submit-btn">Update Targets</button>
+                <button id="admin-save-target-btn" class="submit-btn" style="max-width:300px;">Update Targets</button>
             </div>
         </div>
     </div>
@@ -247,10 +250,13 @@
         const modalDetails = document.getElementById('modal-details');
 
         let allReports = [];
-        let viewState = { level: 1, selectedUid: null, selectedName: null, selectedDate: null };
+        
+        // Merged View States down to Level 1 and Level 2
+        let viewState = { level: 1, selectedUid: null, selectedName: null };
         
         let currentTargetUid = null;
         let currentTargetName = null;
+        let currentlyViewedReport = null; // Used for Excel Export
 
         // --- NOTIFICATION ENGINE ---
         const notifWrapper = document.getElementById('notif-wrapper');
@@ -278,60 +284,50 @@
                 const rDate = new Date(report.date);
                 rDate.setHours(0,0,0,0);
 
-                // 1. Future Visit / Leave (from Main Calendar)
                 if (rDate > today) {
-                    notifications.push({
-                        title: report.status === 'Leave' ? `Leave: ${empName}` : `Visit: ${empName}`,
-                        desc: report.status === 'Leave' ? report.leaveReason : `Scheduled visit to ${hospName}`,
-                        dateObj: rDate
-                    });
+                    notifications.push({ title: report.status === 'Leave' ? `Leave: ${empName}` : `Visit: ${empName}`, desc: report.status === 'Leave' ? report.leaveReason : `Scheduled visit to ${hospName}`, dateObj: rDate });
                 }
 
-                // 2. Expected Deal Date (Cold Call)
                 if (dtl.expectedDate) {
                     const expDate = new Date(dtl.expectedDate); expDate.setHours(0,0,0,0);
                     if (expDate >= today) notifications.push({ title: `Deal Alert: ${empName}`, desc: `Expected at ${hospName}`, dateObj: expDate });
                 }
 
-                // 3. 3-Month Follow Up
                 if (dtl.timeline === "In 3 Months") {
                     const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 3); tDate.setHours(0,0,0,0);
                     if (tDate >= today) notifications.push({ title: `3-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate });
                 }
 
-                // 4. 6-Month Follow Up
                 if (dtl.timeline === "In 6 Months") {
                     const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 6); tDate.setHours(0,0,0,0);
                     if (tDate >= today) notifications.push({ title: `6-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate });
                 }
 
-                // 5. Follow-Up Scheduled Date (GV, Pros, HP)
                 if (dtl.scheduledDate) {
                     const sDate = new Date(dtl.scheduledDate); sDate.setHours(0,0,0,0);
                     if (sDate >= today) notifications.push({ title: `${dtl.type}: ${empName}`, desc: `Follow-up visit at ${hospName}`, dateObj: sDate });
                 }
 
-                // 6. Payment Not Received Date
                 if (dtl.paymentFollowUpDate) {
                     const pDate = new Date(dtl.paymentFollowUpDate); pDate.setHours(0,0,0,0);
                     if (pDate >= today) notifications.push({ title: `Payment Check: ${empName}`, desc: `Payment pending at ${hospName}`, dateObj: pDate });
                 }
 
-                // 7. App Support Dates
                 if (dtl.postSaleDemoDate) {
                     const pDemo = new Date(dtl.postSaleDemoDate); pDemo.setHours(0,0,0,0);
                     if (pDemo >= today) notifications.push({ title: `Post Sale Demo: ${empName}`, desc: hospName, dateObj: pDemo });
                 }
+                
                 if (dtl.postSaleSupportDate) {
                     const pSup = new Date(dtl.postSaleSupportDate); pSup.setHours(0,0,0,0);
                     if (pSup >= today) notifications.push({ title: `Post Sale Support: ${empName}`, desc: hospName, dateObj: pSup });
                 }
+                
                 if (dtl.supportCallDate) {
                     const sCall = new Date(dtl.supportCallDate); sCall.setHours(0,0,0,0);
                     if (sCall >= today) notifications.push({ title: `Support Call: ${empName}`, desc: hospName, dateObj: sCall });
                 }
 
-                // 8. Cold Call No Req Follow Up
                 if (dtl.noReqFollowUpDate) {
                     const noReqDate = new Date(dtl.noReqFollowUpDate); noReqDate.setHours(0,0,0,0);
                     if (noReqDate >= today) notifications.push({ title: `Follow-Up: ${empName}`, desc: `No Req at ${hospName}`, dateObj: noReqDate });
@@ -386,20 +382,20 @@
                 allReports = [];
                 snapshot.forEach((doc) => { allReports.push({ id: doc.id, ...doc.data() }); });
                 renderCurrentView(); 
-                renderAdminNotifications(); // Update Global Bell
+                renderAdminNotifications();
             });
         }
 
         function renderCurrentView() {
             if (viewState.level === 1) renderEmployeeList();
-            else if (viewState.level === 2) renderDateList();
-            else if (viewState.level === 3) renderReportsList();
+            else if (viewState.level === 2) renderReportsList(); // Level 3 merged into Level 2
         }
 
-        // --- DASHBOARD NAVIGATION VIEWS ---
+        // --- LEVEL 1: EMPLOYEE LIST ---
         function renderEmployeeList() {
             breadcrumbNav.innerHTML = `<span class="breadcrumb-active">All Employees</span>`;
             const employeeMap = {};
+            
             allReports.forEach(report => {
                 if (!employeeMap[report.employeeUid]) {
                     employeeMap[report.employeeUid] = { name: report.employeeName, count: 0 };
@@ -422,7 +418,10 @@
 
             document.querySelectorAll('.clickable-row').forEach(row => {
                 row.addEventListener('click', () => {
-                    viewState.level = 2; viewState.selectedUid = row.getAttribute('data-uid'); viewState.selectedName = row.getAttribute('data-name'); renderCurrentView();
+                    viewState.level = 2; // Jump straight to reports
+                    viewState.selectedUid = row.getAttribute('data-uid'); 
+                    viewState.selectedName = row.getAttribute('data-name'); 
+                    renderCurrentView();
                 });
             });
 
@@ -435,56 +434,50 @@
             });
         }
 
-        function renderDateList() {
-            breadcrumbNav.innerHTML = `<span class="breadcrumb-item" id="nav-home">All Employees</span> <span class="breadcrumb-separator">/</span> <span class="breadcrumb-active">${viewState.selectedName}</span>`;
-            document.getElementById('nav-home').addEventListener('click', () => { viewState.level = 1; renderCurrentView(); });
-
-            const empReports = allReports.filter(r => r.employeeUid === viewState.selectedUid);
-            const dateMap = {};
-            empReports.forEach(report => { if (!dateMap[report.date]) dateMap[report.date] = 0; dateMap[report.date]++; });
-
-            let html = `<table><thead><tr><th>Submission Date</th><th>Reports on this Date</th></tr></thead><tbody>`;
-            for (const [date, count] of Object.entries(dateMap)) {
-                html += `<tr class="clickable-row" data-date="${date}"><td>${date}</td><td>${count} Report(s) <span style="float:right;">View Reports &rarr;</span></td></tr>`;
-            }
-            html += `</tbody></table>`;
-            tableContainer.innerHTML = html;
-
-            document.querySelectorAll('.clickable-row').forEach(row => {
-                row.addEventListener('click', () => { viewState.level = 3; viewState.selectedDate = row.getAttribute('data-date'); renderCurrentView(); });
-            });
-        }
-
+        // --- LEVEL 2: ALL REPORTS FOR EMPLOYEE (MERGED) ---
         function renderReportsList() {
-            breadcrumbNav.innerHTML = `<span class="breadcrumb-item" id="nav-home">All Employees</span> <span class="breadcrumb-separator">/</span> <span class="breadcrumb-item" id="nav-emp">${viewState.selectedName}</span> <span class="breadcrumb-separator">/</span> <span class="breadcrumb-active">${viewState.selectedDate}</span>`;
+            breadcrumbNav.innerHTML = `<span class="breadcrumb-item" id="nav-home">All Employees</span> <span class="breadcrumb-separator">/</span> <span class="breadcrumb-active">${viewState.selectedName}'s Reports</span>`;
             document.getElementById('nav-home').addEventListener('click', () => { viewState.level = 1; renderCurrentView(); });
-            document.getElementById('nav-emp').addEventListener('click', () => { viewState.level = 2; renderCurrentView(); });
 
-            const exactReports = allReports.filter(r => r.employeeUid === viewState.selectedUid && r.date === viewState.selectedDate);
-            let html = `<table><thead><tr><th>Time Logged</th><th>Status</th><th>Category</th><th>Action</th></tr></thead><tbody>`;
-            exactReports.forEach(report => {
-                const timeString = new Date(report.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            // Fetch ALL reports for this user (they are already sorted desc by timestamp from the DB query)
+            const empReports = allReports.filter(r => r.employeeUid === viewState.selectedUid);
+            
+            let html = `<table><thead><tr><th>Date Submitted</th><th>Status</th><th>Category</th><th>Action</th></tr></thead><tbody>`;
+            
+            empReports.forEach(report => {
+                // Format the Date string nicely
+                const d = new Date(report.date);
+                const prettyDate = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                
                 const statusClass = report.status === 'Work' ? 'status-work' : 'status-leave';
-                html += `<tr><td>${timeString}</td><td><span class="status-badge ${statusClass}">${report.status}</span></td><td>${report.category || '-'}</td><td><button class="view-btn" data-id="${report.id}">View Details</button></td></tr>`;
+                html += `<tr>
+                            <td>${prettyDate}</td>
+                            <td><span class="status-badge ${statusClass}">${report.status}</span></td>
+                            <td>${report.category || '-'}</td>
+                            <td><button class="view-btn" data-id="${report.id}">View Details</button></td>
+                         </tr>`;
             });
+            
+            if(empReports.length === 0) html += `<tr><td colspan="4" style="text-align:center;">No reports submitted yet.</td></tr>`;
+            
             html += `</tbody></table>`;
             tableContainer.innerHTML = html;
 
             document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => { openModal(exactReports.find(r => r.id === e.target.getAttribute('data-id'))); });
+                btn.addEventListener('click', (e) => { openModal(empReports.find(r => r.id === e.target.getAttribute('data-id'))); });
             });
         }
 
+        // --- VIEW DETAILS MODAL ---
         function formatKey(key) { const result = key.replace(/([A-Z])/g, " $1"); return result.charAt(0).toUpperCase() + result.slice(1); }
 
         function openModal(report) {
+            currentlyViewedReport = report; // Store globally for Excel Export
+
             let html = `<div class="report-section"><h3>General Info</h3><ul><li><strong>Employee:</strong> ${report.employeeName}</li><li><strong>Date:</strong> ${report.date}</li><li><strong>Status:</strong> ${report.status}</li></ul></div>`;
             
             if (report.status === 'Work') {
                 let hospHTML = "";
-                // Backward compatibility for old reports that had inTime and outTime
-                if (report.inTime) hospHTML += `<li><strong>In-Time:</strong> ${report.inTime}</li>`;
-                if (report.outTime) hospHTML += `<li><strong>Out-Time:</strong> ${report.outTime}</li>`;
                 
                 if (report.hospital?.name) hospHTML += `<li><strong>Hospital Name:</strong> ${report.hospital.name}</li>`;
                 if (report.hospital?.area) hospHTML += `<li><strong>Area:</strong> ${report.hospital.area}</li>`;
@@ -507,8 +500,64 @@
             } else if (report.status === 'Leave' && report.leaveReason) {
                 html += `<div class="report-section"><h3>Leave Details</h3><ul><li><strong>Reason:</strong> ${report.leaveReason}</li></ul></div>`;
             }
-            modalDetails.innerHTML = html; modal.style.display = 'flex';
+            
+            modalDetails.innerHTML = html; 
+            modal.style.display = 'flex';
         }
+
+        // --- EXPORT TO EXCEL LOGIC ---
+        document.getElementById('export-excel-btn').addEventListener('click', () => {
+            if(!currentlyViewedReport) return;
+            
+            const r = currentlyViewedReport;
+            let csvRows = [];
+            
+            // Build CSV structure
+            csvRows.push(["Field", "Data"]);
+            csvRows.push(["Employee Name", r.employeeName]);
+            csvRows.push(["Report Date", r.date]);
+            csvRows.push(["Status", r.status]);
+
+            if (r.status === 'Work') {
+                if(r.hospital) {
+                    csvRows.push([""]); // Empty spacing row
+                    csvRows.push(["--- HOSPITAL DETAILS ---", ""]);
+                    for (const [key, value] of Object.entries(r.hospital)) {
+                        csvRows.push([formatKey(key), value || "N/A"]);
+                    }
+                }
+                
+                csvRows.push([""]); // Empty spacing row
+                csvRows.push(["--- ACTIVITY DETAILS ---", ""]);
+                csvRows.push(["Category", r.category || "N/A"]);
+                if(r.salesCallType) csvRows.push(["Call Type", r.salesCallType]);
+                
+                if(r.details) {
+                    for (const [key, value] of Object.entries(r.details)) {
+                        csvRows.push([formatKey(key), value || "N/A"]);
+                    }
+                }
+            } else if (r.status === 'Leave') {
+                csvRows.push([""]); // Empty spacing row
+                csvRows.push(["Leave Reason", r.leaveReason || "No reason provided"]);
+            }
+
+            // Convert to CSV String (Handle internal commas by wrapping values in quotes)
+            let csvContent = csvRows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(",")).join("\n");
+            
+            // Create Blob and Download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Empire_Report_${r.employeeName.replace(/\s+/g, '_')}_${r.date}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
 
         // --- ADMIN DUAL-TARGET LOGIC ---
         const targetModal = document.getElementById('target-modal');
@@ -520,7 +569,6 @@
             document.getElementById('target-modal-name').textContent = `${name}'s Targets`;
             targetModal.style.display = 'flex';
             
-            // Calculate Current Timeline
             const now = new Date();
             const currentMonthIndex = now.getMonth(); 
             const currentYear = now.getFullYear();
@@ -530,7 +578,6 @@
             document.getElementById('admin-month-title').textContent = monthNames[currentMonthIndex];
             document.getElementById('admin-quarter-title').textContent = `Quarter ${currentQuarter}`;
 
-            // Fetch Firebase Data
             const targetDoc = await getDoc(doc(db, "targets", uid));
             let monthlyTarget = 0, quarterlyTarget = 0;
             if (targetDoc.exists()) {
@@ -538,11 +585,9 @@
                 quarterlyTarget = targetDoc.data().quarterlyTarget || 0;
             }
 
-            // Fill Admin Inputs
             document.getElementById('admin-monthly-input').value = monthlyTarget || '';
             document.getElementById('admin-quarterly-input').value = quarterlyTarget || '';
 
-            // Calculate Employee Completions
             const targetReports = allReports.filter(r => r.employeeUid === uid);
             let monthlyCompleted = 0;
             let quarterlyCompleted = 0;
@@ -555,12 +600,10 @@
                 }
             });
 
-            // Draw Both Doughnut Charts
             drawAdminChart('admin-monthly-chart-wrapper', 'adminMonthlyChart', 'admin-monthly-stats', monthlyCompleted, monthlyTarget);
             drawAdminChart('admin-quarterly-chart-wrapper', 'adminQuarterlyChart', 'admin-quarterly-stats', quarterlyCompleted, quarterlyTarget);
         }
 
-        // Save Dual Targets to Firebase
         document.getElementById('admin-save-target-btn').addEventListener('click', async () => {
             const monthlyVal = parseInt(document.getElementById('admin-monthly-input').value) || 0;
             const quarterlyVal = parseInt(document.getElementById('admin-quarterly-input').value) || 0;
@@ -579,20 +622,19 @@
                 }, { merge: true });
                 
                 alert("Targets successfully updated!");
-                openAdminTargetModal(currentTargetUid, currentTargetName); // Refresh View automatically
+                openAdminTargetModal(currentTargetUid, currentTargetName);
             } catch (error) {
                 console.error(error);
-                alert("Failed to update target. Ensure you published the updated Security Rules!");
+                alert("Failed to update targets.");
             } finally {
                 btn.textContent = "Update Targets";
                 btn.disabled = false;
             }
         });
 
-        // Dynamic Chart.js Overwrite Engine
         function drawAdminChart(wrapperId, canvasId, statsId, completed, target) {
             const wrapper = document.getElementById(wrapperId);
-            wrapper.innerHTML = `<canvas id="${canvasId}"></canvas>`; // Reset DOM completely to prevent overlap
+            wrapper.innerHTML = `<canvas id="${canvasId}"></canvas>`; 
             const ctx = document.getElementById(canvasId).getContext('2d');
             const statsText = document.getElementById(statsId);
 
