@@ -66,12 +66,18 @@
 
         .card { background: white; padding: 35px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); width: 100%; }
         
-        .breadcrumb-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; font-family: var(--font-heading); font-weight: 500; color: #555; }
+        .breadcrumb-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; font-family: var(--font-heading); font-weight: 500; color: #555; }
+        .breadcrumb-path { display: flex; align-items: center; gap: 10px; }
         .breadcrumb-item { cursor: pointer; color: var(--color-primary); transition: color 0.2s; }
         .breadcrumb-item:hover { text-decoration: underline; color: #062a52; }
         .breadcrumb-separator { color: #ccc; }
         .breadcrumb-active { color: #333; font-weight: bold; pointer-events: none; }
 
+        /* EXPORT BUTTON */
+        .export-btn { background-color: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 4px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.3s; box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2); display: flex; align-items: center; gap: 8px; }
+        .export-btn:hover { background-color: #218838; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3); }
+
+        /* TABLE & ACCORDION */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background-color: var(--color-primary); color: white; font-weight: 500; }
@@ -79,13 +85,17 @@
         .clickable-row { cursor: pointer; transition: background 0.2s; }
         .clickable-row:hover { background-color: #f1f7fd; }
         .clickable-row td { color: var(--color-primary); font-weight: 500; }
-        tr:not(.clickable-row):hover { background-color: #f9f9f9; }
+        tr:not(.clickable-row):not(.inner-table-row):hover { background-color: #f9f9f9; }
+        
+        .inner-table-row { display: none; background-color: #f8fafc; }
+        .inner-table-row.open { display: table-row; }
+        .inner-table-container { padding: 15px; border: 1px dashed #ced4da; border-radius: 6px; margin: 10px 0; background-color: #fff; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);}
         
         .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
         .status-work { background-color: #d9edf7; color: #31708f; }
         .status-leave { background-color: #fcf8e3; color: #8a6d3b; }
 
-        .view-btn { background-color: var(--color-primary); color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
+        .view-btn { background-color: var(--color-primary); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
         .view-btn:hover { background-color: #062a52; }
         .target-btn { background-color: var(--color-accent); color: #222; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: 0.2s; font-weight: bold; }
         .target-btn:hover { background-color: #e0a800; }
@@ -106,13 +116,8 @@
         .report-section li strong { display: inline-block; width: 180px; color: #555; }
         
         .target-input-group input { width: 100%; max-width: 150px; padding: 10px; border: 2px solid #e1e8ed; border-radius: 6px; font-size: 1.1rem; text-align: center; font-weight: bold; margin-bottom: 10px;}
-        
         .submit-btn { background-color: var(--color-primary); color: white; padding: 12px 30px; border: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: background 0.3s, transform 0.2s; box-shadow: 0 4px 6px rgba(8,61,119,0.2); }
         .submit-btn:hover { background-color: #062a52; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(8,61,119,0.3); }
-
-        /* Excel Export Button Specific Style */
-        .export-btn { background-color: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 20px; width: 100%; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2); }
-        .export-btn:hover { background-color: #218838; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3); }
 
         #loader { text-align: center; padding: 100px; font-size: 1.2rem; color: var(--color-primary); font-weight: bold; }
         footer { background-color: var(--color-primary); color: var(--color-text-light); padding: 20px; text-align: center; margin-top: auto; }
@@ -122,20 +127,17 @@
             .grid-2-col { grid-template-columns: 1fr; gap: 15px; } 
             .modal-content { padding: 20px; } 
             .report-section li strong { width: 100%; display: block; margin-bottom: 4px; } 
+            .breadcrumb-nav { flex-direction: column; align-items: flex-start; }
+            .export-btn { width: 100%; justify-content: center; margin-top: 10px;}
 
             header { padding: 0 15px; }
             .logo { font-size: 1.2rem; }
-            .target-btn, .logout-btn { padding: 8px 12px; font-size: 0.85rem; }
+            .logout-btn { padding: 8px 12px; font-size: 0.85rem; }
             .header-btns { gap: 10px; }
 
             .notif-panel { 
-                position: fixed; 
-                top: 70px; 
-                left: 50%; 
-                right: auto; 
-                transform: translateX(-50%); 
-                width: 92vw; 
-                max-width: 380px; 
+                position: fixed; top: 70px; left: 50%; right: auto; 
+                transform: translateX(-50%); width: 92vw; max-width: 380px; 
                 box-shadow: 0 10px 40px rgba(0,0,0,0.3); 
             } 
         }
@@ -156,8 +158,7 @@
                         <span>Pipeline & Events</span>
                         <span id="notif-count" style="font-size:0.85rem; font-weight:normal;">0 Tasks</span>
                     </div>
-                    <div class="notif-list" id="notif-list">
-                        </div>
+                    <div class="notif-list" id="notif-list"></div>
                 </div>
             </div>
             <button id="logout-btn" class="logout-btn">Logout</button>
@@ -176,8 +177,7 @@
 
             <div class="card">
                 <div id="breadcrumb-nav" class="breadcrumb-nav">
-                    <span class="breadcrumb-active">All Employees</span>
-                </div>
+                    </div>
 
                 <div style="overflow-x:auto;" id="dynamic-table-container"></div>
             </div>
@@ -185,10 +185,10 @@
     </main>
 
     <div id="report-modal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 600px;">
             <button class="close-btn" id="close-modal">&times;</button>
             <div id="modal-details"></div>
-            <button id="export-excel-btn" class="export-btn">Export Report to Excel</button>
+            <button id="modal-export-btn" class="export-btn" style="margin-top:20px; justify-content:center;">Export Single Report</button>
         </div>
     </div>
 
@@ -250,13 +250,11 @@
         const modalDetails = document.getElementById('modal-details');
 
         let allReports = [];
-        
-        // Merged View States down to Level 1 and Level 2
         let viewState = { level: 1, selectedUid: null, selectedName: null };
         
         let currentTargetUid = null;
         let currentTargetName = null;
-        let currentlyViewedReport = null; // Used for Excel Export
+        let currentlyViewedReport = null; // Stored for Modal Export
 
         // --- NOTIFICATION ENGINE ---
         const notifWrapper = document.getElementById('notif-wrapper');
@@ -284,74 +282,27 @@
                 const rDate = new Date(report.date);
                 rDate.setHours(0,0,0,0);
 
-                if (rDate > today) {
-                    notifications.push({ title: report.status === 'Leave' ? `Leave: ${empName}` : `Visit: ${empName}`, desc: report.status === 'Leave' ? report.leaveReason : `Scheduled visit to ${hospName}`, dateObj: rDate });
-                }
-
-                if (dtl.expectedDate) {
-                    const expDate = new Date(dtl.expectedDate); expDate.setHours(0,0,0,0);
-                    if (expDate >= today) notifications.push({ title: `Deal Alert: ${empName}`, desc: `Expected at ${hospName}`, dateObj: expDate });
-                }
-
-                if (dtl.timeline === "In 3 Months") {
-                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 3); tDate.setHours(0,0,0,0);
-                    if (tDate >= today) notifications.push({ title: `3-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate });
-                }
-
-                if (dtl.timeline === "In 6 Months") {
-                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 6); tDate.setHours(0,0,0,0);
-                    if (tDate >= today) notifications.push({ title: `6-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate });
-                }
-
-                if (dtl.scheduledDate) {
-                    const sDate = new Date(dtl.scheduledDate); sDate.setHours(0,0,0,0);
-                    if (sDate >= today) notifications.push({ title: `${dtl.type}: ${empName}`, desc: `Follow-up visit at ${hospName}`, dateObj: sDate });
-                }
-
-                if (dtl.paymentFollowUpDate) {
-                    const pDate = new Date(dtl.paymentFollowUpDate); pDate.setHours(0,0,0,0);
-                    if (pDate >= today) notifications.push({ title: `Payment Check: ${empName}`, desc: `Payment pending at ${hospName}`, dateObj: pDate });
-                }
-
-                if (dtl.postSaleDemoDate) {
-                    const pDemo = new Date(dtl.postSaleDemoDate); pDemo.setHours(0,0,0,0);
-                    if (pDemo >= today) notifications.push({ title: `Post Sale Demo: ${empName}`, desc: hospName, dateObj: pDemo });
-                }
-                
-                if (dtl.postSaleSupportDate) {
-                    const pSup = new Date(dtl.postSaleSupportDate); pSup.setHours(0,0,0,0);
-                    if (pSup >= today) notifications.push({ title: `Post Sale Support: ${empName}`, desc: hospName, dateObj: pSup });
-                }
-                
-                if (dtl.supportCallDate) {
-                    const sCall = new Date(dtl.supportCallDate); sCall.setHours(0,0,0,0);
-                    if (sCall >= today) notifications.push({ title: `Support Call: ${empName}`, desc: hospName, dateObj: sCall });
-                }
-
-                if (dtl.noReqFollowUpDate) {
-                    const noReqDate = new Date(dtl.noReqFollowUpDate); noReqDate.setHours(0,0,0,0);
-                    if (noReqDate >= today) notifications.push({ title: `Follow-Up: ${empName}`, desc: `No Req at ${hospName}`, dateObj: noReqDate });
-                }
+                if (rDate > today) notifications.push({ title: report.status === 'Leave' ? `Leave: ${empName}` : `Visit: ${empName}`, desc: report.status === 'Leave' ? report.leaveReason : `Scheduled visit to ${hospName}`, dateObj: rDate });
+                if (dtl.expectedDate) { const expDate = new Date(dtl.expectedDate); expDate.setHours(0,0,0,0); if (expDate >= today) notifications.push({ title: `Deal Alert: ${empName}`, desc: `Expected at ${hospName}`, dateObj: expDate }); }
+                if (dtl.timeline === "In 3 Months") { const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 3); tDate.setHours(0,0,0,0); if (tDate >= today) notifications.push({ title: `3-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate }); }
+                if (dtl.timeline === "In 6 Months") { const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 6); tDate.setHours(0,0,0,0); if (tDate >= today) notifications.push({ title: `6-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate }); }
+                if (dtl.scheduledDate) { const sDate = new Date(dtl.scheduledDate); sDate.setHours(0,0,0,0); if (sDate >= today) notifications.push({ title: `${dtl.type}: ${empName}`, desc: `Follow-up visit at ${hospName}`, dateObj: sDate }); }
+                if (dtl.paymentFollowUpDate) { const pDate = new Date(dtl.paymentFollowUpDate); pDate.setHours(0,0,0,0); if (pDate >= today) notifications.push({ title: `Payment Check: ${empName}`, desc: `Payment pending at ${hospName}`, dateObj: pDate }); }
+                if (dtl.postSaleDemoDate) { const pDemo = new Date(dtl.postSaleDemoDate); pDemo.setHours(0,0,0,0); if (pDemo >= today) notifications.push({ title: `Post Sale Demo: ${empName}`, desc: hospName, dateObj: pDemo }); }
+                if (dtl.postSaleSupportDate) { const pSup = new Date(dtl.postSaleSupportDate); pSup.setHours(0,0,0,0); if (pSup >= today) notifications.push({ title: `Post Sale Support: ${empName}`, desc: hospName, dateObj: pSup }); }
+                if (dtl.supportCallDate) { const sCall = new Date(dtl.supportCallDate); sCall.setHours(0,0,0,0); if (sCall >= today) notifications.push({ title: `Support Call: ${empName}`, desc: hospName, dateObj: sCall }); }
+                if (dtl.noReqFollowUpDate) { const noReqDate = new Date(dtl.noReqFollowUpDate); noReqDate.setHours(0,0,0,0); if (noReqDate >= today) notifications.push({ title: `Follow-Up: ${empName}`, desc: `No Req at ${hospName}`, dateObj: noReqDate }); }
             });
 
             notifications.sort((a,b) => a.dateObj - b.dateObj);
-            
             const list = document.getElementById('notif-list');
             const dot = document.getElementById('notif-dot');
-            
             list.innerHTML = '';
+            
             if (notifications.length > 0) {
                 dot.style.display = 'block';
                 document.getElementById('notif-count').textContent = `${notifications.length} Pipeline Tasks`;
-                notifications.forEach(n => {
-                    list.innerHTML += `
-                        <div class="notif-item">
-                            <div class="notif-title">${n.title}</div>
-                            <div class="notif-desc">${n.desc}</div>
-                            <div class="notif-date">📅 Due: ${n.dateObj.toLocaleDateString()}</div>
-                        </div>
-                    `;
-                });
+                notifications.forEach(n => { list.innerHTML += `<div class="notif-item"><div class="notif-title">${n.title}</div><div class="notif-desc">${n.desc}</div><div class="notif-date">📅 Due: ${n.dateObj.toLocaleDateString()}</div></div>`; });
             } else {
                 dot.style.display = 'none';
                 document.getElementById('notif-count').textContent = `0 Pipeline Tasks`;
@@ -388,18 +339,119 @@
 
         function renderCurrentView() {
             if (viewState.level === 1) renderEmployeeList();
-            else if (viewState.level === 2) renderReportsList(); // Level 3 merged into Level 2
+            else if (viewState.level === 2) renderEmployeeDatesAccordion(); 
         }
+
+        // --- EXPORT TO EXCEL MASTER FUNCTION ---
+        function exportToExcel(reportArray, filename) {
+            if(!reportArray || reportArray.length === 0) return alert("No data to export.");
+            
+            let csvRows = [];
+            // Master wide headers matching modern tracking pipelines
+            const headers = [
+                "S.No", "Submission Timestamp", "Employee Name", "Report Date", "Status", "Leave Reason", 
+                "Hospital Name", "Area", "Doctor Name", "Technician Name", "Existing Machine", "End User(s)",
+                "Activity Category", "Sales Call Type", "Requirement / Action", 
+                "Machine Condition / Type / Model", "Quantity", "Budget", "Timeline", 
+                "Expected / Scheduled Date", "Probe Configuration", "Demo Seen", "Demo Fixed", 
+                "Payment Status", "Service Actions", "FSM IDs", "Comments / Reasons / Others"
+            ];
+            csvRows.push(headers.join(","));
+
+            reportArray.forEach((r, index) => {
+                const h = r.hospital || {};
+                const d = r.details || {};
+                
+                let subCategory = r.salesCallType || "-";
+                let reqAction = d.requirementStatus || d.type || "-";
+                if(r.category === 'Service') reqAction = "Service Job";
+                if(r.category === 'Application Support') reqAction = "App Support";
+                
+                let machineInfo = [];
+                if(d.condition) machineInfo.push(d.condition);
+                if(d.machineType) machineInfo.push(d.machineType);
+                if(d.machineModel) machineInfo.push(d.machineModel);
+                
+                let expDate = d.expectedDate || d.scheduledDate || d.postSaleDemoDate || d.postSaleSupportDate || d.supportCallDate || d.noReqFollowUpDate || d.paymentFollowUpDate || "-";
+                
+                let fsmIds = [];
+                if(d.pmsFsm) fsmIds.push("PMS: " + d.pmsFsm);
+                if(d.instFsm) fsmIds.push("Inst: " + d.instFsm);
+                if(d.bdFsm) fsmIds.push("BD: " + d.bdFsm);
+
+                let remarks = d.reason || d.comments || d.others || r.leaveReason || d.installation || "-";
+
+                let rowData = [
+                    index + 1,
+                    new Date(r.timestamp).toLocaleString(),
+                    r.employeeName || "-",
+                    r.date || "-",
+                    r.status || "-",
+                    r.leaveReason || "-",
+                    h.name || "-",
+                    h.area || "-",
+                    h.doctor || "-",
+                    h.technician || "-",
+                    h.existingMachine || "-",
+                    h.endUser || "-",
+                    r.category || "-",
+                    subCategory,
+                    reqAction,
+                    machineInfo.join(" / ") || "-",
+                    d.quantity || "-",
+                    d.budget || "-",
+                    d.timeline || "-",
+                    expDate,
+                    d.probeConfiguration || "-",
+                    d.demoSeen || "-",
+                    d.demoFixed || "-",
+                    d.paymentStatus || "-",
+                    d.serviceActions || "-",
+                    fsmIds.join(" | ") || "-",
+                    remarks
+                ];
+
+                // Properly format CSV row
+                const formattedRow = rowData.map(val => `"${String(val).replace(/"/g, '""')}"`).join(",");
+                csvRows.push(formattedRow);
+            });
+
+            const csvContent = "\uFEFF" + csvRows.join("\n"); 
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `${filename}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Hook for Single Modal Export
+        document.getElementById('modal-export-btn').addEventListener('click', () => {
+            if(currentlyViewedReport) {
+                exportToExcel([currentlyViewedReport], `Empire_Report_${currentlyViewedReport.employeeName.replace(/\s+/g, '_')}_${currentlyViewedReport.date}`);
+            }
+        });
 
         // --- LEVEL 1: EMPLOYEE LIST ---
         function renderEmployeeList() {
-            breadcrumbNav.innerHTML = `<span class="breadcrumb-active">All Employees</span>`;
-            const employeeMap = {};
+            breadcrumbNav.innerHTML = `
+                <div class="breadcrumb-path"><span class="breadcrumb-active">All Employees</span></div>
+                <button id="global-export-btn" class="export-btn">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 16 16"><path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"/><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/></svg>
+                    Export Global Data
+                </button>
+            `;
             
+            document.getElementById('global-export-btn').addEventListener('click', () => exportToExcel(allReports, 'EmpireHealthCare_Global_Reports'));
+
+            const employeeMap = {};
             allReports.forEach(report => {
-                if (!employeeMap[report.employeeUid]) {
-                    employeeMap[report.employeeUid] = { name: report.employeeName, count: 0 };
-                }
+                if (!employeeMap[report.employeeUid]) employeeMap[report.employeeUid] = { name: report.employeeName, count: 0 };
                 employeeMap[report.employeeUid].count++;
             });
 
@@ -411,14 +463,13 @@
                     <td><button class="target-btn open-admin-target" data-uid="${uid}" data-name="${data.name}">View Targets</button></td>
                 </tr>`;
             }
-
             if(Object.keys(employeeMap).length === 0) html += `<tr><td colspan="3" style="text-align:center;">No reports found.</td></tr>`;
             html += `</tbody></table>`;
             tableContainer.innerHTML = html;
 
             document.querySelectorAll('.clickable-row').forEach(row => {
                 row.addEventListener('click', () => {
-                    viewState.level = 2; // Jump straight to reports
+                    viewState.level = 2; 
                     viewState.selectedUid = row.getAttribute('data-uid'); 
                     viewState.selectedName = row.getAttribute('data-name'); 
                     renderCurrentView();
@@ -434,37 +485,99 @@
             });
         }
 
-        // --- LEVEL 2: ALL REPORTS FOR EMPLOYEE (MERGED) ---
-        function renderReportsList() {
-            breadcrumbNav.innerHTML = `<span class="breadcrumb-item" id="nav-home">All Employees</span> <span class="breadcrumb-separator">/</span> <span class="breadcrumb-active">${viewState.selectedName}'s Reports</span>`;
+        // --- LEVEL 2: DATES ACCORDION ---
+        function renderEmployeeDatesAccordion() {
+            const safeName = viewState.selectedName.replace(/\s+/g, '_');
+            breadcrumbNav.innerHTML = `
+                <div class="breadcrumb-path">
+                    <span class="breadcrumb-item" id="nav-home">All Employees</span> 
+                    <span class="breadcrumb-separator">/</span> 
+                    <span class="breadcrumb-active">${viewState.selectedName}'s Timeline</span>
+                </div>
+                <button id="employee-export-btn" class="export-btn">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 16 16"><path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"/><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/></svg>
+                    Export ${viewState.selectedName}
+                </button>
+            `;
             document.getElementById('nav-home').addEventListener('click', () => { viewState.level = 1; renderCurrentView(); });
 
-            // Fetch ALL reports for this user (they are already sorted desc by timestamp from the DB query)
             const empReports = allReports.filter(r => r.employeeUid === viewState.selectedUid);
-            
-            let html = `<table><thead><tr><th>Date Submitted</th><th>Status</th><th>Category</th><th>Action</th></tr></thead><tbody>`;
-            
+            document.getElementById('employee-export-btn').addEventListener('click', () => exportToExcel(empReports, `EmpireHealthCare_${safeName}_Reports`));
+
+            // Group Reports perfectly by matching Date
+            const dateMap = {};
             empReports.forEach(report => {
-                // Format the Date string nicely
-                const d = new Date(report.date);
-                const prettyDate = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                
-                const statusClass = report.status === 'Work' ? 'status-work' : 'status-leave';
-                html += `<tr>
-                            <td>${prettyDate}</td>
-                            <td><span class="status-badge ${statusClass}">${report.status}</span></td>
-                            <td>${report.category || '-'}</td>
-                            <td><button class="view-btn" data-id="${report.id}">View Details</button></td>
-                         </tr>`;
+                if (!dateMap[report.date]) dateMap[report.date] = [];
+                dateMap[report.date].push(report);
             });
+
+            // Sort Dates descending (newest on top)
+            const sortedDates = Object.keys(dateMap).sort((a, b) => new Date(b) - new Date(a));
+
+            let html = `<table><thead><tr><th>Date</th><th>Activity Overview</th></tr></thead><tbody>`;
             
-            if(empReports.length === 0) html += `<tr><td colspan="4" style="text-align:center;">No reports submitted yet.</td></tr>`;
-            
+            for (const date of sortedDates) {
+                const reports = dateMap[date];
+                // Sort inner reports by time descending
+                reports.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                const prettyDate = new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                
+                // Parent Accordion Row
+                html += `<tr class="clickable-row accordion-toggle" data-target="inner-${date}">
+                            <td style="font-weight:bold; font-size:1.05rem;">📅 ${prettyDate}</td>
+                            <td>${reports.length} Report(s) Submitted <span style="float:right; color:#888;">Click to expand &darr;</span></td>
+                         </tr>`;
+                
+                // Hidden Inner Row (Contains the actual reports for that day)
+                html += `<tr class="inner-table-row" id="inner-${date}">
+                            <td colspan="2" style="padding: 0;">
+                                <div class="inner-table-container">
+                                    <table style="margin:0; box-shadow:none;">
+                                        <thead><tr><th>Time Logged</th><th>Status</th><th>Category</th><th>Action</th></tr></thead>
+                                        <tbody>`;
+                                        
+                reports.forEach(r => {
+                    const timeString = new Date(r.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    const statusClass = r.status === 'Work' ? 'status-work' : 'status-leave';
+                    html += `<tr>
+                                <td>${timeString}</td>
+                                <td><span class="status-badge ${statusClass}">${r.status}</span></td>
+                                <td>${r.category || '-'}</td>
+                                <td><button class="view-btn" data-id="${r.id}">View Details</button></td>
+                             </tr>`;
+                });
+                
+                html += `               </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                         </tr>`;
+            }
             html += `</tbody></table>`;
             tableContainer.innerHTML = html;
 
+            // Accordion Toggle Logic
+            document.querySelectorAll('.accordion-toggle').forEach(row => {
+                row.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const targetRow = document.getElementById(targetId);
+                    
+                    // Close others to keep UI clean
+                    document.querySelectorAll('.inner-table-row').forEach(tr => {
+                        if(tr.id !== targetId) tr.classList.remove('open');
+                    });
+
+                    targetRow.classList.toggle('open');
+                });
+            });
+
+            // View Details Logic
             document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => { openModal(empReports.find(r => r.id === e.target.getAttribute('data-id'))); });
+                btn.addEventListener('click', (e) => { 
+                    e.stopPropagation(); 
+                    openModal(empReports.find(r => r.id === e.target.getAttribute('data-id'))); 
+                });
             });
         }
 
@@ -472,13 +585,12 @@
         function formatKey(key) { const result = key.replace(/([A-Z])/g, " $1"); return result.charAt(0).toUpperCase() + result.slice(1); }
 
         function openModal(report) {
-            currentlyViewedReport = report; // Store globally for Excel Export
+            currentlyViewedReport = report; 
 
             let html = `<div class="report-section"><h3>General Info</h3><ul><li><strong>Employee:</strong> ${report.employeeName}</li><li><strong>Date:</strong> ${report.date}</li><li><strong>Status:</strong> ${report.status}</li></ul></div>`;
             
             if (report.status === 'Work') {
                 let hospHTML = "";
-                
                 if (report.hospital?.name) hospHTML += `<li><strong>Hospital Name:</strong> ${report.hospital.name}</li>`;
                 if (report.hospital?.area) hospHTML += `<li><strong>Area:</strong> ${report.hospital.area}</li>`;
                 if (report.hospital?.doctor) hospHTML += `<li><strong>Doctor:</strong> ${report.hospital.doctor}</li>`;
@@ -502,62 +614,8 @@
             }
             
             modalDetails.innerHTML = html; 
-            modal.style.display = 'flex';
+            document.getElementById('report-modal').style.display = 'flex';
         }
-
-        // --- EXPORT TO EXCEL LOGIC ---
-        document.getElementById('export-excel-btn').addEventListener('click', () => {
-            if(!currentlyViewedReport) return;
-            
-            const r = currentlyViewedReport;
-            let csvRows = [];
-            
-            // Build CSV structure
-            csvRows.push(["Field", "Data"]);
-            csvRows.push(["Employee Name", r.employeeName]);
-            csvRows.push(["Report Date", r.date]);
-            csvRows.push(["Status", r.status]);
-
-            if (r.status === 'Work') {
-                if(r.hospital) {
-                    csvRows.push([""]); // Empty spacing row
-                    csvRows.push(["--- HOSPITAL DETAILS ---", ""]);
-                    for (const [key, value] of Object.entries(r.hospital)) {
-                        csvRows.push([formatKey(key), value || "N/A"]);
-                    }
-                }
-                
-                csvRows.push([""]); // Empty spacing row
-                csvRows.push(["--- ACTIVITY DETAILS ---", ""]);
-                csvRows.push(["Category", r.category || "N/A"]);
-                if(r.salesCallType) csvRows.push(["Call Type", r.salesCallType]);
-                
-                if(r.details) {
-                    for (const [key, value] of Object.entries(r.details)) {
-                        csvRows.push([formatKey(key), value || "N/A"]);
-                    }
-                }
-            } else if (r.status === 'Leave') {
-                csvRows.push([""]); // Empty spacing row
-                csvRows.push(["Leave Reason", r.leaveReason || "No reason provided"]);
-            }
-
-            // Convert to CSV String (Handle internal commas by wrapping values in quotes)
-            let csvContent = csvRows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(",")).join("\n");
-            
-            // Create Blob and Download
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `Empire_Report_${r.employeeName.replace(/\s+/g, '_')}_${r.date}.csv`);
-            link.style.visibility = 'hidden';
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
 
         // --- ADMIN DUAL-TARGET LOGIC ---
         const targetModal = document.getElementById('target-modal');
@@ -622,7 +680,7 @@
                 }, { merge: true });
                 
                 alert("Targets successfully updated!");
-                openAdminTargetModal(currentTargetUid, currentTargetName);
+                openAdminTargetModal(currentTargetUid, currentTargetName); 
             } catch (error) {
                 console.error(error);
                 alert("Failed to update targets.");
@@ -661,7 +719,7 @@
             });
         }
 
-        closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
+        document.getElementById('close-modal').addEventListener('click', () => document.getElementById('report-modal').style.display = 'none');
         document.getElementById('close-target-modal').addEventListener('click', () => targetModal.style.display = 'none');
         
         logoutBtn.addEventListener('click', () => { signOut(auth).then(() => window.location.href = "login.html"); });
