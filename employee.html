@@ -70,6 +70,12 @@
         .dynamic-form input[type="text"], .dynamic-form input[type="date"], .dynamic-form select, .dynamic-form textarea { width: 100%; padding: 12px 15px; margin-bottom: 20px; border: 1px solid #ced4da; border-radius: 6px; font-family: var(--font-body); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; background-color: #fff; resize: vertical; }
         .dynamic-form input:focus, .dynamic-form select:focus, .dynamic-form textarea:focus { border-color: var(--color-primary); outline: none; box-shadow: 0 0 0 3px rgba(8, 61, 119, 0.1); }
         
+        /* New Combined Input Wrapper */
+        .combined-input-wrapper { display: flex; align-items: center; border: 1px solid #ced4da; border-radius: 6px; background-color: #fff; margin-bottom: 20px; padding: 0 5px; transition: border-color 0.3s, box-shadow 0.3s; }
+        .combined-input-wrapper:focus-within { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(8, 61, 119, 0.1); }
+        .combined-input-wrapper input[type="text"] { border: none !important; box-shadow: none !important; margin-bottom: 0 !important; padding: 12px 10px !important; flex: 1; background: transparent; }
+        .combined-input-wrapper input[type="date"] { border: none !important; box-shadow: none !important; margin-bottom: 0 !important; padding: 12px 5px !important; width: auto; background: transparent; cursor: pointer; color: #555; }
+        
         .section-box { background-color: #f8fafc; padding: 25px; border-radius: 8px; border: 1px solid #e1e8ed; margin-bottom: 25px; }
         .section-box h3 { color: var(--color-primary); margin: 0 0 20px 0; font-size: 1.2rem; border-bottom: 2px solid #e1e8ed; padding-bottom: 8px; }
         
@@ -398,46 +404,34 @@
 
                 <!-- App Support Section -->
                 <div class="app-support-section" style="display: none; margin-top: 15px;">
-                    <div class="grid-2-col">
-                        <div>
-                            <label>Pre Sale Demo</label>
-                            <div style="display:flex; gap:10px;">
-                                <select class="app-pre-demo-day" style="flex:1; margin-bottom:0;">
-                                    <option value="">Select Day...</option>
-                                    <option value="Day 1">Day 1</option><option value="Day 2">Day 2</option>
-                                    <option value="Day 3">Day 3</option><option value="Day 4">Day 4</option>
-                                    <option value="Day 5">Day 5</option><option value="Day 6">Day 6</option>
-                                    <option value="Day 7">Day 7</option>
-                                </select>
-                                <input type="text" class="app-pre-demo-text" placeholder="Enter demo details" style="flex:1.5; margin-bottom:0;">
-                            </div>
-                        </div>
-                        <div>
-                            <label>Installation</label>
-                            <input type="text" class="app-inst" placeholder="Enter installation details">
-                        </div>
+                    <label>Pre Sale Demo</label>
+                    <div class="combined-input-wrapper">
+                        <input type="text" class="app-pre-demo-text" placeholder="Enter demo details...">
+                        <input type="date" class="app-pre-demo-date">
+                    </div>
+                    
+                    <label>Installation</label>
+                    <div class="combined-input-wrapper">
+                        <input type="text" class="app-inst-text" placeholder="Enter installation details...">
+                        <input type="date" class="app-inst-date">
+                    </div>
+                    
+                    <label>Post Sale Demo</label>
+                    <div class="combined-input-wrapper">
+                        <input type="text" class="app-post-demo-text" placeholder="Enter demo details...">
+                        <input type="date" class="app-post-demo-date">
+                    </div>
+                    
+                    <label>Post Sale Support</label>
+                    <div class="combined-input-wrapper">
+                        <input type="text" class="app-post-support-text" placeholder="Enter support details...">
+                        <input type="date" class="app-post-support-date">
                     </div>
 
-                    <div class="grid-2-col" style="margin-top:20px;">
-                        <div>
-                            <label>Post Sale Demo</label>
-                            <div style="display:flex; gap:10px;">
-                                <input type="date" class="app-post-demo-date" style="flex:1; margin-bottom:0;">
-                                <input type="text" class="app-post-demo-text" placeholder="Enter details" style="flex:1.5; margin-bottom:0;">
-                            </div>
-                        </div>
-                        <div>
-                            <label>Post Sale Support</label>
-                            <div style="display:flex; gap:10px;">
-                                <input type="date" class="app-post-support-date" style="flex:1; margin-bottom:0;">
-                                <input type="text" class="app-post-support-text" placeholder="Enter details" style="flex:1.5; margin-bottom:0;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:20px;">
-                        <label>Support Call</label>
-                        <input type="date" class="app-call">
+                    <label>Support Call</label>
+                    <div class="combined-input-wrapper">
+                        <input type="text" class="app-call-text" placeholder="Enter call details...">
+                        <input type="date" class="app-call-date">
                     </div>
                 </div>
             </div>
@@ -523,13 +517,11 @@
             }
         });
 
-        // --- DYNAMIC MULTI-HOSPITAL LOGIC & DELEGATION ---
-        
+        // --- DYNAMIC MULTI-HOSPITAL LOGIC ---
         function createWorkInstance() {
             instanceCount++;
             const template = document.getElementById('work-instance-template').content.cloneNode(true);
             
-            // Generate unique names for radio buttons to prevent them overriding each other
             const radios = template.querySelectorAll('input[type="radio"]');
             const nameMap = {};
             radios.forEach(radio => {
@@ -542,7 +534,6 @@
                 }
             });
             
-            // Set required fields if status is Work
             if (statusSelect.value === 'Work') {
                 template.querySelector('.activity-category').required = true;
             }
@@ -563,7 +554,6 @@
             });
         }
 
-        // Delegated Event Listener for All Form Interactions
         workInstancesContainer.addEventListener('change', (e) => {
             const instance = e.target.closest('.work-instance');
             if (!instance) return;
@@ -585,55 +575,45 @@
                 }
             }
 
-            // Sales - Call Type
+            // Sales Options
             if (e.target.classList.contains('sales-call-type')) {
                 instance.querySelector('.cold-call-fields').style.display = 'none';
                 instance.querySelector('.follow-up-fields').style.display = 'none';
                 if (e.target.value === 'Cold Call') instance.querySelector('.cold-call-fields').style.display = 'block';
                 else if (e.target.value === 'Follow-up Call') instance.querySelector('.follow-up-fields').style.display = 'block';
             }
-
-            // Sales - CC Status (checking dynamic name startsWith)
             if (e.target.name && e.target.name.startsWith('cc-req-status')) {
                 instance.querySelector('.cc-no-req-details').style.display = e.target.value === 'No Requirement' ? 'block' : 'none';
                 instance.querySelector('.cc-req-details').style.display = e.target.value === 'Requirement' ? 'block' : 'none';
             }
-
-            // Sales - Demo Toggles
             if (e.target.classList.contains('chk-demo-seen')) {
                 instance.querySelector('.cc-demo-seen').style.display = e.target.checked ? 'block' : 'none';
             }
             if (e.target.classList.contains('chk-demo-fixed')) {
                 instance.querySelector('.cc-demo-fixed').style.display = e.target.checked ? 'block' : 'none';
             }
-
-            // Sales - Follow Up Type
             if (e.target.name && e.target.name.startsWith('fu-type')) {
                 const val = e.target.value;
                 instance.querySelector('.fu-date-container').style.display = ['General Visit', 'Prospect', 'Hot Prospect'].includes(val) ? 'block' : 'none';
                 instance.querySelector('.fu-payment-container').style.display = val === 'Payment Follow Up' ? 'block' : 'none';
             }
-
-            // Sales - Payment Status
             if (e.target.name && e.target.name.startsWith('fu-payment-status')) {
                 instance.querySelector('.fu-payment-date-container').style.display = e.target.value === 'Not Received' ? 'block' : 'none';
             }
 
-            // Service - Multi checks
+            // Service Options
             if (e.target.classList.contains('chk-srv-pms')) {
                 instance.querySelector('.srv-pms-details').style.display = e.target.checked ? 'block' : 'none';
             }
             if (e.target.name && e.target.name.startsWith('pms-status')) {
                 instance.querySelector('.pms-fsm').style.display = e.target.value === 'Updated' ? 'block' : 'none';
             }
-            
             if (e.target.classList.contains('chk-srv-inst')) {
                 instance.querySelector('.srv-inst-details').style.display = e.target.checked ? 'block' : 'none';
             }
             if (e.target.name && e.target.name.startsWith('inst-status')) {
                 instance.querySelector('.inst-fsm').style.display = e.target.value === 'Updated' ? 'block' : 'none';
             }
-            
             if (e.target.classList.contains('chk-srv-bd')) {
                 instance.querySelector('.srv-bd-details').style.display = e.target.checked ? 'block' : 'none';
             }
@@ -642,7 +622,6 @@
             }
         });
 
-        // Add/Remove multi-input rows and hospital instances
         workInstancesContainer.addEventListener('click', (e) => {
             if (e.target.classList.contains('add-btn')) {
                 const targetClass = e.target.getAttribute('data-target-class');
@@ -687,7 +666,7 @@
         });
 
 
-        // --- SMART NOTIFICATION ENGINE ---
+        // --- SMART NOTIFICATION ENGINE (Updated 4-day, 1-week, and 4-Month logic) ---
         const notifWrapper = document.getElementById('notif-wrapper');
         const notifPanel = document.getElementById('notif-panel');
         
@@ -708,48 +687,78 @@
             const today = new Date();
             today.setHours(0,0,0,0);
 
+            // Reusable Notification Evaluator (Before 4 days & Before a week)
+            const checkNotification = (targetDateString, title, desc) => {
+                if (!targetDateString) return;
+                const tDate = new Date(targetDateString);
+                tDate.setHours(0,0,0,0);
+                
+                const daysLeft = Math.ceil((tDate - today) / (1000 * 60 * 60 * 24));
+                
+                // Show reminder if it is within 7 days, or overdue
+                if (daysLeft <= 7 && daysLeft >= 0) { 
+                    let dueStr = daysLeft === 0 ? "Due Today" : `Due in ${daysLeft} days`;
+                    notifications.push({ title, desc, dateObj: tDate, dueStr });
+                } else if (daysLeft < 0) {
+                    notifications.push({ title, desc, dateObj: tDate, dueStr: `Overdue by ${Math.abs(daysLeft)} days` });
+                }
+            };
+
             snapshot.forEach(docSnap => {
                 const data = docSnap.data();
                 const dtl = data.details || {};
                 const hospName = data.hospital?.name || 'Unknown Hospital';
                 const rDate = new Date(data.date);
 
-                if (dtl.noReqFollowUpDate) {
-                    const noReqDate = new Date(dtl.noReqFollowUpDate); noReqDate.setHours(0,0,0,0);
-                    if (noReqDate >= today) notifications.push({ title: `Follow-Up: ${hospName}`, desc: dtl.reason || 'No Requirement Follow-up', dateObj: noReqDate });
+                // Service Specific Logic (Every 4 months, notify 15 days before)
+                if (data.category === 'Service') {
+                    let nextServiceDate = new Date(rDate);
+                    nextServiceDate.setHours(0,0,0,0);
+                    
+                    // Increment cycle to the current or closest upcoming 4-month interval
+                    while (true) {
+                        let diff = Math.ceil((nextServiceDate - today) / (1000 * 60 * 60 * 24));
+                        if (diff < -30) { 
+                            // If overdue by more than 30 days, assume cycle moved to the next 4 months
+                            nextServiceDate.setMonth(nextServiceDate.getMonth() + 4);
+                        } else {
+                            // Current actionable cycle
+                            if (diff <= 15) { 
+                                let dueStr = diff > 0 ? `Due in ${diff} days` : (diff === 0 ? "Due Today" : `Overdue by ${Math.abs(diff)} days`);
+                                notifications.push({ 
+                                    title: `Routine Maintenance: ${hospName}`, 
+                                    desc: '4-Month recurring service interval', 
+                                    dateObj: new Date(nextServiceDate), 
+                                    dueStr 
+                                });
+                            }
+                            break; 
+                        }
+                    }
                 }
-                if (dtl.expectedDate) {
-                    const expDate = new Date(dtl.expectedDate); expDate.setHours(0,0,0,0);
-                    if (expDate >= today) notifications.push({ title: `Requirement: ${hospName}`, desc: 'Expected completion date', dateObj: expDate });
-                }
+
+                // Standard Checks
+                if (dtl.noReqFollowUpDate) checkNotification(dtl.noReqFollowUpDate, `Follow-Up: ${hospName}`, dtl.reason || 'No Requirement Follow-up');
+                if (dtl.expectedDate) checkNotification(dtl.expectedDate, `Requirement: ${hospName}`, 'Expected completion date');
+                
                 if (dtl.timeline === "In 3 Months") {
-                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 3); tDate.setHours(0,0,0,0);
-                    if (tDate >= today) notifications.push({ title: `3-Month Check: ${hospName}`, desc: 'Timeline follow-up', dateObj: tDate });
+                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 3);
+                    checkNotification(tDate, `3-Month Check: ${hospName}`, 'Timeline follow-up');
                 }
                 if (dtl.timeline === "In 6 Months") {
-                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 6); tDate.setHours(0,0,0,0);
-                    if (tDate >= today) notifications.push({ title: `6-Month Check: ${hospName}`, desc: 'Timeline follow-up', dateObj: tDate });
+                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 6);
+                    checkNotification(tDate, `6-Month Check: ${hospName}`, 'Timeline follow-up');
                 }
-                if (dtl.scheduledDate) {
-                    const sDate = new Date(dtl.scheduledDate); sDate.setHours(0,0,0,0);
-                    if (sDate >= today) notifications.push({ title: `${dtl.type}: ${hospName}`, desc: 'Scheduled follow-up visit', dateObj: sDate });
-                }
-                if (dtl.paymentFollowUpDate) {
-                    const pDate = new Date(dtl.paymentFollowUpDate); pDate.setHours(0,0,0,0);
-                    if (pDate >= today) notifications.push({ title: `Payment Check: ${hospName}`, desc: 'Payment not received previously', dateObj: pDate });
-                }
-                if (dtl.postSaleDemoDate) {
-                    const pDemo = new Date(dtl.postSaleDemoDate); pDemo.setHours(0,0,0,0);
-                    if (pDemo >= today) notifications.push({ title: `Post Sale Demo: ${hospName}`, desc: 'App Support scheduled', dateObj: pDemo });
-                }
-                if (dtl.postSaleSupportDate) {
-                    const pSup = new Date(dtl.postSaleSupportDate); pSup.setHours(0,0,0,0);
-                    if (pSup >= today) notifications.push({ title: `Post Sale Support: ${hospName}`, desc: 'App Support scheduled', dateObj: pSup });
-                }
-                if (dtl.supportCallDate) {
-                    const sCall = new Date(dtl.supportCallDate); sCall.setHours(0,0,0,0);
-                    if (sCall >= today) notifications.push({ title: `Support Call: ${hospName}`, desc: 'Scheduled support call', dateObj: sCall });
-                }
+                
+                if (dtl.scheduledDate) checkNotification(dtl.scheduledDate, `${dtl.type}: ${hospName}`, 'Scheduled follow-up visit');
+                if (dtl.paymentFollowUpDate) checkNotification(dtl.paymentFollowUpDate, `Payment Check: ${hospName}`, 'Payment not received previously');
+                
+                // New Combined App Support Dates check
+                if (dtl.preSaleDemoDate) checkNotification(dtl.preSaleDemoDate, `Pre Sale Demo: ${hospName}`, dtl.preSaleDemoText || 'App Support action');
+                if (dtl.installationDate) checkNotification(dtl.installationDate, `Installation: ${hospName}`, dtl.installationText || 'Installation scheduled');
+                if (dtl.postSaleDemoDate) checkNotification(dtl.postSaleDemoDate, `Post Sale Demo: ${hospName}`, dtl.postSaleDemoText || 'App Support action');
+                if (dtl.postSaleSupportDate) checkNotification(dtl.postSaleSupportDate, `Post Sale Support: ${hospName}`, dtl.postSaleSupportText || 'App Support scheduled');
+                if (dtl.supportCallDate) checkNotification(dtl.supportCallDate, `Support Call: ${hospName}`, dtl.supportCallText || 'Scheduled support call');
             });
 
             notifications.sort((a,b) => a.dateObj - b.dateObj);
@@ -766,7 +775,10 @@
                         <div class="notif-item">
                             <div class="notif-title">${n.title}</div>
                             <div class="notif-desc">${n.desc}</div>
-                            <div class="notif-date">📅 Due: ${n.dateObj.toLocaleDateString()}</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                                <div class="notif-date">📅 ${n.dateObj.toLocaleDateString()}</div>
+                                <span style="font-size:0.75rem; font-weight:bold; color:${n.dueStr.includes('Overdue') ? '#d9534f' : '#28a745'};">${n.dueStr}</span>
+                            </div>
                         </div>
                     `;
                 });
@@ -853,7 +865,6 @@
             });
         }
 
-        // Object cleaner for Payload
         function cleanObject(obj) {
             for (let propName in obj) {
                 if (obj[propName] === null || obj[propName] === undefined || obj[propName] === '') {
@@ -996,15 +1007,22 @@
                             reportData.details = srvData;
                             
                         } else if (category === 'Application Support') {
+                            // Extract data from the new combined text+date UI fields
                             reportData.details = { 
-                                preSaleDemoDay: instance.querySelector('.app-pre-demo-day').value,
+                                preSaleDemoDate: instance.querySelector('.app-pre-demo-date').value,
                                 preSaleDemoText: instance.querySelector('.app-pre-demo-text').value.trim(),
-                                installation: instance.querySelector('.app-inst').value.trim(), 
+                                
+                                installationDate: instance.querySelector('.app-inst-date').value,
+                                installationText: instance.querySelector('.app-inst-text').value.trim(), 
+                                
                                 postSaleDemoDate: instance.querySelector('.app-post-demo-date').value, 
                                 postSaleDemoText: instance.querySelector('.app-post-demo-text').value.trim(),
+                                
                                 postSaleSupportDate: instance.querySelector('.app-post-support-date').value, 
                                 postSaleSupportText: instance.querySelector('.app-post-support-text').value.trim(),
-                                supportCallDate: instance.querySelector('.app-call').value
+                                
+                                supportCallDate: instance.querySelector('.app-call-date').value,
+                                supportCallText: instance.querySelector('.app-call-text').value.trim()
                             };
                         }
 
