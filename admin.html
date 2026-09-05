@@ -274,6 +274,21 @@
             const today = new Date();
             today.setHours(0,0,0,0);
 
+            // Reusable logic exactly matching the employee dashboard
+            const checkNotification = (targetDateString, title, desc) => {
+                if (!targetDateString) return;
+                const tDate = new Date(targetDateString);
+                tDate.setHours(0,0,0,0);
+                const daysLeft = Math.ceil((tDate - today) / (1000 * 60 * 60 * 24));
+                
+                if (daysLeft <= 7 && daysLeft >= 0) { 
+                    let dueStr = daysLeft === 0 ? "Due Today" : `Due in ${daysLeft} days`;
+                    notifications.push({ title, desc, dateObj: tDate, dueStr });
+                } else if (daysLeft < 0) {
+                    notifications.push({ title, desc, dateObj: tDate, dueStr: `Overdue by ${Math.abs(daysLeft)} days` });
+                }
+            };
+
             allReports.forEach(report => {
                 const empName = report.employeeName || 'Unknown Employee';
                 const hospName = report.hospital?.name || 'Unknown Hospital';
@@ -282,16 +297,50 @@
                 const rDate = new Date(report.date);
                 rDate.setHours(0,0,0,0);
 
-                if (rDate > today) notifications.push({ title: report.status === 'Leave' ? `Leave: ${empName}` : `Visit: ${empName}`, desc: report.status === 'Leave' ? report.leaveReason : `Scheduled visit to ${hospName}`, dateObj: rDate });
-                if (dtl.expectedDate) { const expDate = new Date(dtl.expectedDate); expDate.setHours(0,0,0,0); if (expDate >= today) notifications.push({ title: `Deal Alert: ${empName}`, desc: `Expected at ${hospName}`, dateObj: expDate }); }
-                if (dtl.timeline === "In 3 Months") { const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 3); tDate.setHours(0,0,0,0); if (tDate >= today) notifications.push({ title: `3-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate }); }
-                if (dtl.timeline === "In 6 Months") { const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 6); tDate.setHours(0,0,0,0); if (tDate >= today) notifications.push({ title: `6-Mo Follow-Up: ${empName}`, desc: hospName, dateObj: tDate }); }
-                if (dtl.scheduledDate) { const sDate = new Date(dtl.scheduledDate); sDate.setHours(0,0,0,0); if (sDate >= today) notifications.push({ title: `${dtl.type}: ${empName}`, desc: `Follow-up visit at ${hospName}`, dateObj: sDate }); }
-                if (dtl.paymentFollowUpDate) { const pDate = new Date(dtl.paymentFollowUpDate); pDate.setHours(0,0,0,0); if (pDate >= today) notifications.push({ title: `Payment Check: ${empName}`, desc: `Payment pending at ${hospName}`, dateObj: pDate }); }
-                if (dtl.postSaleDemoDate) { const pDemo = new Date(dtl.postSaleDemoDate); pDemo.setHours(0,0,0,0); if (pDemo >= today) notifications.push({ title: `Post Sale Demo: ${empName}`, desc: hospName, dateObj: pDemo }); }
-                if (dtl.postSaleSupportDate) { const pSup = new Date(dtl.postSaleSupportDate); pSup.setHours(0,0,0,0); if (pSup >= today) notifications.push({ title: `Post Sale Support: ${empName}`, desc: hospName, dateObj: pSup }); }
-                if (dtl.supportCallDate) { const sCall = new Date(dtl.supportCallDate); sCall.setHours(0,0,0,0); if (sCall >= today) notifications.push({ title: `Support Call: ${empName}`, desc: hospName, dateObj: sCall }); }
-                if (dtl.noReqFollowUpDate) { const noReqDate = new Date(dtl.noReqFollowUpDate); noReqDate.setHours(0,0,0,0); if (noReqDate >= today) notifications.push({ title: `Follow-Up: ${empName}`, desc: `No Req at ${hospName}`, dateObj: noReqDate }); }
+                // Service Specific Logic (Every 4 months, notify 15 days before)
+                if (report.category === 'Service') {
+                    let nextServiceDate = new Date(rDate);
+                    nextServiceDate.setHours(0,0,0,0);
+                    
+                    while (true) {
+                        let diff = Math.ceil((nextServiceDate - today) / (1000 * 60 * 60 * 24));
+                        if (diff < -30) { 
+                            nextServiceDate.setMonth(nextServiceDate.getMonth() + 4);
+                        } else {
+                            if (diff <= 15) { 
+                                let dueStr = diff > 0 ? `Due in ${diff} days` : (diff === 0 ? "Due Today" : `Overdue by ${Math.abs(diff)} days`);
+                                notifications.push({ 
+                                    title: `Service Routine: ${empName}`, 
+                                    desc: `${hospName} (4-Month Cycle)`, 
+                                    dateObj: new Date(nextServiceDate), 
+                                    dueStr 
+                                });
+                            }
+                            break; 
+                        }
+                    }
+                }
+
+                if (dtl.noReqFollowUpDate) checkNotification(dtl.noReqFollowUpDate, `Follow-Up: ${empName}`, dtl.reason || `No Req at ${hospName}`);
+                if (dtl.expectedDate) checkNotification(dtl.expectedDate, `Deal Alert: ${empName}`, `Expected at ${hospName}`);
+                
+                if (dtl.timeline === "In 3 Months") {
+                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 3);
+                    checkNotification(tDate, `3-Mo Follow-Up: ${empName}`, hospName);
+                }
+                if (dtl.timeline === "In 6 Months") {
+                    const tDate = new Date(rDate); tDate.setMonth(tDate.getMonth() + 6);
+                    checkNotification(tDate, `6-Mo Follow-Up: ${empName}`, hospName);
+                }
+                
+                if (dtl.scheduledDate) checkNotification(dtl.scheduledDate, `${dtl.type}: ${empName}`, `Follow-up visit at ${hospName}`);
+                if (dtl.paymentFollowUpDate) checkNotification(dtl.paymentFollowUpDate, `Payment Check: ${empName}`, `Pending at ${hospName}`);
+                
+                if (dtl.preSaleDemoDate) checkNotification(dtl.preSaleDemoDate, `Pre Sale Demo: ${empName}`, dtl.preSaleDemoText || hospName);
+                if (dtl.installationDate) checkNotification(dtl.installationDate, `Installation: ${empName}`, dtl.installationText || hospName);
+                if (dtl.postSaleDemoDate) checkNotification(dtl.postSaleDemoDate, `Post Sale Demo: ${empName}`, dtl.postSaleDemoText || hospName);
+                if (dtl.postSaleSupportDate) checkNotification(dtl.postSaleSupportDate, `Post Sale Support: ${empName}`, dtl.postSaleSupportText || hospName);
+                if (dtl.supportCallDate) checkNotification(dtl.supportCallDate, `Support Call: ${empName}`, dtl.supportCallText || hospName);
             });
 
             notifications.sort((a,b) => a.dateObj - b.dateObj);
@@ -302,7 +351,18 @@
             if (notifications.length > 0) {
                 dot.style.display = 'block';
                 document.getElementById('notif-count').textContent = `${notifications.length} Pipeline Tasks`;
-                notifications.forEach(n => { list.innerHTML += `<div class="notif-item"><div class="notif-title">${n.title}</div><div class="notif-desc">${n.desc}</div><div class="notif-date">📅 Due: ${n.dateObj.toLocaleDateString()}</div></div>`; });
+                notifications.forEach(n => {
+                    list.innerHTML += `
+                        <div class="notif-item">
+                            <div class="notif-title">${n.title}</div>
+                            <div class="notif-desc">${n.desc}</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                                <div class="notif-date">📅 ${n.dateObj.toLocaleDateString()}</div>
+                                <span style="font-size:0.75rem; font-weight:bold; color:${n.dueStr.includes('Overdue') ? '#d9534f' : '#28a745'};">${n.dueStr}</span>
+                            </div>
+                        </div>
+                    `;
+                });
             } else {
                 dot.style.display = 'none';
                 document.getElementById('notif-count').textContent = `0 Pipeline Tasks`;
@@ -347,14 +407,13 @@
             if(!reportArray || reportArray.length === 0) return alert("No data to export.");
             
             let csvRows = [];
-            // Master wide headers matching modern tracking pipelines
             const headers = [
-                "S.No", "Submission Timestamp", "Employee Name", "Report Date", "Status", "Leave Reason", 
+                "S.No", "Submission Timestamp", "Check-in Time", "Employee Name", "Report Date", "Status", "Leave Reason", 
                 "Hospital Name", "Area", "Doctor Name", "Technician Name", "Existing Machine", "End User(s)",
                 "Activity Category", "Sales Call Type", "Requirement / Action", 
                 "Machine Condition / Type / Model", "Quantity", "Budget", "Timeline", 
                 "Expected / Scheduled Date", "Probe Configuration", "Demo Seen", "Demo Fixed", 
-                "Payment Status", "Service Actions", "FSM IDs", "Comments / Reasons / Others"
+                "Payment Status", "Service Actions", "FSM IDs", "Comments / Details / Reasons / Others"
             ];
             csvRows.push(headers.join(","));
 
@@ -372,18 +431,20 @@
                 if(d.machineType) machineInfo.push(d.machineType);
                 if(d.machineModel) machineInfo.push(d.machineModel);
                 
-                let expDate = d.expectedDate || d.scheduledDate || d.postSaleDemoDate || d.postSaleSupportDate || d.supportCallDate || d.noReqFollowUpDate || d.paymentFollowUpDate || "-";
+                let expDate = d.expectedDate || d.scheduledDate || d.preSaleDemoDate || d.installationDate || d.postSaleDemoDate || d.postSaleSupportDate || d.supportCallDate || d.noReqFollowUpDate || d.paymentFollowUpDate || "-";
                 
                 let fsmIds = [];
                 if(d.pmsFsm) fsmIds.push("PMS: " + d.pmsFsm);
                 if(d.instFsm) fsmIds.push("Inst: " + d.instFsm);
                 if(d.bdFsm) fsmIds.push("BD: " + d.bdFsm);
 
-                let remarks = d.reason || d.comments || d.others || r.leaveReason || d.installation || "-";
+                let allRemarks = [d.reason, d.comments, d.others, r.leaveReason, d.preSaleDemoText, d.installationText, d.postSaleDemoText, d.postSaleSupportText, d.supportCallText].filter(Boolean).join(" | ");
+                let remarks = allRemarks || "-";
 
                 let rowData = [
                     index + 1,
                     new Date(r.timestamp).toLocaleString(),
+                    r.checkInTime || "-",
                     r.employeeName || "-",
                     r.date || "-",
                     r.status || "-",
@@ -411,7 +472,6 @@
                     remarks
                 ];
 
-                // Properly format CSV row
                 const formattedRow = rowData.map(val => `"${String(val).replace(/"/g, '""')}"`).join(",");
                 csvRows.push(formattedRow);
             });
@@ -504,44 +564,42 @@
             const empReports = allReports.filter(r => r.employeeUid === viewState.selectedUid);
             document.getElementById('employee-export-btn').addEventListener('click', () => exportToExcel(empReports, `EmpireHealthCare_${safeName}_Reports`));
 
-            // Group Reports perfectly by matching Date
             const dateMap = {};
             empReports.forEach(report => {
                 if (!dateMap[report.date]) dateMap[report.date] = [];
                 dateMap[report.date].push(report);
             });
 
-            // Sort Dates descending (newest on top)
             const sortedDates = Object.keys(dateMap).sort((a, b) => new Date(b) - new Date(a));
 
             let html = `<table><thead><tr><th>Date</th><th>Activity Overview</th></tr></thead><tbody>`;
             
             for (const date of sortedDates) {
                 const reports = dateMap[date];
-                // Sort inner reports by time descending
                 reports.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
                 
                 const prettyDate = new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                 
-                // Parent Accordion Row
                 html += `<tr class="clickable-row accordion-toggle" data-target="inner-${date}">
                             <td style="font-weight:bold; font-size:1.05rem;">📅 ${prettyDate}</td>
                             <td>${reports.length} Report(s) Submitted <span style="float:right; color:#888;">Click to expand &darr;</span></td>
                          </tr>`;
                 
-                // Hidden Inner Row (Contains the actual reports for that day)
                 html += `<tr class="inner-table-row" id="inner-${date}">
                             <td colspan="2" style="padding: 0;">
                                 <div class="inner-table-container">
                                     <table style="margin:0; box-shadow:none;">
-                                        <thead><tr><th>Time Logged</th><th>Status</th><th>Category</th><th>Action</th></tr></thead>
+                                        <thead><tr><th>Time Logged</th><th>Check-in</th><th>Status</th><th>Category</th><th>Action</th></tr></thead>
                                         <tbody>`;
                                         
                 reports.forEach(r => {
                     const timeString = new Date(r.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    const checkInHtml = r.checkInTime ? `<span style="color:#28a745; font-weight:bold;">${r.checkInTime}</span>` : `<span style="color:#aaa;">-</span>`;
                     const statusClass = r.status === 'Work' ? 'status-work' : 'status-leave';
+                    
                     html += `<tr>
                                 <td>${timeString}</td>
+                                <td>${checkInHtml}</td>
                                 <td><span class="status-badge ${statusClass}">${r.status}</span></td>
                                 <td>${r.category || '-'}</td>
                                 <td><button class="view-btn" data-id="${r.id}">View Details</button></td>
@@ -557,13 +615,11 @@
             html += `</tbody></table>`;
             tableContainer.innerHTML = html;
 
-            // Accordion Toggle Logic
             document.querySelectorAll('.accordion-toggle').forEach(row => {
                 row.addEventListener('click', function() {
                     const targetId = this.getAttribute('data-target');
                     const targetRow = document.getElementById(targetId);
                     
-                    // Close others to keep UI clean
                     document.querySelectorAll('.inner-table-row').forEach(tr => {
                         if(tr.id !== targetId) tr.classList.remove('open');
                     });
@@ -572,7 +628,6 @@
                 });
             });
 
-            // View Details Logic
             document.querySelectorAll('.view-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => { 
                     e.stopPropagation(); 
@@ -587,7 +642,12 @@
         function openModal(report) {
             currentlyViewedReport = report; 
 
-            let html = `<div class="report-section"><h3>General Info</h3><ul><li><strong>Employee:</strong> ${report.employeeName}</li><li><strong>Date:</strong> ${report.date}</li><li><strong>Status:</strong> ${report.status}</li></ul></div>`;
+            let html = `<div class="report-section"><h3>General Info</h3><ul>
+                <li><strong>Employee:</strong> ${report.employeeName}</li>
+                <li><strong>Date:</strong> ${report.date}</li>
+                ${report.checkInTime ? `<li><strong>Check-In Time:</strong> ${report.checkInTime}</li>` : ''}
+                <li><strong>Status:</strong> ${report.status}</li>
+            </ul></div>`;
             
             if (report.status === 'Work') {
                 let hospHTML = "";
